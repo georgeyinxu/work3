@@ -25,3 +25,7 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.drop-shadow-price {
+  --tw-drop-shadow: drop-shadow(0px 0px 10px rgba(69,108,207,.5));
+}
