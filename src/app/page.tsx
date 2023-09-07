@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FaAnglesRight } from "react-icons/fa6";
+import React from "react";
 
 const App = () => {
   return (
@@ -86,7 +87,7 @@ const App = () => {
               We&apos;re looking for a mid-level product designer to join our
               team.
             </p>
-            <button className="p-1 rounded-full from-rose-400 via-fuchsia-500 to-indigo-500 bg-gradient-to-r">
+            <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r">
               <span className="block text-black px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
                 1000 $SALD
               </span>
