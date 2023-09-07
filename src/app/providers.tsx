@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import {
   metamaskWallet,
@@ -7,7 +8,6 @@ import {
   walletConnect,
 } from "@thirdweb-dev/react";
 import { Ethereum } from "@thirdweb-dev/chains";
-import React from "react";
 import Navbar from "@/components/Navbar";
 
 const queryClient = new QueryClient();
