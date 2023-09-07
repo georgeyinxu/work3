@@ -49,9 +49,9 @@ const JobDetails = () => {
             </div>
             <hr className="w-full h-0.5 bg-gray-50 rounded-full my-10" />
             <h3 className="text-[#222222] text-3xl font-semibold">
-              Description
+              Product Designer
             </h3>
-            <p className="overflow-hidden overflow-ellipsis text-[#222222] mt-4">
+            <p className="overflow-hidden overflow-ellipsis text-[#222222] mt-2">
               Ethereum is a smart contract platform that enables developers to
               build tokens and decentralized applications (dapps). ETH is the
               native currency for the Ethereum platform and also works as the
