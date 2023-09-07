@@ -78,9 +78,17 @@ const JobDetails = () => {
               more guide on using ethereum wallet: How to Use an Ethereum Wallet
             </p>
             <h6 className="text-sm text-[#7D7D7D] mt-8">Files</h6>
-            <div className="flex items-center justify-start mt-2">
+            <div className="flex items-center justify-start gap-4 mt-2">
               <button className="text-sm text-[#FF66FF] flex items-center gap-2">
                 <span className="truncate">Design Assignment 1</span>
+                <ImArrowUpRight2 />
+              </button>
+              <button className="text-sm text-[#FF66FF] flex items-center gap-2">
+                <span className="truncate">Design Assignment 2</span>
+                <ImArrowUpRight2 />
+              </button>
+              <button className="text-sm text-[#FF66FF] flex items-center gap-2">
+                <span className="truncate">Design Assignment 3</span>
                 <ImArrowUpRight2 />
               </button>
             </div>

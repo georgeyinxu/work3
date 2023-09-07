@@ -49,3 +49,14 @@ body {
   transition: transform 250ms ease 0s;
 }
 
+.ql-toolbar {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.ql-container {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  min-height: 40vh;
+}
+

@@ -4,7 +4,7 @@ const Navbar = () => {
   return (
     <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="https://flowbite.com/" className="flex items-center">
+        <a href="/" className="flex items-center">
           <img
             src="/images/web3to-logo.svg"
             className="h-6 mr-3"
@@ -16,7 +16,7 @@ const Navbar = () => {
             theme="light"
             style={{
               background:
-                "linear-gradient(93.06deg, rgb(255, 0, 199) 2.66%, rgb(255, 159, 251) 98.99%);",
+                "linear-gradient(93.06deg, rgb(255, 0, 199) 2.66%, rgb(255, 159, 251) 98.99%)",
               borderRadius: 40,
               paddingLeft: 36,
               paddingRight: 36,

@@ -38,7 +38,7 @@ const TransactionCard = () => {
           theme="light"
           style={{
             background:
-              "linear-gradient(93.06deg, rgb(255, 0, 199) 2.66%, rgb(255, 159, 251) 98.99%);",
+              "linear-gradient(93.06deg, rgb(255, 0, 199) 2.66%, rgb(255, 159, 251) 98.99%)",
             borderRadius: 16,
             paddingTop: 20,
             paddingBottom: 20,
