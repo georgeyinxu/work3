@@ -1,8 +1,33 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import axios from "axios";
+
 import { FaAnglesRight } from "react-icons/fa6";
-import React from "react";
+
+import ICategory from "@/interfaces/categoryResponse";
 
 const App = () => {
+  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [selected, setSelected] = useState<string>("");
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get("/api/category");
+      const categories: ICategory[] = response.data.data;
+
+      setCategories(categories);
+      setSelected(categories[0].value);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
   return (
     <main className="bg-white flex flex-col items-center justify-center">
       <div className="max-w-screen-xl py-40 min-h-screen flex flex-col items-start">
@@ -10,65 +35,24 @@ const App = () => {
           [How Work Should Work]
         </h1>
         <div className="grid grid-cols-8 gap-4 mt-10">
-          <div className="bg-[#FF66FF] rounded-md py-4 px-8 flex flex-col items-center justify-center">
-            <p className="text-white">View All</p>
-          </div>
-          <div className="bg-[#FF66FF] rounded-md py-4 px-8 flex flex-col items-center justify-center bg-opacity-60">
-            <img
-              src="/images/icons/development-icon.svg"
-              className="h-10 mb-4"
-              alt="Development"
-            />
-            <p className="text-white text-center">Development</p>
-          </div>
-          <div className="bg-[#FF66FF] rounded-md py-4 px-8 flex flex-col items-center justify-center bg-opacity-60">
-            <img
-              src="/images/icons/marketing-icon.svg"
-              className="h-10 mb-4"
-              alt="Development"
-            />
-            <p className="text-white text-center">Marketing</p>
-          </div>
-          <div className="bg-[#FF66FF] rounded-md py-4 px-8 flex flex-col items-center justify-center bg-opacity-60">
-            <img
-              src="/images/icons/cs-icon.svg"
-              className="h-10 mb-4"
-              alt="Development"
-            />
-            <p className="text-white text-center">Customer Service</p>
-          </div>
-          <div className="bg-[#FF66FF] rounded-md py-4 px-8 flex flex-col items-center justify-center bg-opacity-60">
-            <img
-              src="/images/icons/design-icon.svg"
-              className="h-10 mb-4"
-              alt="Development"
-            />
-            <p className="text-white text-center">Design</p>
-          </div>
-          <div className="bg-[#FF66FF] rounded-md py-4 px-8 flex flex-col items-center justify-center bg-opacity-60">
-            <img
-              src="/images/icons/operations-icon.svg"
-              className="h-10 mb-4"
-              alt="Development"
-            />
-            <p className="text-white text-center">Operations</p>
-          </div>
-          <div className="bg-[#FF66FF] rounded-md py-4 px-8 flex flex-col items-center justify-center bg-opacity-60">
-            <img
-              src="/images/icons/finance-icon.svg"
-              className="h-10 mb-4"
-              alt="Development"
-            />
-            <p className="text-white text-center">Finance</p>
-          </div>
-          <div className="bg-[#FF66FF] rounded-md py-4 px-8 flex flex-col items-center justify-center bg-opacity-60">
-            <img
-              src="/images/icons/management-icon.svg"
-              className="h-10 mb-4"
-              alt="Development"
-            />
-            <p className="text-white text-center">Management</p>
-          </div>
+          {categories.map((category) => (
+            <button
+              className={`bg-[#FF66FF] rounded-md py-4 px-8 flex flex-col items-center justify-center ${
+                category.value !== selected && "bg-opacity-60"
+              }`}
+              key={category._id}
+              onClick={() => setSelected(category.value)}
+            >
+              {category.icon && (
+                <img
+                  src={category.icon}
+                  className="h-10 mb-4"
+                  alt={category.title}
+                />
+              )}
+              <p className="text-white text-center">{category.title}</p>
+            </button>
+          ))}
         </div>
         <div className="h-1 my-8 bg-gradient-to-r from-red-400 via-yellow-500 to-green-400" />
         <div className="flex flex-col gap-4 w-full">
