@@ -6,7 +6,7 @@ const ApplicantCard = () => {
   return (
     <div className="bg-white rounded-2xl transaction-card ml-2">
       <div className="max-h-[40vh] overflow-y-scroll">
-        <div className="bg-gray-100 rounded-2xl flex items-center justify-between gap-2 text-gray-500 text-xl p-4 mb-2 border-2 border-[#FF66FF]">
+        <div className="bg-gray-100 rounded-2xl flex items-center justify-between gap-2 text-gray-500 text-xl p-4 mb-2 border-2 border-[#FF66FF] hover:cursor-pointer">
           <div className="flex items-center justify-center">
             <button className="mr-2">
               <IoCopyOutline />
@@ -24,7 +24,7 @@ const ApplicantCard = () => {
             </span>
           </button>
         </div>
-        <div className="bg-gray-100 rounded-2xl flex items-center justify-between gap-2 text-gray-500 text-xl p-4 mb-2 border border-[#]">
+        <div className="bg-gray-100 rounded-2xl flex items-center justify-between gap-2 text-gray-500 text-xl p-4 mb-2 hover:cursor-pointer">
           <div className="flex items-center justify-center">
             <button className="mr-2">
               <IoCopyOutline />
@@ -42,7 +42,7 @@ const ApplicantCard = () => {
             </span>
           </button>
         </div>
-        <div className="bg-gray-100 rounded-2xl flex items-center justify-between gap-2 text-gray-500 text-xl p-4 mb-2 border border-[#]">
+        <div className="bg-gray-100 rounded-2xl flex items-center justify-between gap-2 text-gray-500 text-xl p-4 mb-2 hover:cursor-pointer">
           <div className="flex items-center justify-center">
             <button className="mr-2">
               <IoCopyOutline />
@@ -60,7 +60,7 @@ const ApplicantCard = () => {
             </span>
           </button>
         </div>
-        <div className="bg-gray-100 rounded-2xl flex items-center justify-between gap-2 text-gray-500 text-xl p-4 mb-2 border border-[#]">
+        <div className="bg-gray-100 rounded-2xl flex items-center justify-between gap-2 text-gray-500 text-xl p-4 mb-2 hover:cursor-pointer">
           <div className="flex items-center justify-center">
             <button className="mr-2">
               <IoCopyOutline />
@@ -78,7 +78,7 @@ const ApplicantCard = () => {
             </span>
           </button>
         </div>
-        <div className="bg-gray-100 rounded-2xl flex items-center justify-between gap-2 text-gray-500 text-xl p-4 mb-2 border border-[#]">
+        <div className="bg-gray-100 rounded-2xl flex items-center justify-between gap-2 text-gray-500 text-xl p-4 mb-2 hover:cursor-pointer">
           <div className="flex items-center justify-center">
             <button className="mr-2">
               <IoCopyOutline />
