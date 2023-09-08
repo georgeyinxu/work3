@@ -54,7 +54,7 @@ const App = () => {
             </button>
           ))}
         </div>
-        <div className="h-1 my-8 bg-gradient-to-r from-red-400 via-yellow-500 to-green-400" />
+        <hr className="w-full h-0.5 bg-gradient-to-r from-[#ff00c7] to-[#ff9bfb] rounded-full my-10" />
         <div className="flex flex-col gap-4 w-full">
           <div className="py-4 px-6 border border-gray-300 rounded-lg">
             <div className="flex items-center justify-between">

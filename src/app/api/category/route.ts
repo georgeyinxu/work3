@@ -51,6 +51,6 @@ export async function DELETE(req: NextRequest) {
 
   return NextResponse.json(
     { message: "Successfully deleted all categories" },
-    { status: 200 },
+    { status: 204 },
   );
 }

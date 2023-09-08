@@ -1,6 +1,33 @@
+"use client";
+
 import { ConnectWallet } from "@thirdweb-dev/react";
+import axios from "axios";
+import { useEffect } from "react";
+import { useAddress } from "@thirdweb-dev/react";
 
 const Navbar = () => {
+  const address = useAddress();
+  const addWalletAddress = async (address: string) => {
+    try {
+      await axios.post(
+        "/api/wallet",
+        {
+          address,
+        },
+        {},
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (address) {
+      console.log("Adding Wallet Address");
+      addWalletAddress(address);
+    }
+  }, [address]);
+
   return (
     <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">

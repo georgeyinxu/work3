@@ -1,7 +1,9 @@
 import { FaArrowDown } from "react-icons/fa";
-import { ConnectWallet } from "@thirdweb-dev/react";
+import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 
 const TransactionCard = () => {
+  const address = useAddress();
+
   return (
     <div className="bg-white rounded-2xl transaction-card">
       <div className="bg-gray-100 rounded-2xl text-gray-500 text-base p-4">
@@ -34,19 +36,38 @@ const TransactionCard = () => {
         </h3>
       </div>
       <div className="w-full">
-        <ConnectWallet
-          theme="light"
-          style={{
-            background:
-              "linear-gradient(93.06deg, rgb(255, 0, 199) 2.66%, rgb(255, 159, 251) 98.99%)",
-            borderRadius: 16,
-            paddingTop: 20,
-            paddingBottom: 20,
-            fontSize: 24,
-            marginTop: 8,
-            width: "100%",
-          }}
-        />
+        {address ? (
+          <button
+            style={{
+              background:
+                "linear-gradient(93.06deg, rgb(255, 0, 199) 2.66%, rgb(255, 159, 251) 98.99%)",
+              borderRadius: 16,
+              paddingTop: 20,
+              paddingBottom: 20,
+              fontSize: 24,
+              fontWeight: 600,
+              color: "white",
+              marginTop: 8,
+              width: "100%",
+            }}
+          >
+            Apply Now
+          </button>
+        ) : (
+          <ConnectWallet
+            theme="light"
+            style={{
+              background:
+                "linear-gradient(93.06deg, rgb(255, 0, 199) 2.66%, rgb(255, 159, 251) 98.99%)",
+              borderRadius: 16,
+              paddingTop: 20,
+              paddingBottom: 20,
+              fontSize: 24,
+              marginTop: 8,
+              width: "100%",
+            }}
+          />
+        )}
       </div>
     </div>
   );
