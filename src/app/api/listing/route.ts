@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import connectMongoDB from "@/lib/mongodb";
 import Listing from "@/models/listing";
-import File from "@/models/listing";
 
 export async function POST(req: NextRequest) {
   await connectMongoDB();
@@ -50,4 +49,16 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   await connectMongoDB();
+  let listings = [];
+
+  try {
+    listings = await Listing.find();
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Error fetching listings from db due to " + error },
+      { status: 400 },
+    );
+  }
+
+  return NextResponse.json({ listings }, { status: 200 });
 }

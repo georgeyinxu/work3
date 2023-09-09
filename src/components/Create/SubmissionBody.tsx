@@ -9,7 +9,7 @@ const ReactQuill = dynamic(() => import("react-quill"), {
 import Datepicker from "tailwind-datepicker-react";
 import "react-quill/dist/quill.snow.css";
 import { fetchCategories } from "@/utils/Categories";
-import CategoryResponse from "@/interfaces/categoryResponse";
+import ICategory from "@/interfaces/categoryResponse";
 
 const today = new Date();
 const yesterday = new Date(today);
@@ -83,7 +83,7 @@ const SubmissionBody: React.FC<Props> = ({
   setCategory,
 }) => {
   const [show, setShow] = useState<boolean>(false);
-  const [categories, setCategories] = useState<CategoryResponse[]>([]);
+  const [categories, setCategories] = useState<ICategory[]>([]);
 
   const handleDateChange = (selectedDate: Date) => {
     setDate(selectedDate);
@@ -100,6 +100,9 @@ const SubmissionBody: React.FC<Props> = ({
   useEffect(() => {
     const fetchAllData = async () => {
       let categories = await fetchCategories();
+      categories = categories.filter(
+        (category) => category.title !== "View All",
+      );
       setCategories(categories);
     };
 

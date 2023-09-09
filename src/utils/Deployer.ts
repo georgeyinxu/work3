@@ -52,7 +52,6 @@ const postListing = async (
       .connect(signer)
       .approve(process.env.NEXT_PUBLIC_DEPLOYER_ADDR, amountToApprove);
     const approveReceipt = await approveTx.wait();
-    console.log("Approval Receipt: ", approveReceipt);
 
     if (approveReceipt.status === 0) {
       console.error("Approval failed");
