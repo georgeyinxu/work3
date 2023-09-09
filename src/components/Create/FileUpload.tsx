@@ -2,16 +2,21 @@
 
 import React, { useState, useRef } from "react";
 import { FaTrashCan } from "react-icons/fa6";
+import FileInfo from "@/interfaces/fileInfo";
 
-interface FileInfo {
-  name: string;
-  time: string;
-  size: string;
-}
+type Props = {
+  selectedFiles: File[];
+  fileInfo: FileInfo[];
+  setSelectedFiles: React.Dispatch<React.SetStateAction<File[]>>;
+  setFileInfo: React.Dispatch<React.SetStateAction<FileInfo[]>>;
+};
 
-const FileUpload: React.FC = () => {
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [fileInfo, setFileInfo] = useState<FileInfo[]>([]);
+const FileUpload: React.FC<Props> = ({
+  selectedFiles,
+  fileInfo,
+  setSelectedFiles,
+  setFileInfo,
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const formatBytes = (bytes: number, decimals = 2) => {

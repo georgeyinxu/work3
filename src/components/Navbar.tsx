@@ -23,7 +23,6 @@ const Navbar = () => {
 
   useEffect(() => {
     if (address) {
-      console.log("Adding Wallet Address");
       addWalletAddress(address);
     }
   }, [address]);

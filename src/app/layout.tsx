@@ -18,6 +18,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <title>Work3.to</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/datepicker.min.js" />
+      </head>
       <body className={inter.className}>
         <Providers>{children}</Providers>
       </body>
