@@ -1,6 +1,9 @@
+"use client";
+
+import React from "react";
 import FileUpload from "@/components/Create/FileUpload";
 import SubmissionBody from "@/components/Create/SubmissionBody";
-import React from "react";
+import { postListing } from "@/utils/Deployer";
 
 const Create = () => {
   return (
@@ -18,7 +21,12 @@ const Create = () => {
           <SubmissionBody />
         </div>
         <div className="flex items-center justify-end my-4">
-          <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r">
+          <button
+            className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r"
+            onClick={() =>
+              postListing("Hello World", "Hi I am good!", "100", 1000000)
+            }
+          >
             <span className="block text-white px-4 py-2 font-semibold rounded-full bg-transparent hover:bg-white hover:text-black transition">
               Confirm Submission
             </span>
