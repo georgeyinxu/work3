@@ -10,7 +10,7 @@ const Create = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [fileInfo, setFileInfo] = useState<FileInfo[]>([]);
   const [title, setTitle] = useState<string>("");
-  const [reward, setReward] = useState<number>(0);
+  const [reward, setReward] = useState<string>("0");
   const [date, setDate] = useState<Date>(new Date());
   const [category, setCategory] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -49,7 +49,7 @@ const Create = () => {
           <button
             className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r"
             onClick={() =>
-              postListing(title, description, reward.toString(), category, date)
+              postListing(title, description, reward, category, date)
             }
           >
             <span className="block text-white px-4 py-2 font-semibold rounded-full bg-transparent hover:bg-white hover:text-black transition">

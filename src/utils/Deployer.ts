@@ -2,6 +2,7 @@ import { ethers } from "ethers";
 import axios from "axios";
 
 import deployerContractAbi from "@/abi/DeployerContractABI.json";
+import maslowContractAbi from "@/abi/MaslowContractABI.json";
 import saldTokenAbi from "@/abi/SaldTokenABI.json";
 
 const postListing = async (
@@ -16,6 +17,11 @@ const postListing = async (
     return;
   }
 
+  if (!process.env.NEXT_PUBLIC_MASLOW_ADDR) {
+    console.error("Please set your NEXT_PUBLIC_MASLOW_ADDR in .env.local");
+    return;
+  }
+
   if (!process.env.NEXT_PUBLIC_SALD_ADDR) {
     console.error("Please set your NEXT_PUBLIC_SALD_ADDR in .env.local");
     return;
@@ -23,6 +29,7 @@ const postListing = async (
 
   const deadline = new Date(date).getDate();
   const rewardNum = parseFloat(reward);
+  let maslowJobId = 0;
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -35,6 +42,11 @@ const postListing = async (
   const tokenContract = new ethers.Contract(
     process.env.NEXT_PUBLIC_SALD_ADDR,
     saldTokenAbi,
+    signer,
+  );
+  const maslowContract = new ethers.Contract(
+    process.env.NEXT_PUBLIC_MASLOW_ADDR,
+    maslowContractAbi,
     signer,
   );
 
@@ -69,15 +81,20 @@ const postListing = async (
   };
 
   try {
+    const waitForJobListedEvent = new Promise<number>((resolve, reject) => {
+      maslowContract.on("JobListed", (jobId, event) => {
+        resolve(jobId.toNumber());
+        maslowContract.removeAllListeners("JobListed");
+      });
+    });
+
     const tx = await deployerContract.connect(signer).listJob(jobDetails);
     const receipt = await tx.wait();
 
+    const maslowJobId = await waitForJobListedEvent;
     const from = receipt.from;
     const to = receipt.to;
     const transactionHash = receipt.transactionHash;
-    const transactionIndex = receipt.transactionIndex;
-
-    // TODO: Check if transactionIndex is correct as Steve mentioned it comes from the maslow contract
 
     await axios.post(
       "/api/listing",
@@ -88,7 +105,7 @@ const postListing = async (
         description,
         reward: rewardNum,
         transactionHash,
-        jobId: transactionIndex,
+        jobId: maslowJobId,
         date,
         categoryId: category,
       },

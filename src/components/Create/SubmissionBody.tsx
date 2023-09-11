@@ -24,7 +24,7 @@ const formattedDate = yesterday.toLocaleDateString("en-SG", {
 const options = {
   title: "Please choose a date",
   autoHide: true,
-  todayBtn: true,
+  todayBtn: false,
   clearBtn: true,
   maxDate: new Date("2030-01-01"),
   minDate: new Date(formattedDate),
@@ -60,12 +60,12 @@ const options = {
 type Props = {
   title: string;
   description: string;
-  reward: number;
+  reward: string;
   date: Date;
   category: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   setDescription: React.Dispatch<React.SetStateAction<string>>;
-  setReward: React.Dispatch<React.SetStateAction<number>>;
+  setReward: React.Dispatch<React.SetStateAction<string>>;
   setDate: React.Dispatch<React.SetStateAction<Date>>;
   setCategory: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -97,6 +97,11 @@ const SubmissionBody: React.FC<Props> = ({
     setDescription(html);
   }
 
+  const handleRewardChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value: string = e.target.value;
+    setReward(value);
+  };
+
   useEffect(() => {
     const fetchAllData = async () => {
       let categories = await fetchCategories();
@@ -104,6 +109,10 @@ const SubmissionBody: React.FC<Props> = ({
         (category) => category.title !== "View All",
       );
       setCategories(categories);
+
+      if (categories.length > 0) {
+        setCategory(categories[0]._id);
+      }
     };
 
     fetchAllData();
@@ -151,7 +160,7 @@ const SubmissionBody: React.FC<Props> = ({
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="0"
             value={reward}
-            onChange={(e) => setReward(parseFloat(e.target.value))}
+            onChange={handleRewardChange}
             required
           />
         </div>

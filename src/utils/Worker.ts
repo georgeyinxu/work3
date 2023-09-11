@@ -1,35 +1,136 @@
+import React from "react";
 import { ethers } from "ethers";
+import axios from "axios";
 
 import workerContractAbi from "@/abi/WorkerContractABI.json";
+import maslowContractAbi from "@/abi/MaslowContractABI.json";
+import saldTokenAbi from "@/abi/SaldTokenABI.json";
 
-const init = async () => {
-  if (!process.env.NEXT_PUBLIC_MUMBAI_URL) {
-    console.error("Please set your TESTNET URL in .env.local");
+const applyListing = async (
+  _id: string,
+  jobId: number,
+  fee: string,
+  date: Date,
+  setApplied: React.Dispatch<React.SetStateAction<boolean>>,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
+  if (!process.env.NEXT_PUBLIC_WORKER_ADDR) {
+    console.error("Please set your NEXT_PUBLIC_WORKER_ADDR in .env.local");
     return;
   }
 
-  const provider = new ethers.providers.JsonRpcProvider(
-    process.env.NEXT_PUBLIC_MUMBAI_URL,
-  );
-
-  if (
-    !(
-      process.env.NEXT_PUBLIC_WORKER_ADDR &&
-      process.env.NEXT_PUBLIC_DEPLOYER_ADDR &&
-      process.env.NEXT_PUBLIC_VALIDATOR_ADDR &&
-      process.env.NEXT_PUBLIC_MASLOW_ADDR
-    )
-  ) {
-    console.error(
-      "Contract address/addresses is missing, please fill it up in .env.local file",
-    );
+  if (!process.env.NEXT_PUBLIC_MASLOW_ADDR) {
+    console.error("Please set your NEXT_PUBLIC_MASLOW_ADDR in .env.local");
     return;
   }
 
+  if (!process.env.NEXT_PUBLIC_SALD_ADDR) {
+    console.error("Please set your NEXT_PUBLIC_SALD_ADDR in .env.local");
+    return;
+  }
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
-  const worker = new ethers.Contract(
+  const deadline = new Date(date).getDate();
+
+  const workerContract = new ethers.Contract(
     process.env.NEXT_PUBLIC_WORKER_ADDR,
     workerContractAbi,
     signer,
   );
+  const tokenContract = new ethers.Contract(
+    process.env.NEXT_PUBLIC_SALD_ADDR,
+    saldTokenAbi,
+    signer,
+  );
+  const maslowContract = new ethers.Contract(
+    process.env.NEXT_PUBLIC_MASLOW_ADDR,
+    maslowContractAbi,
+    signer,
+  );
+
+  setIsLoading(true);
+
+  try {
+    const amountToApprove = ethers.utils.parseUnits(fee, 18);
+    const existingAllowance = await tokenContract.allowance(
+      await signer.getAddress(),
+      process.env.NEXT_PUBLIC_DEPLOYER_ADDR,
+    );
+
+    if (existingAllowance.lt(amountToApprove)) {
+      const approveTx = await tokenContract
+        .connect(signer)
+        .approve(process.env.NEXT_PUBLIC_DEPLOYER_ADDR, amountToApprove);
+      const approveReceipt = await approveTx.wait();
+
+      if (approveReceipt.status === 0) {
+        console.error("Approval failed");
+        return;
+      }
+    }
+
+    try {
+      const waitForJobListedEvent = new Promise<number>((resolve, reject) => {
+        maslowContract.on("JobApplied", (applicantId, event) => {
+          resolve(applicantId.toNumber());
+          setApplied(true);
+          maslowContract.removeAllListeners("JobApplied");
+        });
+      });
+
+      const tx = await workerContract
+        .connect(signer)
+        .applyJob(jobId, ethers.utils.parseUnits(fee, 18), deadline);
+      const receipt = await tx.wait();
+
+      const applicantId = await waitForJobListedEvent;
+      const from = receipt.from;
+      const transactionHash = receipt.transactionHash;
+
+      // TODO: Check with Steve if the applicantId increments
+      // console.log(applicantId);
+
+      await axios.post(
+        "/api/listing/applicant",
+        {
+          jobId: _id,
+          applicantAddress: from,
+          transactionHash,
+          fee,
+          applicantId,
+        },
+        {},
+      );
+    } catch (error: any) {
+      if (error.code === "ACTION_REJECTED") {
+        console.log("User rejected the MetaMask transaction.");
+      } else {
+        console.error("Failed to apply for job due to: ", error);
+      }
+    }
+  } catch (error) {
+    console.error("Failed to apply for job due to: ", error);
+  } finally {
+    setIsLoading(false);
+  }
 };
+
+const checkApplied = async (address: string, post: string) => {
+  let applied = false;
+
+  try {
+    const res = await axios.get(
+      `/api/user/applied?postId=${post}&address=${address}`,
+    );
+
+    console.log(res.data.data);
+    applied = res.data.data;
+  } catch (error) {
+    console.error("Failed to check if wallet address has applied");
+  }
+
+  return applied;
+};
+
+export { applyListing, checkApplied };
