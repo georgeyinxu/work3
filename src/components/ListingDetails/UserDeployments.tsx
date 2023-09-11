@@ -21,6 +21,7 @@ const UserDeployments = () => {
 
   return (
     <LineChart
+      id="deployments"
       width={800}
       height={400}
       data={data}

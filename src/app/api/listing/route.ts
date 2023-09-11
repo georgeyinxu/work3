@@ -49,10 +49,16 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   await connectMongoDB();
+  const url = new URL(req.url);
+  const id = url.searchParams.get("id");
   let listings = [];
 
   try {
-    listings = await Listing.find();
+    if (id) {
+      listings = await Listing.findById(id);
+    } else {
+      listings = await Listing.find();
+    }
   } catch (error) {
     return NextResponse.json(
       { message: "Error fetching listings from db due to " + error },

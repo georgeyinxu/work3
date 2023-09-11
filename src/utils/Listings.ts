@@ -8,10 +8,23 @@ const fetchListings = async () => {
     const res = await axios.get("/api/listing");
     listingsData = res.data.listings as IListing[];
   } catch (error) {
-    console.error("Failed to get all categories due to: " + error);
+    console.error("Failed to get all listings due to: " + error);
   }
 
   return listingsData;
 };
 
-export { fetchListings };
+const fetchListing = async (id: string) => {
+  let listingData: IListing | {} = {};
+
+  try {
+    const res = await axios.get(`/api/listing?id=${id}`);
+    listingData = res.data.listings as IListing;
+  } catch (error) {
+    console.error("Failed to get all listings due to: " + error);
+  }
+
+  return listingData;
+};
+
+export { fetchListings, fetchListing };
