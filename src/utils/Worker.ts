@@ -124,7 +124,6 @@ const checkApplied = async (address: string, post: string) => {
       `/api/user/applied?postId=${post}&address=${address}`,
     );
 
-    console.log(res.data.data);
     applied = res.data.data;
   } catch (error) {
     console.error("Failed to check if wallet address has applied");

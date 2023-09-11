@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAddress } from "@thirdweb-dev/react";
 import WorkerView from "@/components/ListingDetails/WorkerView";
 import DeployerView from "@/components/ListingDetails/DeployerView";
 import { fetchListing } from "@/utils/Listings";
@@ -29,6 +30,7 @@ const JobDetails: React.FC<Props> = ({ params }) => {
     updatedAt: "",
   });
   const router = useRouter();
+  const address = useAddress();
 
   useEffect(() => {
     const fetchAllData = async () => {
@@ -37,11 +39,19 @@ const JobDetails: React.FC<Props> = ({ params }) => {
         router.push("/");
       } else {
         setListingDetails(data as IListing);
+
+        if ("from" in data && address === data.from) {
+          setIsWorker(false);
+        } else {
+          setIsWorker(true);
+        }
       }
     };
 
-    fetchAllData();
-  }, []);
+    if (address) {
+      fetchAllData();
+    }
+  }, [address]); // Dependency array
 
   return (
     <main className="min-h-screen bg-white flex items-center justify-center">
