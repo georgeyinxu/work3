@@ -122,7 +122,7 @@ const postListing = async (
   window.location.href = `/listing/${createdListingId}`;
 };
 
-const pickApplicant = async (applicantId: number) => {
+const pickApplicant = async (applicantId: number, listingId: string) => {
   if (!process.env.NEXT_PUBLIC_DEPLOYER_ADDR) {
     console.error("Please set your NEXT_PUBLIC_DEPLOYER_ADDR in .env.local");
     return;
@@ -143,19 +143,9 @@ const pickApplicant = async (applicantId: number) => {
 
   const deployerContract = new ethers.Contract(
     process.env.NEXT_PUBLIC_DEPLOYER_ADDR,
-    workerContractAbi,
+    deployerContractAbi,
     signer,
   );
-  // const tokenContract = new ethers.Contract(
-  //   process.env.NEXT_PUBLIC_SALD_ADDR,
-  //   saldTokenAbi,
-  //   signer,
-  // );
-  // const maslowContract = new ethers.Contract(
-  //   process.env.NEXT_PUBLIC_MASLOW_ADDR,
-  //   maslowContractAbi,
-  //   signer,
-  // );
 
   try {
     const tx = await deployerContract
@@ -163,12 +153,9 @@ const pickApplicant = async (applicantId: number) => {
       .pickApplicant(applicantId);
     const receipt = await tx.wait();
 
-    const iface = new ethers.utils.Interface(workerContractAbi);
-    receipt.logs.map((log: any) => {
-      const logDetails = iface.parseLog(log);
-      if (logDetails && logDetails.name === "ApplicantPicked") {
-        console.log("Applicant PICKEDDDDDD");
-      }
+    await axios.put("/api/listing/applicant", {
+      applicantId,
+      listingId,
     });
   } catch (error: any) {
     console.error("Failed to pick applicant for job due to: ", error);

@@ -41,7 +41,7 @@ const JobDetails: React.FC<Props> = ({ params }) => {
         setListingDetails(data as IListing);
 
         if ("from" in data && address === data.from) {
-          // setIsWorker(false);
+          setIsWorker(false);
         } else {
           setIsWorker(true);
         }

@@ -15,12 +15,4 @@ const fetchApplicants = async (listingId: string) => {
   return applicants;
 };
 
-const selectApplicant = async (listingId: string, applicantId: number) => {
-  try {
-    const res = await axios.put("");
-  } catch (error) {
-    console.error("Failed to select applicant due to: " + error);
-  }
-};
-
 export { fetchApplicants };

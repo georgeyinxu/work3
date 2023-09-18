@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import connectMongoDB from "@/lib/mongodb";
 import Applicant from "@/models/applicant";
+import Listing from "@/models/listing";
 import IApplicant from "@/interfaces/ApplicantResponse";
+import JobStatus from "@/enums/JobStatus";
 
 export async function POST(req: NextRequest) {
   await connectMongoDB();
@@ -74,16 +76,34 @@ export async function PUT(req: NextRequest) {
   const { applicantId, listingId } = await req.json();
 
   try {
-    // await Applicant.findOneAndUpdate(
-    //   {
-    //     applicantId,
-    //   },
-    //   {},
-    // );
+    await Applicant.findOneAndUpdate(
+      {
+        applicantId,
+      },
+      { selected: true },
+    );
+
+    await Listing.findOneAndUpdate(
+      {
+        _id: new mongoose.Types.ObjectId(listingId),
+      },
+      {
+        jobStatus: JobStatus.APPLICATION,
+      },
+    );
   } catch (error) {
     return NextResponse.json(
       { message: "Error updating applicant due to" + error },
       { status: 400 },
     );
   }
+
+  return NextResponse.json(
+    {
+      message: "Successfully selected applicant",
+    },
+    {
+      status: 200,
+    },
+  );
 }

@@ -7,6 +7,7 @@ import { short } from "@/utils/Common";
 import { DateTime } from "luxon";
 import { useAddress } from "@thirdweb-dev/react";
 import { applyListing } from "@/utils/Worker";
+import { pickApplicant } from "@/utils/Deployer";
 
 type Props = {
   listingId: string;
@@ -14,7 +15,7 @@ type Props = {
 
 const ApplicantCard: React.FC<Props> = ({ listingId }) => {
   const [applicants, setApplicants] = useState<IApplicant[]>([]);
-  const [selectedApplicant, setSelectedApplicant] = useState("");
+  const [selectedApplicant, setSelectedApplicant] = useState<number>(-1);
   const address = useAddress();
 
   useEffect(() => {
@@ -22,7 +23,7 @@ const ApplicantCard: React.FC<Props> = ({ listingId }) => {
       const res = await fetchApplicants(listingId);
       setApplicants(res);
       if (res.length > 0) {
-        setSelectedApplicant(res[0].applicantAddress);
+        setSelectedApplicant(res[0].applicantId);
       }
     };
 
@@ -35,11 +36,11 @@ const ApplicantCard: React.FC<Props> = ({ listingId }) => {
           applicants.map((applicant) => (
             <div
               className={`bg-gray-100 rounded-2xl flex items-center justify-between gap-2 text-gray-500 text-xl p-4 mb-2 hover:cursor-pointer ${
-                selectedApplicant === applicant.applicantAddress &&
+                selectedApplicant === applicant.applicantId &&
                 "border-2 border-[#FF66FF]"
               }`}
               key={applicant._id}
-              onClick={() => setSelectedApplicant(applicant.applicantAddress)}
+              onClick={() => setSelectedApplicant(applicant.applicantId)}
             >
               <div className="flex items-center justify-center">
                 <button
@@ -85,6 +86,7 @@ const ApplicantCard: React.FC<Props> = ({ listingId }) => {
               marginTop: 8,
               width: "100%",
             }}
+            onClick={() => pickApplicant(selectedApplicant, listingId)}
           >
             Confirm Wallet
           </button>
