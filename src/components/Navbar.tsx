@@ -1,6 +1,32 @@
+"use client";
+
 import { ConnectWallet } from "@thirdweb-dev/react";
+import axios from "axios";
+import React, { useEffect } from "react";
+import { useAddress } from "@thirdweb-dev/react";
 
 const Navbar = () => {
+  const address = useAddress();
+  const addWalletAddress = async (address: string) => {
+    try {
+      await axios.post(
+        "/api/wallet",
+        {
+          address,
+        },
+        {},
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (address) {
+      addWalletAddress(address);
+    }
+  }, [address]);
+
   return (
     <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -11,7 +37,14 @@ const Navbar = () => {
             alt="Web3.to Logo"
           />
         </a>
-        <div className="flex md:order-2">
+        <div className="flex md:order-2 gap-2">
+          <a href="/listing/create">
+            <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r">
+              <span className="block text-black p-4 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
+                Create Listing
+              </span>
+            </button>
+          </a>
           <ConnectWallet
             theme="light"
             style={{
