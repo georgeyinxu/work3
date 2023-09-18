@@ -31,6 +31,7 @@ const applyListing = async (
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
+  console.log(signer);
   const deadline = new Date(date).getDate();
 
   const workerContract = new ethers.Contract(
@@ -83,6 +84,7 @@ const applyListing = async (
         .connect(signer)
         .applyJob(jobId, ethers.utils.parseUnits(fee, 18), deadline);
       const receipt = await tx.wait();
+      console.log(JSON.stringify(receipt));
 
       const applicantId = await waitForJobListedEvent;
       const from = receipt.from;
@@ -130,6 +132,42 @@ const checkApplied = async (address: string, post: string) => {
   }
 
   return applied;
+};
+
+const confirmWorker = async (applicantId: number) => {
+  if (!process.env.NEXT_PUBLIC_WORKER_ADDR) {
+    console.error("Please set your NEXT_PUBLIC_WORKER_ADDR in .env.local");
+    return;
+  }
+
+  if (!process.env.NEXT_PUBLIC_MASLOW_ADDR) {
+    console.error("Please set your NEXT_PUBLIC_MASLOW_ADDR in .env.local");
+    return;
+  }
+
+  if (!process.env.NEXT_PUBLIC_SALD_ADDR) {
+    console.error("Please set your NEXT_PUBLIC_SALD_ADDR in .env.local");
+    return;
+  }
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+
+  const workerContract = new ethers.Contract(
+    process.env.NEXT_PUBLIC_WORKER_ADDR,
+    workerContractAbi,
+    signer,
+  );
+  const tokenContract = new ethers.Contract(
+    process.env.NEXT_PUBLIC_SALD_ADDR,
+    saldTokenAbi,
+    signer,
+  );
+  const maslowContract = new ethers.Contract(
+    process.env.NEXT_PUBLIC_MASLOW_ADDR,
+    maslowContractAbi,
+    signer,
+  );
 };
 
 export { applyListing, checkApplied };

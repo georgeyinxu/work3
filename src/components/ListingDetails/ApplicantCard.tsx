@@ -21,7 +21,9 @@ const ApplicantCard: React.FC<Props> = ({ listingId }) => {
     const fetchAllData = async () => {
       const res = await fetchApplicants(listingId);
       setApplicants(res);
-      setSelectedApplicant(res[0].applicantAddress);
+      if (res.length > 0) {
+        setSelectedApplicant(res[0].applicantAddress);
+      }
     };
 
     fetchAllData();
