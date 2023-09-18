@@ -68,3 +68,22 @@ export async function GET(req: NextRequest) {
     },
   );
 }
+
+export async function PUT(req: NextRequest) {
+  await connectMongoDB();
+  const { applicantId, listingId } = await req.json();
+
+  try {
+    // await Applicant.findOneAndUpdate(
+    //   {
+    //     applicantId,
+    //   },
+    //   {},
+    // );
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Error updating applicant due to" + error },
+      { status: 400 },
+    );
+  }
+}
