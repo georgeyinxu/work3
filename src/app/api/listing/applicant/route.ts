@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import connectMongoDB from "@/lib/mongodb";
 import Applicant from "@/models/applicant";
-import IApplicant from "@/interfaces/applicantResponse";
+import IApplicant from "@/interfaces/ApplicantResponse";
 
 export async function POST(req: NextRequest) {
   await connectMongoDB();
@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
       transactionHash,
       fee,
       applicantId,
+      selected: false,
     });
   } catch (error) {
     return NextResponse.json(
