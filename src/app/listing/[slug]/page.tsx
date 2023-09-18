@@ -49,7 +49,7 @@ const JobDetails: React.FC<Props> = ({ params }) => {
     };
 
     fetchAllData();
-  }, []); // Dependency array
+  }, [address]); // Dependency array
 
   return (
     <main className="min-h-screen bg-white flex items-center justify-center">

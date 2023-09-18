@@ -30,6 +30,7 @@ const postListing = async (
   const deadline = new Date(date).getDate();
   const rewardNum = parseFloat(reward);
   let maslowJobId = 0;
+  let createdListingId;
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
@@ -96,7 +97,7 @@ const postListing = async (
     const to = receipt.to;
     const transactionHash = receipt.transactionHash;
 
-    await axios.post(
+    const res = await axios.post(
       "/api/listing",
       {
         from,
@@ -111,9 +112,13 @@ const postListing = async (
       },
       {},
     );
+
+    createdListingId = res.data.data;
   } catch (error) {
     console.error("Failed to list job due to: " + error);
   }
+
+  window.location.href = `/listing/${createdListingId}`;
 };
 
 export { postListing };

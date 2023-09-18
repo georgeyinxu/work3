@@ -16,10 +16,11 @@ export async function POST(req: NextRequest) {
     date,
     categoryId,
   } = await req.json();
+  let listingId;
 
   // 1. Upload the listing to MongoDB with its details
   try {
-    await Listing.create({
+    const createdListing = await Listing.create({
       from,
       to,
       title,
@@ -30,6 +31,8 @@ export async function POST(req: NextRequest) {
       transactionHash,
       jobId,
     });
+
+    listingId = createdListing._id;
   } catch (error) {
     return NextResponse.json(
       { message: "Error adding listing to db due to " + error },
@@ -38,7 +41,7 @@ export async function POST(req: NextRequest) {
   }
 
   return NextResponse.json(
-    { message: "Successfully created listing" },
+    { message: "Successfully created listing", data: listingId },
     { status: 201 },
   );
 
@@ -74,8 +77,6 @@ export async function PUT(req: NextRequest) {
 
   const { title, description, reward, date, categoryId, listingId } =
     await req.json();
-
-  console.log(date);
 
   try {
     await Listing.findOneAndUpdate(

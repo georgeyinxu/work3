@@ -47,6 +47,8 @@ const updateListing = async (
   } catch (error) {
     console.error("Failed to update listing due to: " + error);
   }
+
+  window.location.href = `/listing/${listingId}`;
 };
 
 export { fetchListings, fetchListing, updateListing };
