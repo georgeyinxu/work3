@@ -10,17 +10,36 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
+    "@thirdweb-dev/chains": "^0.1.50",
+    "@thirdweb-dev/react": "^3.14.40",
+    "@thirdweb-dev/sdk": "^3.10.59",
     "@types/node": "20.5.9",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.15",
+    "axios": "^1.5.0",
+    "encoding": "^0.1.13",
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
+    "lokijs": "^1.5.12",
+    "luxon": "^3.4.3",
+    "mongodb": "^3.5.9",
+    "mongoose": "^7.5.0",
     "next": "13.4.19",
+    "pino-pretty": "^10.2.0",
     "postcss": "8.4.29",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.10.1",
+    "react-query": "^3.39.3",
+    "react-quill": "^2.0.0",
+    "recharts": "^2.8.0",
+    "tailwind-datepicker-react": "^1.4.2",
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2"
+  },
+  "devDependencies": {
+    "@types/luxon": "^3.3.2",
+    "ethers": "^5.7.2"
   }
 }
