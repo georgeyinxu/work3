@@ -3,14 +3,14 @@
 import React, { useEffect, useState } from "react";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import dynamic from "next/dynamic";
-const ReactQuill = dynamic(() => import("react-quill"), {
-  ssr: false,
-});
 import Datepicker from "tailwind-datepicker-react";
 import "react-quill/dist/quill.snow.css";
 import { fetchCategories } from "@/utils/Categories";
 import ICategory from "@/interfaces/categoryResponse";
 
+const ReactQuill = dynamic(() => import("react-quill"), {
+  ssr: false,
+});
 const today = new Date();
 const yesterday = new Date(today);
 yesterday.setDate(today.getDate() - 1);
@@ -20,42 +20,6 @@ const formattedDate = yesterday.toLocaleDateString("en-SG", {
   month: "2-digit",
   day: "2-digit",
 });
-
-const options = {
-  title: "Please choose a date",
-  autoHide: true,
-  todayBtn: false,
-  clearBtn: true,
-  maxDate: new Date("2030-01-01"),
-  minDate: new Date(formattedDate),
-  theme: {
-    background: "bg-white",
-    todayBtn: "",
-    clearBtn: "",
-    icons: "",
-    text: "",
-    disabledText: "bg-gray-200",
-    input: "",
-    inputIcon: "",
-    selected: "",
-  },
-  icons: {
-    // () => ReactElement | JSX.Element
-    prev: () => (
-      <span>
-        <FaArrowLeft />
-      </span>
-    ),
-    next: () => (
-      <span>
-        <FaArrowRight />
-      </span>
-    ),
-  },
-  datepickerClassNames: "top-12",
-  defaultDate: new Date("2022-01-01"),
-  language: "en",
-};
 
 type Props = {
   title: string;
@@ -84,6 +48,44 @@ const SubmissionBody: React.FC<Props> = ({
 }) => {
   const [show, setShow] = useState<boolean>(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
+
+  const options = {
+    title: "Please choose a date",
+    autoHide: true,
+    todayBtn: false,
+    clearBtn: true,
+    maxDate: new Date("2030-01-01"),
+    minDate: new Date(formattedDate),
+    theme: {
+      background: "bg-white",
+      todayBtn: "",
+      clearBtn: "",
+      icons: "",
+      text: "",
+      disabledText: "bg-gray-200",
+      input: "",
+      inputIcon: "",
+      selected: "",
+    },
+    icons: {
+      // () => ReactElement | JSX.Element
+      prev: () => (
+        <span>
+          <FaArrowLeft />
+        </span>
+      ),
+      next: () => (
+        <span>
+          <FaArrowRight />
+        </span>
+      ),
+    },
+    datepickerClassNames: "top-12",
+    defaultDate: new Date(),
+    language: "en",
+  };
+
+  // TODO: Fix default date for edit to show the previous date set by the deployer
 
   const handleDateChange = (selectedDate: Date) => {
     setDate(selectedDate);
@@ -122,9 +124,12 @@ const SubmissionBody: React.FC<Props> = ({
     <div className="bg-white p-8 rounded-xl">
       <div className="flex items-center justify-between">
         <h3 className="text-2xl text-black">Submission Body</h3>
-        <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r">
+        <button
+          className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r"
+          onClick={() => setDescription("")}
+        >
           <span className="block text-black px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
-            Clear Submission
+            Clear Description
           </span>
         </button>
       </div>

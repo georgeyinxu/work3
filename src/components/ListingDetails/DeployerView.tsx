@@ -34,12 +34,6 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
     );
     const targetTime = new Date(listingDetails.date);
 
-    // Set the target to 6 PM SGT on 6th September
-    targetTime.setMonth(8); // September (JavaScript months are 0-based)
-    targetTime.setDate(6);
-    targetTime.setHours(18, 0, 0, 0); // 6 PM
-
-    // If it's already past the target time, set the target to 6 PM SGT on 7th September
     if (sgt.getTime() > targetTime.getTime()) {
       targetTime.setDate(targetTime.getDate() + 1);
     }
@@ -95,13 +89,17 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
                 />
               </div>
             </div>
-            <div>
-              <p className="text-sm text-[#7D7D7D]">Ends In</p>
-              <h3 className="text-[#222222] text-3xl font-semibold">
-                {timeLeft.days}D {timeLeft.hours}H {timeLeft.minutes}M{" "}
-                {timeLeft.seconds}S
-              </h3>
-            </div>
+            {timeLeft.seconds ? (
+              <div>
+                <p className="text-sm text-[#7D7D7D]">Ends In</p>
+                <h3 className="text-[#222222] text-3xl font-semibold">
+                  {timeLeft.days}D {timeLeft.hours}H {timeLeft.minutes}M{" "}
+                  {timeLeft.seconds}S
+                </h3>
+              </div>
+            ) : (
+              " "
+            )}
           </div>
           <hr className="w-full h-0.5 bg-gray-50 rounded-full my-10" />
           <div className="flex items-center justify-between">

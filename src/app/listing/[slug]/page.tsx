@@ -41,17 +41,15 @@ const JobDetails: React.FC<Props> = ({ params }) => {
         setListingDetails(data as IListing);
 
         if ("from" in data && address === data.from) {
-          // setIsWorker(false);
+          setIsWorker(false);
         } else {
           setIsWorker(true);
         }
       }
     };
 
-    if (address) {
-      fetchAllData();
-    }
-  }, [address]); // Dependency array
+    fetchAllData();
+  }, []); // Dependency array
 
   return (
     <main className="min-h-screen bg-white flex items-center justify-center">

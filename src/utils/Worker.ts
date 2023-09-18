@@ -73,7 +73,7 @@ const applyListing = async (
 
     try {
       const waitForJobListedEvent = new Promise<number>((resolve, reject) => {
-        maslowContract.on("JobApplied", (applicantId, event) => {
+        maslowContract.on("JobApplied", (jobId, applicantId, event) => {
           resolve(applicantId.toNumber());
           setApplied(true);
           maslowContract.removeAllListeners("JobApplied");
@@ -89,9 +89,6 @@ const applyListing = async (
       const applicantId = await waitForJobListedEvent;
       const from = receipt.from;
       const transactionHash = receipt.transactionHash;
-
-      // TODO: Check with Steve if the applicantId increments
-      // console.log(applicantId);
 
       await axios.post(
         "/api/listing/applicant",

@@ -2,7 +2,7 @@
 
 import { ConnectWallet } from "@thirdweb-dev/react";
 import axios from "axios";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useAddress } from "@thirdweb-dev/react";
 
 const Navbar = () => {
@@ -37,7 +37,14 @@ const Navbar = () => {
             alt="Web3.to Logo"
           />
         </a>
-        <div className="flex md:order-2">
+        <div className="flex md:order-2 gap-2">
+          <a href="/listing/create">
+            <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r">
+              <span className="block text-black p-4 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
+                Create Listing
+              </span>
+            </button>
+          </a>
           <ConnectWallet
             theme="light"
             style={{

@@ -68,3 +68,37 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({ listings }, { status: 200 });
 }
+
+export async function PUT(req: NextRequest) {
+  await connectMongoDB();
+
+  const { title, description, reward, date, categoryId, listingId } =
+    await req.json();
+
+  console.log(date);
+
+  try {
+    await Listing.findOneAndUpdate(
+      {
+        _id: new mongoose.Types.ObjectId(listingId),
+      },
+      {
+        title,
+        description,
+        reward,
+        date,
+        category: new mongoose.Types.ObjectId(categoryId),
+      },
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Error updating listing in db due to " + error },
+      { status: 400 },
+    );
+  }
+
+  return NextResponse.json(
+    { message: "Successfully updated listing" },
+    { status: 200 },
+  );
+}

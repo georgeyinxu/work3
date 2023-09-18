@@ -27,4 +27,26 @@ const fetchListing = async (id: string) => {
   return listingData;
 };
 
-export { fetchListings, fetchListing };
+const updateListing = async (
+  title: string,
+  description: string,
+  reward: string,
+  date: Date,
+  categoryId: string,
+  listingId: string,
+) => {
+  try {
+    const res = await axios.put("/api/listing", {
+      title,
+      description,
+      reward,
+      date,
+      categoryId,
+      listingId,
+    });
+  } catch (error) {
+    console.error("Failed to update listing due to: " + error);
+  }
+};
+
+export { fetchListings, fetchListing, updateListing };
