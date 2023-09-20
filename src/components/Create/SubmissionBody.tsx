@@ -57,13 +57,13 @@ const SubmissionBody: React.FC<Props> = ({
     maxDate: new Date("2030-01-01"),
     minDate: new Date(formattedDate),
     theme: {
-      background: "bg-white",
+      background: "bg-white dark:bg-white",
       todayBtn: "",
       clearBtn: "",
       icons: "",
-      text: "",
+      text: "text-[#202020]",
       disabledText: "bg-gray-200",
-      input: "",
+      input: "bg-gray-50",
       inputIcon: "",
       selected: "",
     },
@@ -145,7 +145,7 @@ const SubmissionBody: React.FC<Props> = ({
           <input
             type="text"
             id="title"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder=""
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -162,7 +162,7 @@ const SubmissionBody: React.FC<Props> = ({
           <input
             type="number"
             id="reward"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="0"
             value={reward}
             onChange={handleRewardChange}
@@ -192,7 +192,7 @@ const SubmissionBody: React.FC<Props> = ({
           </label>
           <select
             id="countries"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
@@ -207,7 +207,7 @@ const SubmissionBody: React.FC<Props> = ({
       <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-4">
         Description
       </label>
-      <ReactQuill value={description} onChange={handleChange} />
+      <ReactQuill value={description} onChange={handleChange} className="text-[#202020]" />
     </div>
   );
 };

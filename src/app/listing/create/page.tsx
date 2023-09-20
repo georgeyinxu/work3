@@ -18,10 +18,10 @@ const Create = () => {
   return (
     <main className="min-h-screen bg-[#F6F6F6] flex items-center justify-center">
       <div className="max-w-screen-xl rounded-xl px-6 py-32 w-full">
-        <h3 className="text-4xl uppercase font-semibold">
+        <h3 className="text-4xl text-[#202020] uppercase font-semibold">
           <span className="text-[#FF66FF]">NEW LISTING:</span> DRAFT
         </h3>
-        <h5 className="text-xl">
+        <h5 className="text-xl text-[#202020]">
           Complete your submission, including relevant files, and then stake to
           submit
         </h5>
