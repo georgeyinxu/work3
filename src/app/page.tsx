@@ -69,11 +69,11 @@ const App = () => {
                     key={listing._id}
                   >
                     <div className="flex items-center justify-between">
-                      <h3 className="text-3xl font-semibold">
+                      <h3 className="text-[#202020] text-3xl font-semibold">
                         {listing.title}
                       </h3>
                       <Link
-                        className="flex items-center justify-center gap-3 hover:text-[#FE66FF] text-3xl"
+                        className="flex items-center justify-center gap-3 text-[#202020] hover:text-[#FE66FF] text-3xl"
                         href={`/listing/${listing._id}`}
                       >
                         <span className="font-semibold">Apply</span>
@@ -81,7 +81,7 @@ const App = () => {
                       </Link>
                     </div>
                     <p
-                      className="text-lg mt-2 mb-4 line-clamp-5"
+                      className="text-[#202020] text-lg mt-2 mb-4 line-clamp-5"
                       dangerouslySetInnerHTML={{ __html: listing.description }}
                     />
                     <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r">

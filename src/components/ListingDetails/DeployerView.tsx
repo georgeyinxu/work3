@@ -7,6 +7,7 @@ import { ImArrowUpRight2 } from "react-icons/im";
 import { FaPenFancy } from "react-icons/fa";
 import IListing from "@/interfaces/ListingResponse";
 import { short } from "@/utils/Common";
+import JobCompleteCard from "@/components/ListingDetails/JobCompleteCard";
 
 type Props = {
   listingDetails: IListing;
@@ -59,6 +60,13 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
 
   return (
     <main>
+      <div
+        className="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50"
+        role="alert"
+      >
+        <span className="font-medium">Worker selected!</span> Please communicate
+        through the chat for submissions.
+      </div>
       <div className="flex gap-4 justify-start items-center">
         <img
           src="https://sothebys-com.brightspotcdn.com/dims4/default/6a8c506/2147483647/strip/true/crop/1000x1000+0+0/resize/684x684!/quality/90/?url=http%3A%2F%2Fsothebys-brightspot.s3.amazonaws.com%2Fdotcom%2F8e%2F9c%2F972bfa1645c08ca0919ea68aabfe%2F4609.png"
@@ -136,7 +144,11 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
           </div>
         </div>
         <div>
-          <ApplicantCard listingId={listingDetails._id} />
+          {listingDetails.jobStatus !== "APPLICATION" ? (
+            <ApplicantCard listingId={listingDetails._id} />
+          ) : (
+            <JobCompleteCard />
+          )}
         </div>
       </div>
     </main>
