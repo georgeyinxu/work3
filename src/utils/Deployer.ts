@@ -133,7 +133,7 @@ const pickApplicant = async (
   applicantId: number,
   listingId: string,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  setPickedWorker: React.Dispatch<React.SetStateAction<boolean>>,
+  setPickedWorker: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   if (!process.env.NEXT_PUBLIC_DEPLOYER_ADDR) {
     console.error("Please set your NEXT_PUBLIC_DEPLOYER_ADDR in .env.local");
@@ -169,6 +169,7 @@ const pickApplicant = async (
     await axios.put("/api/listing/applicant", {
       applicantId,
       listingId,
+      status: "APPLICATION"
     });
 
     setPickedWorker(true);
@@ -183,4 +184,61 @@ const pickApplicant = async (
   }
 };
 
-export { postListing, pickApplicant };
+const completeJob = async (
+  jobId: number,
+  applicantId: number,
+  listingId: string,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setCompleteJobDone: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
+  if (!process.env.NEXT_PUBLIC_DEPLOYER_ADDR) {
+    console.error("Please set your NEXT_PUBLIC_DEPLOYER_ADDR in .env.local");
+    return;
+  }
+
+  if (!process.env.NEXT_PUBLIC_MASLOW_ADDR) {
+    console.error("Please set your NEXT_PUBLIC_MASLOW_ADDR in .env.local");
+    return;
+  }
+
+  if (!process.env.NEXT_PUBLIC_SALD_ADDR) {
+    console.error("Please set your NEXT_PUBLIC_SALD_ADDR in .env.local");
+    return;
+  }
+
+  setIsLoading(true);
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+
+  const deployerContract = new ethers.Contract(
+    process.env.NEXT_PUBLIC_DEPLOYER_ADDR,
+    deployerContractAbi,
+    signer
+  );
+
+  try {
+    const tx = await deployerContract.connect(signer).finishJob(jobId);
+
+    const receipt = await tx.wait();
+    console.log(receipt);
+
+    await axios.put("/api/listing/applicant", {
+      applicantId,
+      listingId,
+      status: "COMPLETED"
+    });
+
+    setCompleteJobDone(true);
+  } catch (error: any) {
+    if (error.code === "ACTION_REJECTED") {
+      console.log("User rejected the MetaMask transaction.");
+    } else {
+      console.error("Failed to pick applicant for job due to: ", error);
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+export { postListing, pickApplicant, completeJob };

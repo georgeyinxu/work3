@@ -73,7 +73,7 @@ export async function GET(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   await connectMongoDB();
-  const { applicantId, listingId } = await req.json();
+  const { applicantId, listingId, status } = await req.json();
 
   try {
     await Applicant.findOneAndUpdate(
@@ -88,7 +88,7 @@ export async function PUT(req: NextRequest) {
         _id: new mongoose.Types.ObjectId(listingId),
       },
       {
-        jobStatus: JobStatus.APPLICATION,
+        jobStatus: JobStatus[status as JobStatus],
       },
     );
   } catch (error) {

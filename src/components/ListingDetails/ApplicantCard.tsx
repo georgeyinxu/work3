@@ -6,18 +6,40 @@ import IApplicant from "@/interfaces/ApplicantResponse";
 import { short } from "@/utils/Common";
 import { DateTime } from "luxon";
 import { useAddress } from "@thirdweb-dev/react";
-import { pickApplicant } from "@/utils/Deployer";
+import { completeJob, pickApplicant } from "@/utils/Deployer";
 import AlertCard from "@/components/Alerts/AlertCard";
+import JobStatus from "@/enums/JobStatus";
 
 type Props = {
   listingId: string;
+  jobId: number;
+  listingStatus: JobStatus;
 };
 
-const ApplicantCard: React.FC<Props> = ({ listingId }) => {
+const ApplicantCard: React.FC<Props> = ({
+  listingId,
+  jobId,
+  listingStatus,
+}) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [completeLoading, setCompleteLoading] = useState<boolean>(false);
+  const [completeJobDone, setCompleteJobDone] = useState<boolean>(false);
   const [pickedWorker, setPickedWorker] = useState<boolean>(false);
+  const [confirmedWorker, setConfirmedWorker] = useState<IApplicant>({
+    _id: "",
+    post: "",
+    applicantAddress: "",
+    transactionHash: "",
+    fee: 0,
+    applicantId: 0,
+    selected: false,
+    createdAt: "",
+    updatedAt: "",
+    __v: 0,
+  });
   const [applicants, setApplicants] = useState<IApplicant[]>([]);
   const [selectedApplicant, setSelectedApplicant] = useState<number>(-1);
+
   const address = useAddress();
 
   useEffect(() => {
@@ -34,10 +56,12 @@ const ApplicantCard: React.FC<Props> = ({ listingId }) => {
         console.log("Filtered applicants: ", filteredApplicants);
         if (filteredApplicants.length === 1) {
           setPickedWorker(true);
+          setConfirmedWorker(filteredApplicants[0]);
         }
       }
     };
 
+    setCompleteJobDone(listingStatus === "COMPLETED");
     fetchAllData();
   }, []);
   return (
@@ -95,8 +119,19 @@ const ApplicantCard: React.FC<Props> = ({ listingId }) => {
             color: "white",
             width: "100%",
           }}
+          onClick={() =>
+            completeJob(
+              jobId,
+              confirmedWorker.applicantId,
+              listingId,
+              setCompleteLoading,
+              setCompleteJobDone
+            )
+          }
+          disabled={completeLoading || completeJobDone}
+          className="disabled:opacity-60"
         >
-          Completed Job
+          {completeLoading ? "Loading..." : "Completed Job"}
         </button>
       ) : (
         <div className="w-full">
@@ -150,11 +185,19 @@ const ApplicantCard: React.FC<Props> = ({ listingId }) => {
           )}
         </div>
       )}
-      {pickedWorker && (
+      {pickedWorker && !completeJobDone && (
         <div className="mt-2">
           <AlertCard
             header="Successfully Selected Worker!"
             text="Feel free to communicate with the worker using our built in chat!"
+          />
+        </div>
+      )}
+      {completeJobDone && (
+        <div className="mt-2">
+          <AlertCard
+            header="Successfully Completed Job!"
+            text="Thank you for trusting us with your project!"
           />
         </div>
       )}

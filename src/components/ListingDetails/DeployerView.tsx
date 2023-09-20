@@ -146,7 +146,7 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
           </div>
         </div>
         <div>
-          <ApplicantCard listingId={listingDetails._id} />
+          <ApplicantCard listingId={listingDetails._id} jobId={listingDetails.jobId} listingStatus={listingDetails.jobStatus} />
         </div>
       </div>
     </main>
