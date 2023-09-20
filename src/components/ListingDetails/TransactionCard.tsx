@@ -3,7 +3,7 @@ import { FaArrowDown } from "react-icons/fa";
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 import { applyListing, checkApplied } from "@/utils/Worker";
 import { short } from "@/utils/Common";
-import WorkerApplied from "@/components/Banners/WorkerApplied";
+import AlertCard from "@/components/Alerts/AlertCard";
 
 type Props = {
   to: string;
@@ -103,7 +103,7 @@ const TransactionCard: React.FC<Props> = ({ to, jobId, date, _id }) => {
       </div>
       {applied && (
         <div className="mt-2">
-          <WorkerApplied />
+          <AlertCard header="Successfully Applied" text="Please give the deployer a few days to select the applicant" />
         </div>
       )}
     </div>

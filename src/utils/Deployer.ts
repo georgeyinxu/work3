@@ -28,7 +28,7 @@ const postListing = async (
     return;
   }
 
-  setIsLoading(true)
+  setIsLoading(true);
   const deadline = new Date(date).getDate();
   const rewardNum = parseFloat(reward);
   let maslowJobId = 0;
@@ -129,7 +129,12 @@ const postListing = async (
   window.location.href = `/listing/${createdListingId}`;
 };
 
-const pickApplicant = async (applicantId: number, listingId: string) => {
+const pickApplicant = async (
+  applicantId: number,
+  listingId: string,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setPickedWorker: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
   if (!process.env.NEXT_PUBLIC_DEPLOYER_ADDR) {
     console.error("Please set your NEXT_PUBLIC_DEPLOYER_ADDR in .env.local");
     return;
@@ -145,6 +150,7 @@ const pickApplicant = async (applicantId: number, listingId: string) => {
     return;
   }
 
+  setIsLoading(true);
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
 
@@ -164,8 +170,16 @@ const pickApplicant = async (applicantId: number, listingId: string) => {
       applicantId,
       listingId,
     });
+
+    setPickedWorker(true);
   } catch (error: any) {
-    console.error("Failed to pick applicant for job due to: ", error);
+    if (error.code === "ACTION_REJECTED") {
+      console.log("User rejected the MetaMask transaction.");
+    } else {
+      console.error("Failed to pick applicant for job due to: ", error);
+    }
+  } finally {
+    setIsLoading(false);
   }
 };
 

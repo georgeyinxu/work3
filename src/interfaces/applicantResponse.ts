@@ -5,6 +5,7 @@ interface IApplicant {
   transactionHash: string;
   fee: number;
   applicantId: number;
+  selected: boolean;
   createdAt: string;
   updatedAt: string;
   __v: number;

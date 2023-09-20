@@ -7,12 +7,15 @@ import { short } from "@/utils/Common";
 import { DateTime } from "luxon";
 import { useAddress } from "@thirdweb-dev/react";
 import { pickApplicant } from "@/utils/Deployer";
+import AlertCard from "@/components/Alerts/AlertCard";
 
 type Props = {
   listingId: string;
 };
 
 const ApplicantCard: React.FC<Props> = ({ listingId }) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [pickedWorker, setPickedWorker] = useState<boolean>(false);
   const [applicants, setApplicants] = useState<IApplicant[]>([]);
   const [selectedApplicant, setSelectedApplicant] = useState<number>(-1);
   const address = useAddress();
@@ -23,6 +26,15 @@ const ApplicantCard: React.FC<Props> = ({ listingId }) => {
       setApplicants(res);
       if (res.length > 0) {
         setSelectedApplicant(res[0].applicantId);
+
+        const filteredApplicants = res.filter(
+          (applicant) => applicant.selected
+        );
+
+        console.log("Filtered applicants: ", filteredApplicants);
+        if (filteredApplicants.length === 1) {
+          setPickedWorker(true);
+        }
       }
     };
 
@@ -85,11 +97,22 @@ const ApplicantCard: React.FC<Props> = ({ listingId }) => {
               marginTop: 8,
               width: "100%",
             }}
-            className={`${applicants.length === 0 ? "opacity-60" : ""}`}
-            disabled={applicants.length === 0}
-            onClick={() => pickApplicant(selectedApplicant, listingId)}
+            className={`${
+              applicants.length === 0 || isLoading || pickedWorker ? "opacity-60" : ""
+            }`}
+            disabled={applicants.length === 0 || isLoading}
+            onClick={() =>
+              pickApplicant(
+                selectedApplicant,
+                listingId,
+                setIsLoading,
+                setPickedWorker
+              )
+            }
           >
-            {applicants.length === 0 ? "0 Applicants" : "Confirm Wallet"}
+            {isLoading && "Loading..."}
+            {applicants.length === 0 && "0 Applicants"}
+            {applicants.length !== 0 && !isLoading && "Confirm Wallet"}
           </button>
         ) : (
           <ConnectWallet
@@ -107,6 +130,14 @@ const ApplicantCard: React.FC<Props> = ({ listingId }) => {
           />
         )}
       </div>
+      {pickedWorker && (
+        <div className="mt-2">
+          <AlertCard
+            header="Successfully Selected Worker!"
+            text="Feel free to communicate with the worker using our built in chat!"
+          />
+        </div>
+      )}
     </div>
   );
 };
