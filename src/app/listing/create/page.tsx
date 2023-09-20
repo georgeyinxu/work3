@@ -14,6 +14,7 @@ const Create = () => {
   const [date, setDate] = useState<Date>(new Date());
   const [category, setCategory] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <main className="min-h-screen bg-[#F6F6F6] flex items-center justify-center">
@@ -47,13 +48,21 @@ const Create = () => {
         </div>
         <div className="flex items-center justify-end my-4">
           <button
-            className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r"
+            className={`p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r ${isLoading ? 'bg-opacity-60' : ''}`}
             onClick={() =>
-              postListing(title, description, reward, category, date)
+              postListing(
+                title,
+                description,
+                reward,
+                category,
+                date,
+                setIsLoading
+              )
             }
+            disabled={isLoading}
           >
             <span className="block text-white px-4 py-2 font-semibold rounded-full bg-transparent hover:bg-white hover:text-black transition">
-              Confirm Submission
+              {isLoading ? "Loading..." : "Confirm Submission"}
             </span>
           </button>
         </div>

@@ -10,7 +10,8 @@ const postListing = async (
   description: string,
   reward: string,
   category: string,
-  date: Date
+  date: Date,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   if (!process.env.NEXT_PUBLIC_DEPLOYER_ADDR) {
     console.error("Please set your NEXT_PUBLIC_DEPLOYER_ADDR in .env.local");
@@ -27,6 +28,7 @@ const postListing = async (
     return;
   }
 
+  setIsLoading(true)
   const deadline = new Date(date).getDate();
   const rewardNum = parseFloat(reward);
   let maslowJobId = 0;
@@ -120,6 +122,8 @@ const postListing = async (
     } else {
       console.error("Failed to list job due to: ", error);
     }
+  } finally {
+    setIsLoading(false);
   }
 
   window.location.href = `/listing/${createdListingId}`;

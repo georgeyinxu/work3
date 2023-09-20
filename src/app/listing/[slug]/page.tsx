@@ -41,7 +41,7 @@ const JobDetails: React.FC<Props> = ({ params }) => {
         setListingDetails(data as IListing);
 
         if ("from" in data && address === data.from) {
-          setIsWorker(false);
+          // setIsWorker(false);
         } else {
           setIsWorker(true);
         }
@@ -49,11 +49,11 @@ const JobDetails: React.FC<Props> = ({ params }) => {
     };
 
     fetchAllData();
-  }, [address]); // Dependency array
+  }, [address]);
 
   return (
     <main className="min-h-screen bg-white flex items-center justify-center">
-      <div className="max-w-screen-xl rounded-xl px-6 py-32 w-full">
+      <div className="max-w-screen-xl rounded-xl px-6 py-12 w-full">
         {isWorker ? (
           <WorkerView listingDetails={listingDetails} />
         ) : (

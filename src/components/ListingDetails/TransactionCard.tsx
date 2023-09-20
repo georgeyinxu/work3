@@ -3,6 +3,7 @@ import { FaArrowDown } from "react-icons/fa";
 import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
 import { applyListing, checkApplied } from "@/utils/Worker";
 import { short } from "@/utils/Common";
+import WorkerApplied from "@/components/Banners/WorkerApplied";
 
 type Props = {
   to: string;
@@ -52,7 +53,7 @@ const TransactionCard: React.FC<Props> = ({ to, jobId, date, _id }) => {
           </div>
         </div>
       </div>
-      <div className="bg-gray-100 rounded-md w-10 h-10 flex items-center justify-center -my-4 mx-auto border-4 border-white border-solid z-100 relative">
+      <div className="bg-gray-100 rounded-md w-10 h-10 flex items-center justify-center -my-4 mx-auto border-4 border-white border-solid z-100 relative text-[#202020]">
         <FaArrowDown />
       </div>
       <div className="bg-gray-100 rounded-2xl text-gray-500 text-base px-4 py-8">
@@ -100,6 +101,11 @@ const TransactionCard: React.FC<Props> = ({ to, jobId, date, _id }) => {
           />
         )}
       </div>
+      {applied && (
+        <div className="mt-2">
+          <WorkerApplied />
+        </div>
+      )}
     </div>
   );
 };
