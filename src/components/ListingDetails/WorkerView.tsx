@@ -3,7 +3,7 @@ import UserDeployments from "@/components/ListingDetails/UserDeployments";
 import DeploymentTabs from "@/components/ListingDetails/DeploymentTabs";
 import { ImArrowUpRight2 } from "react-icons/im";
 import TransactionCard from "@/components/ListingDetails/TransactionCard";
-import IListing from "@/interfaces/listingResponse";
+import IListing from "@/interfaces/ListingResponse";
 import { short } from "@/utils/Common";
 
 type Props = {
@@ -28,7 +28,7 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
   const calculateTimeLeft = () => {
     const now = new Date();
     const sgt = new Date(
-      now.toLocaleString("en-US", { timeZone: "Asia/Singapore" }),
+      now.toLocaleString("en-US", { timeZone: "Asia/Singapore" })
     );
     const targetTime = new Date(listingDetails.date);
 

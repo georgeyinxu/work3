@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import connectMongoDB from "@/lib/mongodb";
 import Applicant from "@/models/applicant";
-import IApplicant from "@/interfaces/applicantResponse";
+import IApplicant from "@/interfaces/ApplicantResponse";
 
 export async function POST(req: NextRequest) {
   await connectMongoDB();
@@ -16,11 +16,12 @@ export async function POST(req: NextRequest) {
       transactionHash,
       fee,
       applicantId,
+      selected: false,
     });
   } catch (error) {
     return NextResponse.json(
       { message: "Error adding applicant to db due to " + error },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -30,7 +31,7 @@ export async function POST(req: NextRequest) {
     },
     {
       status: 201,
-    },
+    }
   );
 }
 
@@ -43,7 +44,7 @@ export async function GET(req: NextRequest) {
   if (!listingId) {
     return NextResponse.json(
       { message: "Please add query param listingId" },
-      { status: 404 },
+      { status: 404 }
     );
   }
 
@@ -54,7 +55,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       { message: "Error fetching all applicants to db due to " + error },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -64,6 +65,6 @@ export async function GET(req: NextRequest) {
     },
     {
       status: 200,
-    },
+    }
   );
 }

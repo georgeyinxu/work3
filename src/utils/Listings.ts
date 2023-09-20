@@ -1,5 +1,5 @@
 import axios from "axios";
-import IListing from "@/interfaces/listingResponse";
+import IListing from "@/interfaces/ListingResponse";
 
 const fetchListings = async () => {
   let listingsData: IListing[] = [];
@@ -33,7 +33,7 @@ const updateListing = async (
   reward: string,
   date: Date,
   categoryId: string,
-  listingId: string,
+  listingId: string
 ) => {
   try {
     const res = await axios.put("/api/listing", {

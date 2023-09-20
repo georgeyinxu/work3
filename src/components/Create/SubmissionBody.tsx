@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import Datepicker from "tailwind-datepicker-react";
 import "react-quill/dist/quill.snow.css";
 import { fetchCategories } from "@/utils/Categories";
-import ICategory from "@/interfaces/categoryResponse";
+import ICategory from "@/interfaces/CategoryResponse";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
@@ -207,7 +207,7 @@ const SubmissionBody: React.FC<Props> = ({
       <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-4">
         Description
       </label>
-      <ReactQuill value={description} onChange={handleChange} />
+      <ReactQuill value={description} onChange={handleChange} className='text-[#202020]' />
     </div>
   );
 };

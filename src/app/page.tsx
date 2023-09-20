@@ -2,10 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { FaAnglesRight } from "react-icons/fa6";
 
-import ICategory from "@/interfaces/categoryResponse";
-import IListing from "@/interfaces/listingResponse";
+import ICategory from "@/interfaces/CategoryResponse";
+import IListing from "@/interfaces/ListingResponse";
 
 import { fetchListings } from "@/utils/Listings";
 import { fetchCategories } from "@/utils/Categories";

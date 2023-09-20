@@ -1,11 +1,11 @@
 import axios from "axios";
-import IApplicant from "@/interfaces/applicantResponse";
+import IApplicant from "@/interfaces/ApplicantResponse";
 
 const fetchApplicants = async (listingId: string) => {
   let applicants: IApplicant[] = [];
   try {
     const res = await axios.get(
-      `/api/listing/applicant?listingId=${listingId}`,
+      `/api/listing/applicant?listingId=${listingId}`
     );
     applicants = res.data.data;
   } catch (error) {

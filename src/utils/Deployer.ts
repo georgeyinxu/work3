@@ -10,7 +10,7 @@ const postListing = async (
   description: string,
   reward: string,
   category: string,
-  date: Date,
+  date: Date
 ) => {
   if (!process.env.NEXT_PUBLIC_DEPLOYER_ADDR) {
     console.error("Please set your NEXT_PUBLIC_DEPLOYER_ADDR in .env.local");
@@ -38,17 +38,17 @@ const postListing = async (
   const deployerContract = new ethers.Contract(
     process.env.NEXT_PUBLIC_DEPLOYER_ADDR,
     deployerContractAbi,
-    signer,
+    signer
   );
   const tokenContract = new ethers.Contract(
     process.env.NEXT_PUBLIC_SALD_ADDR,
     saldTokenAbi,
-    signer,
+    signer
   );
   const maslowContract = new ethers.Contract(
     process.env.NEXT_PUBLIC_MASLOW_ADDR,
     maslowContractAbi,
-    signer,
+    signer
   );
 
   // Approval
@@ -57,7 +57,7 @@ const postListing = async (
   // Check existing allowance
   const existingAllowance = await tokenContract.allowance(
     await signer.getAddress(),
-    process.env.NEXT_PUBLIC_DEPLOYER_ADDR,
+    process.env.NEXT_PUBLIC_DEPLOYER_ADDR
   );
 
   if (existingAllowance.lt(amountToApprove)) {
@@ -110,15 +110,59 @@ const postListing = async (
         date,
         categoryId: category,
       },
-      {},
+      {}
     );
 
     createdListingId = res.data.data;
-  } catch (error) {
-    console.error("Failed to list job due to: " + error);
+  } catch (error: any) {
+    if (error.code === "ACTION_REJECTED") {
+      console.log("User rejected the MetaMask transaction.");
+    } else {
+      console.error("Failed to list job due to: ", error);
+    }
   }
 
   window.location.href = `/listing/${createdListingId}`;
 };
 
-export { postListing };
+const pickApplicant = async (applicantId: number, listingId: string) => {
+  if (!process.env.NEXT_PUBLIC_DEPLOYER_ADDR) {
+    console.error("Please set your NEXT_PUBLIC_DEPLOYER_ADDR in .env.local");
+    return;
+  }
+
+  if (!process.env.NEXT_PUBLIC_MASLOW_ADDR) {
+    console.error("Please set your NEXT_PUBLIC_MASLOW_ADDR in .env.local");
+    return;
+  }
+
+  if (!process.env.NEXT_PUBLIC_SALD_ADDR) {
+    console.error("Please set your NEXT_PUBLIC_SALD_ADDR in .env.local");
+    return;
+  }
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+
+  const deployerContract = new ethers.Contract(
+    process.env.NEXT_PUBLIC_DEPLOYER_ADDR,
+    deployerContractAbi,
+    signer
+  );
+
+  try {
+    const tx = await deployerContract
+      .connect(signer)
+      .pickApplicant(applicantId);
+    const receipt = await tx.wait();
+
+    await axios.put("/api/listing/applicant", {
+      applicantId,
+      listingId,
+    });
+  } catch (error: any) {
+    console.error("Failed to pick applicant for job due to: ", error);
+  }
+};
+
+export { postListing, pickApplicant };
