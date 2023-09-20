@@ -10,9 +10,10 @@ type Props = {
   jobId: number;
   date: Date;
   _id: string;
+  status: boolean;
 };
 
-const TransactionCard: React.FC<Props> = ({ to, jobId, date, _id }) => {
+const TransactionCard: React.FC<Props> = ({ to, jobId, date, _id, status }) => {
   const address = useAddress();
   const [applied, setApplied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -62,7 +63,41 @@ const TransactionCard: React.FC<Props> = ({ to, jobId, date, _id }) => {
         </h3>
       </div>
       <div className="w-full">
-        {address ? (
+        {!address && (
+          <ConnectWallet
+            theme="light"
+            style={{
+              background:
+                "linear-gradient(93.06deg, rgb(255, 0, 199) 2.66%, rgb(255, 159, 251) 98.99%)",
+              borderRadius: 16,
+              paddingTop: 20,
+              paddingBottom: 20,
+              fontSize: 24,
+              marginTop: 8,
+              width: "100%",
+            }}
+          />
+        )}
+        {status ? (
+          <button
+            style={{
+              background:
+                "linear-gradient(93.06deg, rgb(255, 0, 199) 2.66%, rgb(255, 159, 251) 98.99%)",
+              borderRadius: 16,
+              paddingTop: 20,
+              paddingBottom: 20,
+              fontSize: 24,
+              fontWeight: 600,
+              color: "white",
+              marginTop: 8,
+              width: "100%",
+            }}
+            disabled={status}
+            className='opacity-60'
+          >
+            Application Closed
+          </button>
+        ) : (
           <button
             style={{
               background:
@@ -85,25 +120,14 @@ const TransactionCard: React.FC<Props> = ({ to, jobId, date, _id }) => {
             {applied && "Applied"}
             {!isLoading && !applied && "Apply Now"}
           </button>
-        ) : (
-          <ConnectWallet
-            theme="light"
-            style={{
-              background:
-                "linear-gradient(93.06deg, rgb(255, 0, 199) 2.66%, rgb(255, 159, 251) 98.99%)",
-              borderRadius: 16,
-              paddingTop: 20,
-              paddingBottom: 20,
-              fontSize: 24,
-              marginTop: 8,
-              width: "100%",
-            }}
-          />
         )}
       </div>
       {applied && (
         <div className="mt-2">
-          <AlertCard header="Successfully Applied" text="Please give the deployer a few days to select the applicant" />
+          <AlertCard
+            header="Successfully Applied"
+            text="Please give the deployer a few days to select the applicant"
+          />
         </div>
       )}
     </div>

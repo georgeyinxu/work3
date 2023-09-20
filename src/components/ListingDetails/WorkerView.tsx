@@ -5,6 +5,7 @@ import { ImArrowUpRight2 } from "react-icons/im";
 import TransactionCard from "@/components/ListingDetails/TransactionCard";
 import IListing from "@/interfaces/ListingResponse";
 import { short } from "@/utils/Common";
+import ErrorAlert from "../Alerts/ErrorAlert";
 
 type Props = {
   listingDetails: IListing;
@@ -57,6 +58,12 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
 
   return (
     <main>
+      {listingDetails.jobStatus !== "ACTIVE" && (
+        <ErrorAlert
+          header="Listing no longer available!"
+          text="Another worker who has applied for the job has been selected to conduct it."
+        />
+      )}
       <div className="flex justify-between items-center">
         <div className="flex justify-start items-center gap-4">
           <img
@@ -139,6 +146,7 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
             to={listingDetails.from}
             date={new Date(listingDetails.date)}
             _id={listingDetails._id}
+            status={listingDetails.jobStatus !== "ACTIVE"}
           />
         </div>
       </div>
