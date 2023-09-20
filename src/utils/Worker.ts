@@ -31,7 +31,6 @@ const applyListing = async (
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
-  console.log(signer);
   const deadline = new Date(date).getDate();
 
   const workerContract = new ethers.Contract(
@@ -84,7 +83,6 @@ const applyListing = async (
         .connect(signer)
         .applyJob(jobId, ethers.utils.parseUnits(fee, 18), deadline);
       const receipt = await tx.wait();
-      console.log(JSON.stringify(receipt));
 
       const applicantId = await waitForJobListedEvent;
       const from = receipt.from;

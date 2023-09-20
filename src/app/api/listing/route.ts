@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import connectMongoDB from "@/lib/mongodb";
 import Listing from "@/models/listing";
+import JobStatus from "@/enums/JobStatus";
 
 export async function POST(req: NextRequest) {
   await connectMongoDB();
@@ -30,6 +31,7 @@ export async function POST(req: NextRequest) {
       category: new mongoose.Types.ObjectId(categoryId),
       transactionHash,
       jobId,
+      jobStatus: JobStatus.ACTIVE,
     });
 
     listingId = createdListing._id;

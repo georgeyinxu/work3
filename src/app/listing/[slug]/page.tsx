@@ -6,7 +6,8 @@ import { useAddress } from "@thirdweb-dev/react";
 import WorkerView from "@/components/ListingDetails/WorkerView";
 import DeployerView from "@/components/ListingDetails/DeployerView";
 import { fetchListing } from "@/utils/Listings";
-import IListing from "@/interfaces/listingResponse";
+import IListing from "@/interfaces/ListingResponse";
+import JobStatus from "@/enums/JobStatus";
 
 type Props = {
   params: { slug: string };
@@ -23,6 +24,7 @@ const JobDetails: React.FC<Props> = ({ params }) => {
     from: "",
     to: "",
     jobId: 0,
+    jobStatus: JobStatus.ACTIVE,
     date: "",
     createdAt: "",
     reward: 0,

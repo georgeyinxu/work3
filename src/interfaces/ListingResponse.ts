@@ -1,3 +1,5 @@
+import JobStatus from "@/enums/JobStatus";
+
 interface IListing {
   _id: string;
   from: string;
@@ -8,6 +10,7 @@ interface IListing {
   reward: number;
   transactionHash: string;
   jobId: number;
+  jobStatus: JobStatus;
   date: string;
   createdAt: string;
   updatedAt: string;

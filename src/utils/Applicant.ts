@@ -1,5 +1,5 @@
 import axios from "axios";
-import IApplicant from "@/interfaces/applicantResponse";
+import IApplicant from "@/interfaces/ApplicantResponse";
 
 const fetchApplicants = async (listingId: string) => {
   let applicants: IApplicant[] = [];
