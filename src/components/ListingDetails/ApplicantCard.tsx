@@ -82,54 +82,74 @@ const ApplicantCard: React.FC<Props> = ({ listingId }) => {
             </div>
           ))}
       </div>
-      <div className="w-full">
-        {address ? (
-          <button
-            style={{
-              background:
-                "linear-gradient(93.06deg, rgb(255, 0, 199) 2.66%, rgb(255, 159, 251) 98.99%)",
-              borderRadius: 16,
-              paddingTop: 20,
-              paddingBottom: 20,
-              fontSize: 24,
-              fontWeight: 600,
-              color: "white",
-              marginTop: 8,
-              width: "100%",
-            }}
-            className={`${
-              applicants.length === 0 || isLoading || pickedWorker ? "opacity-60" : ""
-            }`}
-            disabled={applicants.length === 0 || isLoading}
-            onClick={() =>
-              pickApplicant(
-                selectedApplicant,
-                listingId,
-                setIsLoading,
-                setPickedWorker
-              )
-            }
-          >
-            {isLoading && "Loading..."}
-            {applicants.length === 0 && "0 Applicants"}
-            {applicants.length !== 0 && !isLoading && "Confirm Wallet"}
-          </button>
-        ) : (
-          <ConnectWallet
-            theme="light"
-            style={{
-              background:
-                "linear-gradient(93.06deg, rgb(255, 0, 199) 2.66%, rgb(255, 159, 251) 98.99%)",
-              borderRadius: 16,
-              paddingTop: 20,
-              paddingBottom: 20,
-              fontSize: 24,
-              marginTop: 8,
-              width: "100%",
-            }}
-          />
-        )}
-      </div>
+      {pickedWorker ? (
+        <button
+          style={{
+            background:
+              "linear-gradient(93.06deg, rgb(255, 0, 199) 2.66%, rgb(255, 159, 251) 98.99%)",
+            borderRadius: 16,
+            paddingTop: 20,
+            paddingBottom: 20,
+            fontSize: 24,
+            fontWeight: 600,
+            color: "white",
+            width: "100%",
+          }}
+        >
+          Completed Job
+        </button>
+      ) : (
+        <div className="w-full">
+          {address ? (
+            <button
+              style={{
+                background:
+                  "linear-gradient(93.06deg, rgb(255, 0, 199) 2.66%, rgb(255, 159, 251) 98.99%)",
+                borderRadius: 16,
+                paddingTop: 20,
+                paddingBottom: 20,
+                fontSize: 24,
+                fontWeight: 600,
+                color: "white",
+                marginTop: 8,
+                width: "100%",
+              }}
+              className={`${
+                applicants.length === 0 || isLoading || pickedWorker
+                  ? "opacity-60"
+                  : ""
+              }`}
+              disabled={applicants.length === 0 || isLoading}
+              onClick={() =>
+                pickApplicant(
+                  selectedApplicant,
+                  listingId,
+                  setIsLoading,
+                  setPickedWorker
+                )
+              }
+            >
+              {isLoading && "Loading..."}
+              {applicants.length === 0 && "0 Applicants"}
+              {applicants.length !== 0 && !isLoading && "Confirm Wallet"}
+            </button>
+          ) : (
+            <ConnectWallet
+              theme="light"
+              style={{
+                background:
+                  "linear-gradient(93.06deg, rgb(255, 0, 199) 2.66%, rgb(255, 159, 251) 98.99%)",
+                borderRadius: 16,
+                paddingTop: 20,
+                paddingBottom: 20,
+                fontSize: 24,
+                marginTop: 8,
+                width: "100%",
+              }}
+            />
+          )}
+        </div>
+      )}
       {pickedWorker && (
         <div className="mt-2">
           <AlertCard
