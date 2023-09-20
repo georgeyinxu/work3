@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const connectMongoDB = async () => {
-  const connectionString = process.env.NEXT_PUBLIC_MONGODB_URI;
+  const connectionString = process.env.MONGODB_URI;
 
   if (!connectionString) {
     return;
