@@ -10,6 +10,7 @@ const applicantSchema = new Schema(
     transactionHash: String,
     fee: Number,
     applicantId: Number,
+    selected: Boolean,
   },
   {
     timestamps: true,

@@ -5,11 +5,11 @@ import SubmissionBody from "@/components/Create/SubmissionBody";
 import React, { useEffect, useState } from "react";
 import ListingCard from "@/components/Edit/ListingCard";
 import { fetchListing, updateListing } from "@/utils/Listings";
-import IListing from "@/interfaces/listingResponse";
+import IListing from "@/interfaces/ListingResponse";
 import { useAddress } from "@thirdweb-dev/react";
 import { useRouter } from "next/navigation";
 import listing from "@/models/listing";
-import FileInfo from "@/interfaces/fileInfo";
+import FileInfo from "@/interfaces/FileInfo";
 
 type Props = {
   params: { slug: string };
