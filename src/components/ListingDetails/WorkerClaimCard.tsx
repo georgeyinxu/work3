@@ -1,4 +1,26 @@
-const WorkerClaimCard = () => {
+import { checkIfClaimed } from "@/utils/Applicant";
+import { claimReward } from "@/utils/Worker";
+import React, { useEffect, useState } from "react";
+
+type Props = {
+  applicantId: number;
+  listingId: string;
+};
+
+const WorkerClaimCard: React.FC<Props> = ({ applicantId, listingId }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [claimed, setClaimed] = useState(false);
+
+  useEffect(() => {
+    const fetchAllData = async () => {
+      const claimedBefore = await checkIfClaimed(applicantId);
+      setClaimed(claimedBefore);
+    };
+
+    if (applicantId) {
+      fetchAllData();
+    }
+  }, [applicantId]);
   return (
     <div className="transaction-card bg-white rounded-2xl ml-2">
       <button
@@ -13,8 +35,15 @@ const WorkerClaimCard = () => {
           color: "white",
           width: "100%",
         }}
+        className="disabled:opacity-60"
+        disabled={claimed || isLoading}
+        onClick={() =>
+          claimReward(applicantId, listingId, setIsLoading, setClaimed)
+        }
       >
-        Claim Reward
+        {isLoading && "Loading..."}
+        {claimed && "Claimed"}
+        {!isLoading && !claimed && "Claim Reward"}
       </button>
     </div>
   );

@@ -11,6 +11,7 @@ import { checkWorkerSelected } from "@/utils/Worker";
 import AlertCard from "../Alerts/AlertCard";
 import JobStatus from "@/enums/JobStatus";
 import WorkerClaimCard from "./WorkerClaimCard";
+import IApplicant from "@/interfaces/ApplicantResponse";
 
 type Props = {
   listingDetails: IListing;
@@ -31,6 +32,19 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
     seconds: 0,
   });
   const [isSelected, setIsSelected] = useState<boolean>(false);
+  const [applicantDetails, setApplicantDetails] = useState<IApplicant>({
+    _id: "",
+    post: "",
+    applicantAddress: "",
+    transactionHash: "",
+    fee: 0,
+    applicantId: 0,
+    selected: false,
+    claimed: false,
+    createdAt: "",
+    updatedAt: "",
+    __v: 0,
+  });
   const address = useAddress();
 
   const calculateTimeLeft = () => {
@@ -65,12 +79,14 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
 
   useEffect(() => {
     const fetchAllData = async () => {
-      if (address) {
-        const workerSelected = await checkWorkerSelected(
+      if (address && listingDetails._id) {
+        const {data, applicantDetails} = await checkWorkerSelected(
           listingDetails._id,
           address
         );
-        setIsSelected(workerSelected);
+
+        setIsSelected(data);
+        setApplicantDetails(applicantDetails);
       }
     };
 
@@ -171,7 +187,7 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
         </div>
         <div>
           {listingDetails.jobStatus === JobStatus.COMPLETED ? (
-            <WorkerClaimCard />
+            <WorkerClaimCard listingId={listingDetails._id} applicantId={applicantDetails.applicantId} />
           ) : (
             <TransactionCard
               jobId={listingDetails.jobId}

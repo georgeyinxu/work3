@@ -6,6 +6,7 @@ interface IApplicant {
   fee: number;
   applicantId: number;
   selected: boolean;
+  claimed: boolean;
   createdAt: string;
   updatedAt: string;
   __v: number;

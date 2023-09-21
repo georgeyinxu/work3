@@ -33,6 +33,7 @@ const ApplicantCard: React.FC<Props> = ({
     fee: 0,
     applicantId: 0,
     selected: false,
+    claimed: false,
     createdAt: "",
     updatedAt: "",
     __v: 0,

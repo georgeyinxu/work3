@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
       fee,
       applicantId,
       selected: false,
+      claimed: false,
     });
   } catch (error) {
     return NextResponse.json(
@@ -79,8 +80,9 @@ export async function PUT(req: NextRequest) {
     await Applicant.findOneAndUpdate(
       {
         applicantId,
+        post: new mongoose.Types.ObjectId(listingId),
       },
-      { selected: true },
+      { selected: true }
     );
 
     await Listing.findOneAndUpdate(
@@ -89,12 +91,12 @@ export async function PUT(req: NextRequest) {
       },
       {
         jobStatus: JobStatus[status as JobStatus],
-      },
+      }
     );
   } catch (error) {
     return NextResponse.json(
       { message: "Error updating applicant due to" + error },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -104,6 +106,6 @@ export async function PUT(req: NextRequest) {
     },
     {
       status: 200,
-    },
+    }
   );
 }
