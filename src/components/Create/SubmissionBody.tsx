@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import Datepicker from "tailwind-datepicker-react";
 import "react-quill/dist/quill.snow.css";
 import { fetchCategories } from "@/utils/Categories";
-import { ICategory } from "@/interfaces/categoryResponse";
+import { ICategory } from "@/interfaces/CategoryResponse";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,

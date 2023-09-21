@@ -1,4 +1,4 @@
-import { IApplicant } from "@/interfaces/applicantResponse";
+import { IApplicant } from "@/interfaces/ApplicantResponse";
 import connectMongoDB from "@/lib/mongodb";
 import Applicant from "@/models/applicant";
 import mongoose from "mongoose";

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IListing } from "@/interfaces/listingResponse";
+import { IListing } from "@/interfaces/ListingResponse";
 
 const fetchListings = async () => {
   let listingsData: IListing[] = [];

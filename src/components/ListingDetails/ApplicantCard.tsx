@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ConnectWallet } from "@thirdweb-dev/react";
 import { IoCopyOutline, IoChatbubbleEllipsesOutline } from "react-icons/io5";
 import { fetchApplicants } from "@/utils/Applicant";
-import { IApplicant } from "@/interfaces/applicantResponse";
+import { IApplicant } from "@/interfaces/ApplicantResponse";
 import { short } from "@/utils/Common";
 import { DateTime } from "luxon";
 import { useAddress } from "@thirdweb-dev/react";
