@@ -35,6 +35,7 @@ const postListing = async (
   let createdListingId;
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
+  window.ethereum.enable();
   const signer = provider.getSigner();
 
   const deployerContract = new ethers.Contract(
@@ -59,7 +60,7 @@ const postListing = async (
   // Check existing allowance
   const existingAllowance = await tokenContract.allowance(
     await signer.getAddress(),
-    process.env.NEXT_PUBLIC_DEPLOYER_ADDR
+    process.env.NEXT_PUBLIC_DEPLOYER_ADDR,
   );
 
   if (existingAllowance.lt(amountToApprove)) {
@@ -116,6 +117,8 @@ const postListing = async (
     );
 
     createdListingId = res.data.data;
+
+    window.location.href = `/listing/${createdListingId}`;
   } catch (error: any) {
     if (error.code === "ACTION_REJECTED") {
       console.log("User rejected the MetaMask transaction.");
@@ -125,8 +128,6 @@ const postListing = async (
   } finally {
     setIsLoading(false);
   }
-
-  window.location.href = `/listing/${createdListingId}`;
 };
 
 const pickApplicant = async (
