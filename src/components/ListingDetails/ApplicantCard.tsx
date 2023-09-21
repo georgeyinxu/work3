@@ -66,7 +66,7 @@ const ApplicantCard: React.FC<Props> = ({
     fetchAllData();
   }, []);
   return (
-    <div className="bg-white rounded-2xl transaction-card ml-2">
+    <div className="bg-white rounded-2xl transaction-card md:ml-2">
       <div className="max-h-[40vh] overflow-y-scroll">
         {applicants &&
           applicants.map((applicant) => (

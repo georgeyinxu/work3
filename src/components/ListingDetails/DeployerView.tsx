@@ -63,38 +63,46 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
         <div className="flex justify-start items-center gap-4">
           <img
             src="https://sothebys-com.brightspotcdn.com/dims4/default/6a8c506/2147483647/strip/true/crop/1000x1000+0+0/resize/684x684!/quality/90/?url=http%3A%2F%2Fsothebys-brightspot.s3.amazonaws.com%2Fdotcom%2F8e%2F9c%2F972bfa1645c08ca0919ea68aabfe%2F4609.png"
-            className={"w-16 h-16 rounded-full"}
+            className={"w-12 h-12 md:w-16 md:h-16 rounded-full"}
             alt={"pudgy"}
           />
           <div className="flex flex-col justify-between items-start">
-            <h3 className={"text-3xl text-[#2E2E2E] font-bold"}>
+            <h3
+              className={
+                "text-xl sm:text-2xl md:text-3xl text-[#2E2E2E] font-bold"
+              }
+            >
               {short(listingDetails.from)}
             </h3>
             <span className="text-gray-500 font-bold">TVL: 58%</span>
           </div>
         </div>
-        <button className="bg-gradient-to-r from-red-400 via-red-500 to-red-600 rounded-full p-1">
+        <button className="bg-gradient-to-r from-red-400 via-red-500 to-red-600 rounded-full p-1 hidden md:block">
           <span className="text-black flex items-center justify-center gap-2 px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
             Submit Dispute
           </span>
         </button>
       </div>
-      <div className="grid grid-cols-3">
-        <div className="col-span-2">
+      <div className="grid grid-cols-1 md:grid-cols-3">
+        <div className="md:col-span-2">
           <UserDeployments />
           <hr className="w-full h-0.5 bg-gray-50 rounded-full" />
-          <div className="flex items-center justify-end">
+          <div className="flex items-center justify-center md:justify-end">
             <DeploymentTabs />
           </div>
-          <h3 className="text-[#222222] text-3xl font-semibold">Stats</h3>
-          <div className="flex items-center justify-between mt-4">
+          <h3 className="text-[#222222] text-2xl md:text-3xl font-semibold">
+            Stats
+          </h3>
+          <div className="flex flex-col md:flex-row md:items-center justify-between mt-4">
             <div>
               <p className="text-sm text-[#7D7D7D]">Total Earned</p>
-              <div className="flex items-center justify-center">
-                <h3 className="text-[#222222] text-3xl font-semibold">$1.1B</h3>
+              <div className="flex items-center md:justify-center">
+                <h3 className="text-[#222222] text-2xl md:text-3xl font-semibold">
+                  $1.1B
+                </h3>
                 <img
                   src="/images/sald-token.svg"
-                  className="w-14 h-14"
+                  className="w-10 h-10 md:w-14 md:h-14"
                   alt="sald token"
                 />
               </div>
@@ -102,7 +110,7 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
             {timeLeft.seconds ? (
               <div>
                 <p className="text-sm text-[#7D7D7D]">Ends In</p>
-                <h3 className="text-[#222222] text-3xl font-semibold">
+                <h3 className="text-[#222222] text-2xl md:text-3xl font-semibold">
                   {timeLeft.days}D {timeLeft.hours}H {timeLeft.minutes}M{" "}
                   {timeLeft.seconds}S
                 </h3>
@@ -112,11 +120,19 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
             )}
           </div>
           <hr className="w-full h-0.5 bg-gray-50 rounded-full my-10" />
+          <div className="block mt-4">
+            <ApplicantCard
+              listingId={listingDetails._id}
+              jobId={listingDetails.jobId}
+              listingStatus={listingDetails.jobStatus}
+            />
+          </div>
+          <hr className="w-full h-0.5 bg-gray-50 rounded-full my-10" />
           <div className="flex items-center justify-between">
-            <h3 className="text-[#222222] text-3xl font-semibold">
+            <h3 className="text-[#222222] text-xl sm:text-2xl md:text-3xl font-semibold">
               {listingDetails.title}
             </h3>
-            <Link href={`/listing/${listingDetails._id}/edit`}>
+            <Link href={`/listing/${listingDetails._id}/edit`} className="hidden md:block">
               <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r">
                 <span className="text-black flex items-center justify-center gap-2 px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
                   <FaPenFancy />
@@ -126,11 +142,11 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
             </Link>
           </div>
           <p
-            className="overflow-hidden overflow-ellipsis text-[#222222] mt-2"
+            className="overflow-hidden overflow-ellipsis text-[#222222] mt-2 text-sm sm:text-base md:text-lg"
             dangerouslySetInnerHTML={{ __html: listingDetails.description }}
           />
           <h6 className="text-sm text-[#7D7D7D] mt-8">Files</h6>
-          <div className="flex items-center justify-start gap-4 mt-2">
+          <div className="flex flex-col md:flex-row md:items-center justify-start gap-4 mt-2">
             <button className="text-sm text-[#FF66FF] flex items-center gap-2">
               <span className="truncate">Design Assignment 1</span>
               <ImArrowUpRight2 />
@@ -144,8 +160,16 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
               <ImArrowUpRight2 />
             </button>
           </div>
+          <Link href={`/listing/${listingDetails._id}/edit`} className="md:hidden">
+              <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r w-full mt-8">
+                <span className="text-black flex items-center justify-center gap-2 px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
+                  <FaPenFancy />
+                  Edit
+                </span>
+              </button>
+            </Link>
         </div>
-        <div>
+        <div className="hidden md:block">
           <ApplicantCard
             listingId={listingDetails._id}
             jobId={listingDetails.jobId}
