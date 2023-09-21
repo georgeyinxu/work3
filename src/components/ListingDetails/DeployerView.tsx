@@ -119,7 +119,7 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
               " "
             )}
           </div>
-          <hr className="w-full h-0.5 bg-gray-50 rounded-full my-10" />
+          <hr className="w-full h-0.5 bg-gray-50 rounded-full my-10 md:hidden" />
           <div className="block mt-4">
             <ApplicantCard
               listingId={listingDetails._id}

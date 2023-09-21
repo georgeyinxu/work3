@@ -169,7 +169,7 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
               " "
             )}
           </div>
-          <hr className="w-full h-0.5 bg-gray-50 rounded-full my-10" />
+          <hr className="w-full h-0.5 bg-gray-50 rounded-full my-10 md:hidden" />
           <div className='md:hidden'>
           {listingDetails.jobStatus === JobStatus.COMPLETED ? (
             <WorkerClaimCard
