@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import {IApplicant} from "@/interfaces/ApplicantResponse";
+import { IApplicant } from "@/interfaces/applicantResponse";
 
 import mongoose from "mongoose";
 import connectMongoDB from "@/lib/mongodb";

@@ -1,4 +1,4 @@
-import {IApplicant} from "@/interfaces/ApplicantResponse";
+import { IApplicant } from "@/interfaces/applicantResponse";
 import connectMongoDB from "@/lib/mongodb";
 import Applicant from "@/models/applicant";
 import mongoose from "mongoose";
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
     });
 
     if (applicantResponse) {
-        applicant = applicantResponse;
+      applicant = applicantResponse;
     }
 
     if (applicantResponse.selected) {
@@ -40,5 +40,8 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  return NextResponse.json({ data: selected, applicantDetails: applicant }, { status: 200 });
+  return NextResponse.json(
+    { data: selected, applicantDetails: applicant },
+    { status: 200 }
+  );
 }
