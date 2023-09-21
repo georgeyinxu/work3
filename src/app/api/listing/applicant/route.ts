@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import {IApplicant} from "@/interfaces/ApplicantResponse";
+
 import mongoose from "mongoose";
 import connectMongoDB from "@/lib/mongodb";
 import Applicant from "@/models/applicant";
 import Listing from "@/models/listing";
 import JobStatus from "@/enums/JobStatus";
-import {IApplicant} from "@/interfaces/ApplicantResponse";
 
 export async function POST(req: NextRequest) {
   await connectMongoDB();
