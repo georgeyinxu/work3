@@ -1,6 +1,4 @@
-import JobStatus from "@/enums/JobStatus";
 import mongoose, { Schema } from "mongoose";
-import { Enum } from "@solana/web3.js";
 import JobStatus from "@/enums/JobStatus";
 
 const listingSchema = new Schema(
