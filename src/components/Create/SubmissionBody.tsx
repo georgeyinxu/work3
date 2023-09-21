@@ -123,9 +123,9 @@ const SubmissionBody: React.FC<Props> = ({
   return (
     <div className="bg-white p-8 rounded-xl">
       <div className="flex items-center justify-between">
-        <h3 className="text-2xl text-black">Submission Body</h3>
+        <h3 className="text-xl md:text-2xl text-[#202020] font-semibold">Submission Body</h3>
         <button
-          className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r"
+          className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r hidden md:block"
           onClick={() => setDescription("")}
         >
           <span className="block text-black px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
@@ -134,7 +134,7 @@ const SubmissionBody: React.FC<Props> = ({
         </button>
       </div>
       <hr className="w-full h-0.5 bg-gradient-to-r from-[#ff00c7] to-[#ff9bfb] rounded-full my-4" />
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4">
         <div>
           <label
             htmlFor="title"
@@ -145,7 +145,7 @@ const SubmissionBody: React.FC<Props> = ({
           <input
             type="text"
             id="title"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder=""
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -162,7 +162,7 @@ const SubmissionBody: React.FC<Props> = ({
           <input
             type="number"
             id="reward"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="0"
             value={reward}
             onChange={handleRewardChange}
@@ -192,7 +192,7 @@ const SubmissionBody: React.FC<Props> = ({
           </label>
           <select
             id="countries"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >

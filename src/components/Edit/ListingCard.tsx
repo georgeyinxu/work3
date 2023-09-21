@@ -33,7 +33,7 @@ const ListingCard: React.FC<Props> = ({
   const calculateTimeLeft = () => {
     const now = new Date();
     const sgt = new Date(
-      now.toLocaleString("en-US", { timeZone: "Asia/Singapore" }),
+      now.toLocaleString("en-US", { timeZone: "Asia/Singapore" })
     );
     const targetTime = deadline;
 
@@ -62,38 +62,42 @@ const ListingCard: React.FC<Props> = ({
   }, []);
 
   return (
-    <div className="bg-white rounded-xl p-8 mb-4 my-6 grid grid-cols-3">
-      <div className="col-span-2">
-        <h3 className="text-[#222222] text-3xl font-semibold">{title}</h3>
+    <div className="bg-white rounded-xl p-8 mb-4 my-6 grid grid-cols-1 md:grid-cols-3">
+      <div className="md:col-span-2">
+        <h3 className="text-[#222222] text-xl sm:text-2xl md:text-3xl font-semibold">
+          {title}
+        </h3>
         <p
-          className="overflow-hidden overflow-ellipsis text-[#222222] mt-2 line-clamp-6"
+          className="overflow-hidden overflow-ellipsis text-[#222222] mt-2 line-clamp-6 text-sm sm:text-base md:text-lg"
           dangerouslySetInnerHTML={{ __html: description }}
         />
       </div>
-      <div className="flex flex-col items-start justify-between px-10">
+      <div className="flex flex-col items-start justify-between md:px-10 pt-4">
         <div>
           <p className="text-sm text-[#7D7D7D]">Total Payout</p>
           <div className="flex items-center justify-center">
-            <h3 className="text-[#222222] text-3xl font-semibold">{reward}</h3>
+            <h3 className="text-[#222222] text-2xl md:text-3xl font-semibold">
+              {reward}
+            </h3>
             <img
               src="/images/sald-token.svg"
-              className="w-14 h-14"
+              className="w-10 h-10 md:w-14 md:h-14"
               alt="sald token"
             />
           </div>
         </div>
         <div>
           <p className="text-sm text-[#7D7D7D]">Ends In</p>
-          <h3 className="text-[#222222] text-3xl font-semibold">
+          <h3 className="text-[#222222] text-2xl md:text-3xl font-semibold">
             {timeLeft.days}D {timeLeft.hours}H {timeLeft.minutes}M{" "}
             {timeLeft.seconds}S
           </h3>
         </div>
         <div>
           <p className="text-sm text-[#7D7D7D]">Last Updated</p>
-          <h3 className="text-[#222222] text-3xl font-semibold">
+          <h3 className="text-[#222222] text-2xl md:text-3xl font-semibold">
             {DateTime.fromISO(lastUpdated.toISOString()).toFormat(
-              "yyyy LLL dd",
+              "yyyy LLL dd"
             )}
           </h3>
         </div>
