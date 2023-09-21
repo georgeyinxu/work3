@@ -6,6 +6,11 @@ import TransactionCard from "@/components/ListingDetails/TransactionCard";
 import IListing from "@/interfaces/ListingResponse";
 import { short } from "@/utils/Common";
 import ErrorAlert from "../Alerts/ErrorAlert";
+import { useAddress } from "@thirdweb-dev/react";
+import { checkWorkerSelected } from "@/utils/Worker";
+import AlertCard from "../Alerts/AlertCard";
+import JobStatus from "@/enums/JobStatus";
+import WorkerClaimCard from "./WorkerClaimCard";
 
 type Props = {
   listingDetails: IListing;
@@ -25,6 +30,8 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
     minutes: 0,
     seconds: 0,
   });
+  const [isSelected, setIsSelected] = useState<boolean>(false);
+  const address = useAddress();
 
   const calculateTimeLeft = () => {
     const now = new Date();
@@ -56,13 +63,35 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    const fetchAllData = async () => {
+      if (address) {
+        const workerSelected = await checkWorkerSelected(
+          listingDetails._id,
+          address
+        );
+        setIsSelected(workerSelected);
+      }
+    };
+
+    fetchAllData();
+  }, [address, listingDetails._id]);
+
   return (
     <main>
-      {listingDetails.jobStatus !== "ACTIVE" && (
+      {listingDetails.jobStatus !== "ACTIVE" && !isSelected && (
         <ErrorAlert
           header="Listing no longer available!"
           text="Another worker who has applied for the job has been selected to conduct it."
         />
+      )}
+      {isSelected && (
+        <div className="mb-4">
+          <AlertCard
+            header="Congratulations! You have been selected!"
+            text="Please submit your work via the in-built chat"
+          />
+        </div>
       )}
       <div className="flex justify-between items-center">
         <div className="flex justify-start items-center gap-4">
@@ -141,13 +170,17 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
           </div>
         </div>
         <div>
-          <TransactionCard
-            jobId={listingDetails.jobId}
-            to={listingDetails.from}
-            date={new Date(listingDetails.date)}
-            _id={listingDetails._id}
-            status={listingDetails.jobStatus !== "ACTIVE"}
-          />
+          {listingDetails.jobStatus === JobStatus.COMPLETED ? (
+            <WorkerClaimCard />
+          ) : (
+            <TransactionCard
+              jobId={listingDetails.jobId}
+              to={listingDetails.from}
+              date={new Date(listingDetails.date)}
+              _id={listingDetails._id}
+              status={listingDetails.jobStatus !== "ACTIVE"}
+            />
+          )}
         </div>
       </div>
     </main>

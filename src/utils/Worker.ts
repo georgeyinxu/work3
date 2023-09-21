@@ -131,40 +131,18 @@ const checkApplied = async (address: string, post: string) => {
   return applied;
 };
 
-const confirmWorker = async (applicantId: number) => {
-  if (!process.env.NEXT_PUBLIC_WORKER_ADDR) {
-    console.error("Please set your NEXT_PUBLIC_WORKER_ADDR in .env.local");
-    return;
+const checkWorkerSelected = async (jobId: string, walletAddress: string) => {
+  let selected = false;
+
+  try {
+    const res = await axios.get(`/api/listing/applicant/successful?listingId=${jobId}&address=${walletAddress}`);
+
+    selected = res.data.data;
+  } catch (error) {
+    console.error("Failed to check if applicant was selected")
   }
 
-  if (!process.env.NEXT_PUBLIC_MASLOW_ADDR) {
-    console.error("Please set your NEXT_PUBLIC_MASLOW_ADDR in .env.local");
-    return;
-  }
+  return selected;
+}
 
-  if (!process.env.NEXT_PUBLIC_SALD_ADDR) {
-    console.error("Please set your NEXT_PUBLIC_SALD_ADDR in .env.local");
-    return;
-  }
-
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-
-  const workerContract = new ethers.Contract(
-    process.env.NEXT_PUBLIC_WORKER_ADDR,
-    workerContractAbi,
-    signer,
-  );
-  const tokenContract = new ethers.Contract(
-    process.env.NEXT_PUBLIC_SALD_ADDR,
-    saldTokenAbi,
-    signer,
-  );
-  const maslowContract = new ethers.Contract(
-    process.env.NEXT_PUBLIC_MASLOW_ADDR,
-    maslowContractAbi,
-    signer,
-  );
-};
-
-export { applyListing, checkApplied };
+export { applyListing, checkApplied, checkWorkerSelected };

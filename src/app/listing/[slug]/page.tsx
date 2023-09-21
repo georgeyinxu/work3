@@ -37,13 +37,14 @@ const JobDetails: React.FC<Props> = ({ params }) => {
   useEffect(() => {
     const fetchAllData = async () => {
       const data = await fetchListing(params.slug);
+
       if (Object.keys(data).length === 0 && data.constructor === Object) {
         router.push("/");
       } else {
         setListingDetails(data as IListing);
 
         if ("from" in data && address === data.from) {
-          setIsWorker(false);
+          // setIsWorker(false);
         } else {
           setIsWorker(true);
         }
