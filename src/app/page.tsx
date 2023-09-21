@@ -85,7 +85,7 @@ const App = () => {
                       className="text-sm sm:text-base md:text-lg my-4 line-clamp-5 text-[#202020]"
                       dangerouslySetInnerHTML={{ __html: listing.description }}
                     />
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 items-center justify-center">
+                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-2 items-center justify-center">
                       <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r">
                         <span className="block text-black px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition text-base">
                           {listing.reward} $SALD
