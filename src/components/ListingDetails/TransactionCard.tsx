@@ -38,7 +38,7 @@ const TransactionCard: React.FC<Props> = ({ to, jobId, date, _id, status }) => {
             <input
               type="number"
               id="visitors"
-              className="text-4xl bg-gray-100 text-[#222222] rounded-lg block w-10"
+              className="text-3xl md:text-4xl bg-gray-100 text-[#222222] rounded-lg block w-10 font-bold"
               placeholder="0"
               value="5"
               disabled
@@ -48,7 +48,7 @@ const TransactionCard: React.FC<Props> = ({ to, jobId, date, _id, status }) => {
           <div className="flex items-center">
             <img
               src="/images/sald-token.svg"
-              className="w-16 h-16"
+              className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16"
               alt="sald token"
             />
           </div>
@@ -58,7 +58,7 @@ const TransactionCard: React.FC<Props> = ({ to, jobId, date, _id, status }) => {
         <FaArrowDown />
       </div>
       <div className="bg-gray-100 rounded-2xl text-gray-500 text-base px-4 py-8">
-        <h3 className="text-4xl text-black font-bold text-center">
+        <h3 className="text-3xl md:text-4xl text-black font-bold text-center">
           {short(to)}
         </h3>
       </div>
