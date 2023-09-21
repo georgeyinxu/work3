@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { LineChart, Line, XAxis, Tooltip, Label } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  Tooltip,
+  Label,
+  ResponsiveContainer,
+} from "recharts";
 
 const data = [
   { name: "Jan", BTCUSD: 4000 },
@@ -20,29 +27,31 @@ const UserDeployments = () => {
   const [showXAxis, setShowXAxis] = useState(false);
 
   return (
-    <LineChart
-      id="deployments"
-      width={800}
-      height={400}
-      data={data}
-      margin={{
-        top: 20,
-        right: 30,
-        left: 20,
-        bottom: 10,
-      }}
-      onMouseEnter={() => setShowXAxis(true)}
-      onMouseLeave={() => setShowXAxis(false)}
-    >
-      {showXAxis && <XAxis dataKey="name" axisLine={false} tickLine={false} />}
-      <Tooltip />
-      <Line
-        type="monotone"
-        dataKey="BTCUSD"
-        stroke="#FE66FF"
-        activeDot={{ r: 8 }}
-      />
-    </LineChart>
+    <ResponsiveContainer width="95%" height={400}>
+      <LineChart
+        id="deployments"
+        data={data}
+        margin={{
+          top: 20,
+          right: 30,
+          left: 20,
+          bottom: 10,
+        }}
+        onMouseEnter={() => setShowXAxis(true)}
+        onMouseLeave={() => setShowXAxis(false)}
+      >
+        {showXAxis && (
+          <XAxis dataKey="name" axisLine={false} tickLine={false} />
+        )}
+        <Tooltip />
+        <Line
+          type="monotone"
+          dataKey="BTCUSD"
+          stroke="#FE66FF"
+          activeDot={{ r: 8 }}
+        />
+      </LineChart>
+    </ResponsiveContainer>
   );
 };
 

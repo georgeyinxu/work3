@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { IApplicant } from "@/interfaces/ApplicantResponse";
+
 import mongoose from "mongoose";
 import connectMongoDB from "@/lib/mongodb";
 import Applicant from "@/models/applicant";
 import Listing from "@/models/listing";
-import IApplicant from "@/interfaces/ApplicantResponse";
 import JobStatus from "@/enums/JobStatus";
 
 export async function POST(req: NextRequest) {
@@ -19,11 +20,12 @@ export async function POST(req: NextRequest) {
       fee,
       applicantId,
       selected: false,
+      claimed: false,
     });
   } catch (error) {
     return NextResponse.json(
       { message: "Error adding applicant to db due to " + error },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -33,7 +35,7 @@ export async function POST(req: NextRequest) {
     },
     {
       status: 201,
-    },
+    }
   );
 }
 
@@ -46,7 +48,7 @@ export async function GET(req: NextRequest) {
   if (!listingId) {
     return NextResponse.json(
       { message: "Please add query param listingId" },
-      { status: 404 },
+      { status: 404 }
     );
   }
 
@@ -57,7 +59,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       { message: "Error fetching all applicants to db due to " + error },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -67,20 +69,21 @@ export async function GET(req: NextRequest) {
     },
     {
       status: 200,
-    },
+    }
   );
 }
 
 export async function PUT(req: NextRequest) {
   await connectMongoDB();
-  const { applicantId, listingId } = await req.json();
+  const { applicantId, listingId, status } = await req.json();
 
   try {
     await Applicant.findOneAndUpdate(
       {
         applicantId,
+        post: new mongoose.Types.ObjectId(listingId),
       },
-      { selected: true },
+      { selected: true }
     );
 
     await Listing.findOneAndUpdate(
@@ -88,13 +91,13 @@ export async function PUT(req: NextRequest) {
         _id: new mongoose.Types.ObjectId(listingId),
       },
       {
-        jobStatus: JobStatus.APPLICATION,
-      },
+        jobStatus: JobStatus[status as JobStatus],
+      }
     );
   } catch (error) {
     return NextResponse.json(
       { message: "Error updating applicant due to" + error },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -104,6 +107,6 @@ export async function PUT(req: NextRequest) {
     },
     {
       status: 200,
-    },
+    }
   );
 }

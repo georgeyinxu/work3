@@ -1,11 +1,11 @@
 import axios from "axios";
-import IApplicant from "@/interfaces/ApplicantResponse";
+import { IApplicant } from "@/interfaces/ApplicantResponse";
 
 const fetchApplicants = async (listingId: string) => {
   let applicants: IApplicant[] = [];
   try {
     const res = await axios.get(
-      `/api/listing/applicant?listingId=${listingId}`,
+      `/api/listing/applicant?listingId=${listingId}`
     );
     applicants = res.data.data;
   } catch (error) {
@@ -15,4 +15,18 @@ const fetchApplicants = async (listingId: string) => {
   return applicants;
 };
 
-export { fetchApplicants };
+const checkIfClaimed = async (applicantId: number) => {
+  let claimed = false;
+
+  try {
+    const res = await axios.get(`/api/user/claim?applicantId=${applicantId}`);
+
+    claimed = res.data.data;
+  } catch (error) {
+    console.error("Failed to check if applicant has claimed due to: " + error);
+  }
+
+  return claimed;
+};
+
+export { fetchApplicants, checkIfClaimed };

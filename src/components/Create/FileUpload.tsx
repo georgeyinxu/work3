@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import { FaTrashCan } from "react-icons/fa6";
-import FileInfo from "@/interfaces/FileInfo";
+import { FileInfo } from "@/interfaces/FileInfo";
 
 type Props = {
   selectedFiles: File[];
@@ -38,7 +38,7 @@ const FileUpload: React.FC<Props> = ({
     const newFileInfo = files.map((file) => ({
       name: file.name,
       time: currentTime,
-      size: formatBytes(file.size), // Added size
+      size: formatBytes(file.size),
     }));
 
     setSelectedFiles(files);
@@ -52,7 +52,7 @@ const FileUpload: React.FC<Props> = ({
   return (
     <div className="bg-white p-8 rounded-xl">
       <div className="flex items-center justify-between">
-        <h3 className="text-2xl text-black">File Uploads</h3>
+        <h3 className="text-xl md:text-2xl text-[#202020] font-semibold">File Uploads</h3>
         <button
           onClick={openFilePicker}
           className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r"

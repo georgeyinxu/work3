@@ -1,5 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import { Enum } from "@solana/web3.js";
 import JobStatus from "@/enums/JobStatus";
 
 const listingSchema = new Schema(
@@ -17,7 +16,7 @@ const listingSchema = new Schema(
     jobId: Number,
     jobStatus: {
       type: String,
-      enum: Object.values(JobStatus),
+      enum: JobStatus,
       default: JobStatus.ACTIVE,
     },
     date: Date,

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import connectMongoDB from "@/lib/mongodb";
 import Applicant from "@/models/applicant";
-import IApplicant from "@/interfaces/ApplicantResponse";
+import { IApplicant } from "@/interfaces/ApplicantResponse";
 
 // Check if user has applied to listing
 export async function GET(req: NextRequest) {
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
           "Error trying to find if user has applied for listing from db due to " +
           error,
       },
-      { status: 400 },
+      { status: 400 }
     );
   }
 

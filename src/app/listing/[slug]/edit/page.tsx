@@ -5,11 +5,11 @@ import SubmissionBody from "@/components/Create/SubmissionBody";
 import React, { useEffect, useState } from "react";
 import ListingCard from "@/components/Edit/ListingCard";
 import { fetchListing, updateListing } from "@/utils/Listings";
-import IListing from "@/interfaces/ListingResponse";
+import { IListing } from "@/interfaces/ListingResponse";
 import { useAddress } from "@thirdweb-dev/react";
 import { useRouter } from "next/navigation";
 import listing from "@/models/listing";
-import FileInfo from "@/interfaces/FileInfo";
+import { FileInfo } from "@/interfaces/FileInfo";
 
 type Props = {
   params: { slug: string };
@@ -50,11 +50,11 @@ const Edit: React.FC<Props> = ({ params }) => {
 
   return (
     <main className="min-h-screen bg-[#F6F6F6] flex items-center justify-center">
-      <div className="max-w-screen-xl rounded-xl px-6 py-32 w-full">
-        <h3 className="text-4xl uppercase font-semibold">
+      <div className="max-w-screen-xl rounded-xl px-6 py-12 w-full">
+        <h3 className="text-2xl sm:text-3xl md:text-4xl uppercase font-semibold text-[#202020] text-center md:text-left">
           <span className="text-[#FF66FF]">LISTING:</span> EDIT
         </h3>
-        <h5 className="text-xl">
+        <h5 className="text-md sm:text-lg md:text-xl text-[#202020] text-center">
           Complete your submission, including relevant files, and then stake to
           submit
         </h5>
@@ -65,7 +65,7 @@ const Edit: React.FC<Props> = ({ params }) => {
           lastUpdated={lastUpdated}
           description={description}
         />
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <FileUpload
             selectedFiles={selectedFiles}
             setSelectedFiles={setSelectedFiles}
@@ -95,7 +95,7 @@ const Edit: React.FC<Props> = ({ params }) => {
                 reward,
                 date,
                 category,
-                params.slug,
+                params.slug
               )
             }
           >

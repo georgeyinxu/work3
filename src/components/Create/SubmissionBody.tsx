@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import Datepicker from "tailwind-datepicker-react";
 import "react-quill/dist/quill.snow.css";
 import { fetchCategories } from "@/utils/Categories";
-import ICategory from "@/interfaces/CategoryResponse";
+import { ICategory } from "@/interfaces/CategoryResponse";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
@@ -108,7 +108,7 @@ const SubmissionBody: React.FC<Props> = ({
     const fetchAllData = async () => {
       let categories = await fetchCategories();
       categories = categories.filter(
-        (category) => category.title !== "View All",
+        (category) => category.title !== "View All"
       );
       setCategories(categories);
 
@@ -123,9 +123,9 @@ const SubmissionBody: React.FC<Props> = ({
   return (
     <div className="bg-white p-8 rounded-xl">
       <div className="flex items-center justify-between">
-        <h3 className="text-2xl text-black">Submission Body</h3>
+        <h3 className="text-xl md:text-2xl text-[#202020] font-semibold">Submission Body</h3>
         <button
-          className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r"
+          className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r hidden md:block"
           onClick={() => setDescription("")}
         >
           <span className="block text-black px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
@@ -134,7 +134,7 @@ const SubmissionBody: React.FC<Props> = ({
         </button>
       </div>
       <hr className="w-full h-0.5 bg-gradient-to-r from-[#ff00c7] to-[#ff9bfb] rounded-full my-4" />
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4">
         <div>
           <label
             htmlFor="title"
@@ -207,7 +207,11 @@ const SubmissionBody: React.FC<Props> = ({
       <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-4">
         Description
       </label>
-      <ReactQuill value={description} onChange={handleChange} className="text-[#202020]" />
+      <ReactQuill
+        value={description}
+        onChange={handleChange}
+        className="text-[#202020]"
+      />
     </div>
   );
 };

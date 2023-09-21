@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import FileUpload from "@/components/Create/FileUpload";
 import SubmissionBody from "@/components/Create/SubmissionBody";
 import { postListing } from "@/utils/Deployer";
-import FileInfo from "@/interfaces/FileInfo";
+import { FileInfo } from "@/interfaces/FileInfo";
 
 const Create = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -14,18 +14,19 @@ const Create = () => {
   const [date, setDate] = useState<Date>(new Date());
   const [category, setCategory] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <main className="min-h-screen bg-[#F6F6F6] flex items-center justify-center">
-      <div className="max-w-screen-xl rounded-xl px-6 py-32 w-full">
-        <h3 className="text-4xl text-[#202020] uppercase font-semibold">
+      <div className="max-w-screen-xl rounded-xl px-6 py-12 w-full">
+        <h3 className="text-2xl sm:text-3xl md:text-4xl uppercase font-semibold text-[#202020] text-center md:text-left">
           <span className="text-[#FF66FF]">NEW LISTING:</span> DRAFT
         </h3>
-        <h5 className="text-xl text-[#202020]">
+        <h5 className="text-md sm:text-lg md:text-xl text-[#202020] text-center">
           Complete your submission, including relevant files, and then stake to
           submit
         </h5>
-        <div className="grid grid-cols-2 gap-8 mt-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
           <FileUpload
             selectedFiles={selectedFiles}
             setSelectedFiles={setSelectedFiles}
@@ -47,13 +48,23 @@ const Create = () => {
         </div>
         <div className="flex items-center justify-end my-4">
           <button
-            className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r"
+            className={`p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r ${
+              isLoading ? "bg-opacity-60" : ""
+            }`}
             onClick={() =>
-              postListing(title, description, reward, category, date)
+              postListing(
+                title,
+                description,
+                reward,
+                category,
+                date,
+                setIsLoading
+              )
             }
+            disabled={isLoading}
           >
             <span className="block text-white px-4 py-2 font-semibold rounded-full bg-transparent hover:bg-white hover:text-black transition">
-              Confirm Submission
+              {isLoading ? "Loading..." : "Confirm Submission"}
             </span>
           </button>
         </div>

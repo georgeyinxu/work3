@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       category: new mongoose.Types.ObjectId(categoryId),
       transactionHash,
       jobId,
-      jobStatus: JobStatus.ACTIVE,
+      jobStatus: JobStatus.ACTIVE
     });
 
     listingId = createdListing._id;
