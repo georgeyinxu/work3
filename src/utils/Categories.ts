@@ -1,5 +1,5 @@
 import axios from "axios";
-import {ICategory} from "@/interfaces/CategoryResponse";
+import { ICategory } from "@/interfaces/categoryResponse";
 
 const fetchCategories = async () => {
   let categoryData: ICategory[] = [];

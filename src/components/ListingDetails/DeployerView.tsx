@@ -5,7 +5,7 @@ import DeploymentTabs from "@/components/ListingDetails/DeploymentTabs";
 import ApplicantCard from "@/components/ListingDetails/ApplicantCard";
 import { ImArrowUpRight2 } from "react-icons/im";
 import { FaPenFancy } from "react-icons/fa";
-import {IListing} from "@/interfaces/ListingResponse";
+import { IListing } from "@/interfaces/listingResponse";
 import { short } from "@/utils/Common";
 
 type Props = {
@@ -146,7 +146,11 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
           </div>
         </div>
         <div>
-          <ApplicantCard listingId={listingDetails._id} jobId={listingDetails.jobId} listingStatus={listingDetails.jobStatus} />
+          <ApplicantCard
+            listingId={listingDetails._id}
+            jobId={listingDetails.jobId}
+            listingStatus={listingDetails.jobStatus}
+          />
         </div>
       </div>
     </main>

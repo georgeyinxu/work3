@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import FileUpload from "@/components/Create/FileUpload";
 import SubmissionBody from "@/components/Create/SubmissionBody";
 import { postListing } from "@/utils/Deployer";
-import {FileInfo} from "@/interfaces/FileInfo";
+import { FileInfo } from "@/interfaces/fileInfo";
 
 const Create = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -48,7 +48,9 @@ const Create = () => {
         </div>
         <div className="flex items-center justify-end my-4">
           <button
-            className={`p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r ${isLoading ? 'bg-opacity-60' : ''}`}
+            className={`p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r ${
+              isLoading ? "bg-opacity-60" : ""
+            }`}
             onClick={() =>
               postListing(
                 title,

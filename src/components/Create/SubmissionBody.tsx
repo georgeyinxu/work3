@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import Datepicker from "tailwind-datepicker-react";
 import "react-quill/dist/quill.snow.css";
 import { fetchCategories } from "@/utils/Categories";
-import {ICategory} from "@/interfaces/CategoryResponse";
+import { ICategory } from "@/interfaces/categoryResponse";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
@@ -108,7 +108,7 @@ const SubmissionBody: React.FC<Props> = ({
     const fetchAllData = async () => {
       let categories = await fetchCategories();
       categories = categories.filter(
-        (category) => category.title !== "View All",
+        (category) => category.title !== "View All"
       );
       setCategories(categories);
 
@@ -207,7 +207,11 @@ const SubmissionBody: React.FC<Props> = ({
       <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-4">
         Description
       </label>
-      <ReactQuill value={description} onChange={handleChange} className='text-[#202020]' />
+      <ReactQuill
+        value={description}
+        onChange={handleChange}
+        className="text-[#202020]"
+      />
     </div>
   );
 };
