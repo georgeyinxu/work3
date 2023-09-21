@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 import connectMongoDB from "@/lib/mongodb";
 import Applicant from "@/models/applicant";
 import Listing from "@/models/listing";
-import IApplicant from "@/interfaces/ApplicantResponse";
 import JobStatus from "@/enums/JobStatus";
+import {IApplicant} from "@/interfaces/ApplicantResponse";
 
 export async function POST(req: NextRequest) {
   await connectMongoDB();

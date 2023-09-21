@@ -1,6 +1,6 @@
 import JobStatus from "@/enums/JobStatus";
 
-interface IListing {
+export interface IListing {
   _id: string;
   from: string;
   to: string;
@@ -16,5 +16,3 @@ interface IListing {
   updatedAt: string;
   __v: 0;
 }
-
-export default IListing;

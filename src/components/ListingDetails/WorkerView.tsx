@@ -3,7 +3,7 @@ import UserDeployments from "@/components/ListingDetails/UserDeployments";
 import DeploymentTabs from "@/components/ListingDetails/DeploymentTabs";
 import { ImArrowUpRight2 } from "react-icons/im";
 import TransactionCard from "@/components/ListingDetails/TransactionCard";
-import IListing from "@/interfaces/ListingResponse";
+import {IListing} from "@/interfaces/ListingResponse";
 import { short } from "@/utils/Common";
 import ErrorAlert from "../Alerts/ErrorAlert";
 import { useAddress } from "@thirdweb-dev/react";
@@ -11,7 +11,7 @@ import { checkWorkerSelected } from "@/utils/Worker";
 import AlertCard from "../Alerts/AlertCard";
 import JobStatus from "@/enums/JobStatus";
 import WorkerClaimCard from "./WorkerClaimCard";
-import IApplicant from "@/interfaces/ApplicantResponse";
+import {IApplicant} from "@/interfaces/ApplicantResponse";
 
 type Props = {
   listingDetails: IListing;

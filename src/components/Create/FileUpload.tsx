@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import { FaTrashCan } from "react-icons/fa6";
-import FileInfo from "@/interfaces/FileInfo";
+import {FileInfo} from "@/interfaces/FileInfo";
 
 type Props = {
   selectedFiles: File[];

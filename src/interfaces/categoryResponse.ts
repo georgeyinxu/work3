@@ -1,4 +1,4 @@
-interface ICategory {
+export interface ICategory {
   _id: string;
   title: string;
   value: string;
@@ -7,5 +7,3 @@ interface ICategory {
   updatedAt: string;
   __v: number;
 }
-
-export default ICategory;

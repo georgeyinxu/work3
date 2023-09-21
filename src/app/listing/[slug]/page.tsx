@@ -6,7 +6,7 @@ import { useAddress } from "@thirdweb-dev/react";
 import WorkerView from "@/components/ListingDetails/WorkerView";
 import DeployerView from "@/components/ListingDetails/DeployerView";
 import { fetchListing } from "@/utils/Listings";
-import IListing from "@/interfaces/ListingResponse";
+import {IListing} from "@/interfaces/ListingResponse";
 import JobStatus from "@/enums/JobStatus";
 
 type Props = {

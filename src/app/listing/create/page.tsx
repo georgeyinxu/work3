@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import FileUpload from "@/components/Create/FileUpload";
 import SubmissionBody from "@/components/Create/SubmissionBody";
 import { postListing } from "@/utils/Deployer";
-import FileInfo from "@/interfaces/FileInfo";
+import {FileInfo} from "@/interfaces/FileInfo";
 
 const Create = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);

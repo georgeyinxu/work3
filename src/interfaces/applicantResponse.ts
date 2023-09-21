@@ -1,4 +1,4 @@
-interface IApplicant {
+export interface IApplicant {
   _id: string;
   post: string;
   applicantAddress: string;
@@ -11,5 +11,3 @@ interface IApplicant {
   updatedAt: string;
   __v: number;
 }
-
-export default IApplicant;

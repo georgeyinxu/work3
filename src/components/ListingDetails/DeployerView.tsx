@@ -5,7 +5,7 @@ import DeploymentTabs from "@/components/ListingDetails/DeploymentTabs";
 import ApplicantCard from "@/components/ListingDetails/ApplicantCard";
 import { ImArrowUpRight2 } from "react-icons/im";
 import { FaPenFancy } from "react-icons/fa";
-import IListing from "@/interfaces/ListingResponse";
+import {IListing} from "@/interfaces/ListingResponse";
 import { short } from "@/utils/Common";
 
 type Props = {
