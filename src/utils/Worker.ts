@@ -83,7 +83,6 @@ const applyListing = async (
         .connect(signer)
         .applyJob(jobId, ethers.utils.parseUnits(fee, 18), deadline);
       const receipt = await tx.wait();
-      console.log(JSON.stringify(receipt));
 
       const applicantId = await waitForJobListedEvent;
       const from = receipt.from;

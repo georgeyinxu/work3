@@ -4,6 +4,7 @@ import axios from "axios";
 import deployerContractAbi from "@/abi/DeployerContractABI.json";
 import maslowContractAbi from "@/abi/MaslowContractABI.json";
 import saldTokenAbi from "@/abi/SaldTokenABI.json";
+import workerContractAbi from "@/abi/WorkerContractABI.json";
 
 const postListing = async (
   title: string,

@@ -40,7 +40,6 @@ const ApplicantCard: React.FC<Props> = ({
   });
   const [applicants, setApplicants] = useState<IApplicant[]>([]);
   const [selectedApplicant, setSelectedApplicant] = useState<number>(-1);
-
   const address = useAddress();
 
   useEffect(() => {

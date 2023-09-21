@@ -7,6 +7,7 @@ import { ImArrowUpRight2 } from "react-icons/im";
 import { FaPenFancy } from "react-icons/fa";
 import { IListing } from "@/interfaces/listingResponse";
 import { short } from "@/utils/Common";
+import JobCompleteCard from "@/components/ListingDetails/JobCompleteCard";
 
 type Props = {
   listingDetails: IListing;
