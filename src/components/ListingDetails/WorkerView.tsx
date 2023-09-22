@@ -170,22 +170,22 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
             )}
           </div>
           <hr className="w-full h-0.5 bg-gray-50 rounded-full my-10 md:hidden" />
-          <div className='md:hidden'>
-          {listingDetails.jobStatus === JobStatus.COMPLETED ? (
-            <WorkerClaimCard
-              listingId={listingDetails._id}
-              applicantId={applicantDetails.applicantId}
-            />
-          ) : (
-            <TransactionCard
-              jobId={listingDetails.jobId}
-              to={listingDetails.from}
-              date={new Date(listingDetails.date)}
-              _id={listingDetails._id}
-              status={listingDetails.jobStatus !== "ACTIVE"}
-            />
-          )}
-        </div>
+          <div className="md:hidden">
+            {listingDetails.jobStatus === JobStatus.COMPLETED ? (
+              <WorkerClaimCard
+                listingId={listingDetails._id}
+                applicantId={applicantDetails.applicantId}
+              />
+            ) : (
+              <TransactionCard
+                jobId={listingDetails.jobId}
+                to={listingDetails.from}
+                date={new Date(listingDetails.date)}
+                _id={listingDetails._id}
+                status={listingDetails.jobStatus !== "ACTIVE"}
+              />
+            )}
+          </div>
           <hr className="w-full h-0.5 bg-gray-50 rounded-full my-10" />
           <h3 className="text-[#222222] text-xl sm:text-2xl md:text-3xl font-semibold">
             {listingDetails.title}
@@ -194,7 +194,18 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
             className="overflow-hidden overflow-ellipsis text-[#222222] mt-2 text-sm sm:text-base md:text-lg"
             dangerouslySetInnerHTML={{ __html: listingDetails.description }}
           />
-          <h6 className="text-sm text-[#7D7D7D] mt-8">Files</h6>
+          <h6 className="text-sm text-[#7D7D7D] mt-4">Payout</h6>
+          <div className="flex items-center gap-2">
+            <h3 className="text-[#222222] text-xl md:text-2xl font-semibold">
+              {listingDetails.reward}
+            </h3>
+            <img
+              src="/images/sald-token.svg"
+              className="w-10 h-10 md:w-12 md:h-12"
+              alt="sald token"
+            />
+          </div>
+          <h6 className="text-sm text-[#7D7D7D] mt-4">Files</h6>
           <div className="flex flex-col md:flex-row md:items-center justify-start gap-4 mt-2">
             <button className="text-sm text-[#FF66FF] flex items-center gap-2">
               <span className="truncate">Design Assignment 1</span>
@@ -215,7 +226,7 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
             Submit Dispute
           </span>
         </button>
-        <div className='hidden md:block'>
+        <div className="hidden md:block">
           {listingDetails.jobStatus === JobStatus.COMPLETED ? (
             <WorkerClaimCard
               listingId={listingDetails._id}
