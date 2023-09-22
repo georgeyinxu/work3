@@ -27,11 +27,8 @@ export async function GET(req: NextRequest) {
     });
 
     if (applicantResponse) {
+      selected = applicantResponse.selected;
       applicant = applicantResponse;
-    }
-
-    if (applicantResponse.selected) {
-      selected = true;
     }
   } catch (error) {
     return NextResponse.json(
