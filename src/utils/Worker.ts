@@ -55,13 +55,13 @@ const applyListing = async (
     const amountToApprove = ethers.utils.parseUnits(fee, 18);
     const existingAllowance = await tokenContract.allowance(
       await signer.getAddress(),
-      process.env.NEXT_PUBLIC_DEPLOYER_ADDR
+      process.env.NEXT_PUBLIC_WORKER_ADDR
     );
 
     if (existingAllowance.lt(amountToApprove)) {
       const approveTx = await tokenContract
         .connect(signer)
-        .approve(process.env.NEXT_PUBLIC_DEPLOYER_ADDR, amountToApprove);
+        .approve(process.env.NEXT_PUBLIC_WORKER_ADDR, amountToApprove);
       const approveReceipt = await approveTx.wait();
 
       if (approveReceipt.status === 0) {
