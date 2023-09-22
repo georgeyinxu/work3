@@ -30,7 +30,7 @@ const TransactionCard: React.FC<Props> = ({ to, jobId, date, _id, status }) => {
   }, [to, _id]);
 
   return (
-    <div className="bg-white rounded-2xl transaction-card">
+    <div className="bg-white rounded-2xl transaction-card md:ml-2">
       <div className="bg-gray-100 rounded-2xl text-gray-500 text-base p-4">
         <h6>You pay</h6>
         <div className="flex items-center justify-center">
@@ -123,7 +123,7 @@ const TransactionCard: React.FC<Props> = ({ to, jobId, date, _id, status }) => {
           </button>
         )}
       </div>
-      {applied && (
+      {applied && address && (
         <div className="mt-2">
           <AlertCard
             header="Successfully Applied"
