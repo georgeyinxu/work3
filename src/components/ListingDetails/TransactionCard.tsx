@@ -63,7 +63,7 @@ const TransactionCard: React.FC<Props> = ({ to, jobId, date, _id, status }) => {
         </h3>
       </div>
       <div className="w-full">
-        {!address && (
+        {!address && !status && (
           <ConnectWallet
             theme="light"
             style={{
@@ -114,7 +114,8 @@ const TransactionCard: React.FC<Props> = ({ to, jobId, date, _id, status }) => {
             onClick={() =>
               applyListing(_id, jobId, "5", date, setApplied, setIsLoading)
             }
-            disabled={isLoading || applied}
+            disabled={isLoading || applied || !address}
+            className='disabled:opacity-60'
           >
             {isLoading && "Loading..."}
             {applied && "Applied"}

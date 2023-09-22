@@ -66,7 +66,7 @@ const Navbar = () => {
             <li>
               <a href="/listing/create" className="block">
                 <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r w-full md:w-auto">
-                  <span className="block text-black p-4 font-semibold rounded-full bg-white hover:bg-transparent transition">
+                  <span className={`block text-black font-semibold rounded-full bg-white hover:bg-transparent transition ${address ? 'p-4' : 'p-2'}`}>
                     Create Listing
                   </span>
                 </button>

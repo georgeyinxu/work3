@@ -36,7 +36,7 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
     const targetTime = new Date(listingDetails.date);
 
     if (sgt.getTime() > targetTime.getTime()) {
-      targetTime.setDate(targetTime.getDate() + 1);
+      return { days: 0, hours: 0, minutes: 0, seconds: 0 };
     }
 
     const timeDifference = targetTime.getTime() - sgt.getTime();
@@ -108,7 +108,7 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
                 />
               </div>
             </div>
-            {timeLeft.seconds ? (
+            {timeLeft.seconds === 0 ? (
               <div>
                 <p className="text-sm text-[#7D7D7D]">Ends In</p>
                 <h3 className="text-[#222222] text-2xl md:text-3xl font-semibold">
@@ -121,7 +121,7 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
             )}
           </div>
           <hr className="w-full h-0.5 bg-gray-50 rounded-full my-10 md:hidden" />
-          <div className="block mt-4">
+          <div className="block md:hidden mt-4">
             <ApplicantCard
               listingId={listingDetails._id}
               jobId={listingDetails.jobId}
