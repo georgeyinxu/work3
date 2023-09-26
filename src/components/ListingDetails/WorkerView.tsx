@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import UserDeployments from "@/components/ListingDetails/UserDeployments";
 import DeploymentTabs from "@/components/ListingDetails/DeploymentTabs";
 import { ImArrowUpRight2 } from "react-icons/im";
@@ -12,6 +12,7 @@ import AlertCard from "../Alerts/AlertCard";
 import JobStatus from "@/enums/JobStatus";
 import WorkerClaimCard from "./WorkerClaimCard";
 import { IApplicant } from "@/interfaces/ApplicantResponse";
+import TelegramDialog from "../Dialog/TelegramDialog";
 
 type Props = {
   listingDetails: IListing;
@@ -45,6 +46,8 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
     updatedAt: "",
     __v: 0,
   });
+  const [isOpen, setIsOpen] = useState(true);
+
   const address = useAddress();
 
   const calculateTimeLeft = () => {
@@ -66,6 +69,10 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
 
     return { days, hours, minutes, seconds };
   };
+
+  function openModal() {
+    setIsOpen(true);
+  }
 
   useEffect(() => {
     setTimeLeft(calculateTimeLeft());
@@ -126,6 +133,13 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
             </h3>
             <span className="text-gray-500 font-bold">TVL: 58%</span>
           </div>
+          <button onClick={openModal}>
+            <img
+              src="/images/icons/telegram-logo.webp"
+              className={"w-6 h-6 md:w-8 md:h-8 rounded-full"}
+              alt={"telegram"}
+            />
+          </button>
         </div>
         <button className="bg-gradient-to-r from-red-400 via-red-500 to-red-600 rounded-full p-1 hidden md:block">
           <span className="text-black flex items-center justify-center gap-2 px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
@@ -243,6 +257,8 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
           )}
         </div>
       </div>
+
+      <TelegramDialog isOpen={isOpen} setIsOpen={setIsOpen} />
     </main>
   );
 };

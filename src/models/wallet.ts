@@ -2,6 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 const walletSchema = new Schema({
   address: String,
+  telegram: String,
   createdAt: Date,
 });
 
