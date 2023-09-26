@@ -40,6 +40,7 @@ export async function GET(req: NextRequest) {
     wallet = await Wallet.findOne({
       address,
     });
+
   } catch (error) {
     return NextResponse.json(
       { message: "Error getting wallet address due to: ", error },

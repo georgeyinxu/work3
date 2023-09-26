@@ -15,6 +15,7 @@ import { IApplicant } from "@/interfaces/ApplicantResponse";
 import TelegramDialog from "../Dialog/TelegramDialog";
 import Link from "next/link";
 import { IWallet } from "@/interfaces/WalletResponse";
+import { getDetails } from "@/utils/Deployer";
 
 type Props = {
   listingDetails: IListing;
@@ -51,6 +52,7 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
   });
   const [isOpen, setIsOpen] = useState(false);
   const [wallet, setWallet] = useState<IWallet | null>(null);
+  const [deployerWallet, setDeployerWallet] = useState<IWallet | null>(null);
 
   const address = useAddress();
 
@@ -98,10 +100,14 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
 
         const { telegram, wallet } = await checkTelegram(address);
 
+        const { deployerWallet } = await getDetails(listingDetails.from);
+
         setIsSelected(data);
         setApplicantDetails(applicantDetails);
         setTeleAvailable(telegram);
         setWallet(wallet);
+        setDeployerWallet(deployerWallet);
+        console.log(deployerWallet)
       }
     };
 
@@ -141,25 +147,26 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
             </h3>
             <span className="text-gray-500 font-bold">TVL: 58%</span>
           </div>
-          
+
           {
-            // TODO: Change listingDetails.from to fetch the deployer wallet
-          teleAvailable ? (
-            <Link href={`https://t.me/${listingDetails.from}`}>
+            !teleAvailable && (
+              <button onClick={openModal}>
+                <img
+                  src="/images/icons/telegram-logo.webp"
+                  className={"w-6 h-6 md:w-8 md:h-8 rounded-full"}
+                  alt={"telegram"}
+                />
+              </button>
+            )
+          }
+          {deployerWallet && deployerWallet.telegram !== "" && (
+            <Link href={`https://t.me/${deployerWallet?.telegram}`}>
               <img
                 src="/images/icons/telegram-logo.webp"
                 className={"w-6 h-6 md:w-8 md:h-8 rounded-full"}
                 alt={"telegram"}
               />
             </Link>
-          ) : (
-            <button onClick={openModal}>
-              <img
-                src="/images/icons/telegram-logo.webp"
-                className={"w-6 h-6 md:w-8 md:h-8 rounded-full"}
-                alt={"telegram"}
-              />
-            </button>
           )}
         </div>
         <button className="bg-gradient-to-r from-red-400 via-red-500 to-red-600 rounded-full p-1 hidden md:block">

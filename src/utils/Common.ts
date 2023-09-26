@@ -22,6 +22,7 @@ const addTelegram = async (
     console.error("Failed to add telegram due to: " + error);
   } finally {
     setSuccess(true);
+    window.location.reload();
   }
 };
 

@@ -5,6 +5,7 @@ import deployerContractAbi from "@/abi/DeployerContractABI.json";
 import maslowContractAbi from "@/abi/MaslowContractABI.json";
 import saldTokenAbi from "@/abi/SaldTokenABI.json";
 import workerContractAbi from "@/abi/WorkerContractABI.json";
+import { IWallet } from "@/interfaces/WalletResponse";
 
 const postListing = async (
   title: string,
@@ -243,4 +244,20 @@ const completeJob = async (
   }
 };
 
-export { postListing, pickApplicant, completeJob };
+const getDetails = async (address: string) => {
+  // Can be futher expanded with the deployment data for the graph in the future
+
+  let wallet: IWallet | null = null;
+
+  try {
+    const res = await axios.get(`/api/wallet?address=${address}`)
+
+    wallet = res.data.data;
+  } catch (error) {
+    console.error("Failed to get deployer details due to: ", error)
+  }
+
+  return { deployerWallet: wallet }
+}
+
+export { postListing, pickApplicant, completeJob, getDetails };
