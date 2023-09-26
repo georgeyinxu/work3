@@ -4,7 +4,7 @@ import DeploymentTabs from "@/components/ListingDetails/DeploymentTabs";
 import { ImArrowUpRight2 } from "react-icons/im";
 import TransactionCard from "@/components/ListingDetails/TransactionCard";
 import { IListing } from "@/interfaces/ListingResponse";
-import { short } from "@/utils/Common";
+import { checkTelegram, short } from "@/utils/Common";
 import ErrorAlert from "../Alerts/ErrorAlert";
 import { useAddress } from "@thirdweb-dev/react";
 import { checkWorkerSelected } from "@/utils/Worker";
@@ -13,6 +13,8 @@ import JobStatus from "@/enums/JobStatus";
 import WorkerClaimCard from "./WorkerClaimCard";
 import { IApplicant } from "@/interfaces/ApplicantResponse";
 import TelegramDialog from "../Dialog/TelegramDialog";
+import Link from "next/link";
+import { IWallet } from "@/interfaces/WalletResponse";
 
 type Props = {
   listingDetails: IListing;
@@ -32,6 +34,7 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
     minutes: 0,
     seconds: 0,
   });
+  const [teleAvailable, setTeleAvailable] = useState(false);
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const [applicantDetails, setApplicantDetails] = useState<IApplicant>({
     _id: "",
@@ -46,7 +49,8 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
     updatedAt: "",
     __v: 0,
   });
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [wallet, setWallet] = useState<IWallet | null>(null);
 
   const address = useAddress();
 
@@ -92,8 +96,12 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
           address
         );
 
+        const { telegram, wallet } = await checkTelegram(address);
+
         setIsSelected(data);
         setApplicantDetails(applicantDetails);
+        setTeleAvailable(telegram);
+        setWallet(wallet);
       }
     };
 
@@ -133,13 +141,26 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
             </h3>
             <span className="text-gray-500 font-bold">TVL: 58%</span>
           </div>
-          <button onClick={openModal}>
-            <img
-              src="/images/icons/telegram-logo.webp"
-              className={"w-6 h-6 md:w-8 md:h-8 rounded-full"}
-              alt={"telegram"}
-            />
-          </button>
+          
+          {
+            // TODO: Change listingDetails.from to fetch the deployer wallet
+          teleAvailable ? (
+            <Link href={`https://t.me/${listingDetails.from}`}>
+              <img
+                src="/images/icons/telegram-logo.webp"
+                className={"w-6 h-6 md:w-8 md:h-8 rounded-full"}
+                alt={"telegram"}
+              />
+            </Link>
+          ) : (
+            <button onClick={openModal}>
+              <img
+                src="/images/icons/telegram-logo.webp"
+                className={"w-6 h-6 md:w-8 md:h-8 rounded-full"}
+                alt={"telegram"}
+              />
+            </button>
+          )}
         </div>
         <button className="bg-gradient-to-r from-red-400 via-red-500 to-red-600 rounded-full p-1 hidden md:block">
           <span className="text-black flex items-center justify-center gap-2 px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">

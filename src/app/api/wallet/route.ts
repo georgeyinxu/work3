@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
       {
         address,
       },
-      { address, telegram: "", createdAt: new Date() },
+      { address, createdAt: new Date() },
       {
         upsert: true,
       }

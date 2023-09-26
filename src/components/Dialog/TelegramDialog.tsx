@@ -1,7 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import { addTelegram } from "@/utils/Common";
-import { useAddress } from "@thirdweb-dev/react";
+import { useAddress, ConnectWallet } from "@thirdweb-dev/react";
 
 type Props = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -55,7 +55,7 @@ const TelegramDialog: React.FC<Props> = ({ setIsOpen, isOpen }) => {
                     htmlFor="telegram"
                     className="block mb-2 text-sm font-medium text-gray-900"
                   >
-                    Telegram Handle (with an @ at the front)
+                    Telegram Handle (without an @ at the front)
                   </label>
                   <input
                     type="text"
@@ -70,7 +70,8 @@ const TelegramDialog: React.FC<Props> = ({ setIsOpen, isOpen }) => {
                       className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:text-green-400 mt-2"
                       role="alert"
                     >
-                      <span className="font-medium">Updated!</span> Please continue using the application.
+                      <span className="font-medium">Updated!</span> Please
+                      continue using the application.
                     </div>
                   )}
                 </div>
@@ -84,16 +85,33 @@ const TelegramDialog: React.FC<Props> = ({ setIsOpen, isOpen }) => {
                       Close
                     </span>
                   </button>
-                  <button
-                    className={`p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r`}
-                    onClick={() =>
-                      addTelegram(telegramHandle, address!, setSuccess)
-                    }
-                  >
-                    <span className="block text-white px-4 py-2 font-semibold rounded-full bg-transparent hover:bg-white hover:text-black transition">
-                      Add Telegram Handle!
-                    </span>
-                  </button>
+                  {address ? (
+                    <button
+                      className={`p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r disabled:opacity-60`}
+                      onClick={() =>
+                        addTelegram(telegramHandle, address!, setSuccess)
+                      }
+                      disabled={success || telegramHandle.length === 0}
+                    >
+                      <span className="block text-white px-4 py-2 font-semibold rounded-full bg-transparent hover:bg-white hover:text-black transition">
+                        Add Telegram Handle!
+                      </span>
+                    </button>
+                  ) : (
+                    <ConnectWallet
+                      theme="light"
+                      style={{
+                        background:
+                          "linear-gradient(93.06deg, rgb(255, 0, 199) 2.66%, rgb(255, 159, 251) 98.99%)",
+                        borderRadius: 40,
+                        paddingLeft: 36,
+                        paddingRight: 36,
+                        paddingTop: 16,
+                        paddingBottom: 16,
+                        justifyContent: "center",
+                      }}
+                    />
+                  )}
                 </div>
               </Dialog.Panel>
             </Transition.Child>

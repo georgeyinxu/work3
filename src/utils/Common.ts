@@ -1,3 +1,4 @@
+import { IWallet } from "@/interfaces/WalletResponse";
 import axios from "axios";
 
 const short = (addr?: string) => {
@@ -11,6 +12,7 @@ const addTelegram = async (
   address: string,
   setSuccess: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
+
   try {
     await axios.put("/api/wallet", {
       address,
@@ -23,4 +25,27 @@ const addTelegram = async (
   }
 };
 
-export { short, addTelegram };
+const checkTelegram = async (address: string) => {
+  let telegram = false;
+  let wallet: IWallet | null = null;
+
+  try {
+    const res = await axios.get(`/api/wallet?address=${address}`);
+
+    if (res.status === 200) {
+      wallet = res.data.data;
+
+      if (wallet && wallet.telegram !== "") {
+        telegram = true;
+      }
+    }
+  } catch (error) {
+    console.error(
+      "Failed to verify if user has added telegram due to: " + error
+    );
+  }
+
+  return {wallet, telegram};
+};
+
+export { short, addTelegram, checkTelegram };
