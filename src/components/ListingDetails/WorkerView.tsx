@@ -109,37 +109,8 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
           />
         </div>
       )}
-      <div className="flex justify-between items-center">
-        <div className="flex justify-start items-center gap-4">
-          <img
-            src="https://sothebys-com.brightspotcdn.com/dims4/default/6a8c506/2147483647/strip/true/crop/1000x1000+0+0/resize/684x684!/quality/90/?url=http%3A%2F%2Fsothebys-brightspot.s3.amazonaws.com%2Fdotcom%2F8e%2F9c%2F972bfa1645c08ca0919ea68aabfe%2F4609.png"
-            className={"w-12 h-12 md:w-16 md:h-16 rounded-full"}
-            alt={"pudgy"}
-          />
-          <div className="flex flex-col justify-between items-start">
-            <h3
-              className={
-                "text-xl sm:text-2xl md:text-3xl text-[#2E2E2E] font-bold"
-              }
-            >
-              {short(listingDetails.from)}
-            </h3>
-            <span className="text-gray-500 font-bold">TVL: 58%</span>
-          </div>
-        </div>
-        <button className="bg-gradient-to-r from-red-400 via-red-500 to-red-600 rounded-full p-1 hidden md:block">
-          <span className="text-black flex items-center justify-center gap-2 px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
-            Submit Dispute
-          </span>
-        </button>
-      </div>
       <div className="grid grid-cols-1 md:grid-cols-3">
         <div className="md:col-span-2">
-          <UserDeployments />
-          <hr className="w-full h-0.5 bg-gray-50 rounded-full" />
-          <div className="flex items-center justify-center md:justify-end">
-            <DeploymentTabs />
-          </div>
           <h3 className="text-[#222222] text-2xl md:text-3xl font-semibold">
             Stats
           </h3>

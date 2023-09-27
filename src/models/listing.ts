@@ -14,10 +14,7 @@ const listingSchema = new Schema(
     reward: Number,
     transactionHash: String,
     jobId: Number,
-    jobType: {
-      type: Schema.Types.ObjectId,
-      ref: "JobType"
-    },
+    jobType: String,
     jobStatus: {
       type: String,
       enum: JobStatus,

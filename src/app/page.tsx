@@ -8,6 +8,7 @@ import { IListing } from "@/interfaces/ListingResponse";
 
 import { fetchListings } from "@/utils/Listings";
 import { fetchCategories } from "@/utils/Categories";
+import ListingCard from "@/components/ListingCard";
 
 const App = () => {
   const [categories, setCategories] = useState<ICategory[]>([]);
@@ -15,12 +16,15 @@ const App = () => {
   const [selected, setSelected] = useState<string>("");
 
   useEffect(() => {
-    const fetchAllData = async () => {
-      setCategories(await fetchCategories());
-      setListings(await fetchListings());
-    };
+    const promises = [fetchCategories(), fetchListings()];
 
-    fetchAllData();
+    Promise.all(promises).then((responses) => {
+      const categories = responses[0] as ICategory[];
+      const listings = responses[1] as IListing[];
+
+      setCategories(categories);
+      setListings(listings);
+    });
   }, []);
 
   useEffect(() => {
@@ -61,49 +65,7 @@ const App = () => {
                 listing.category === selected ||
                 categories[0]._id === selected
               ) {
-                return (
-                  <div
-                    className="py-6 px-8 border border-gray-300 rounded-lg"
-                    key={listing._id}
-                  >
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-xl sm:text-2xl md:text-3xl text-[#202020] font-semibold">
-                        {listing.title}
-                      </h3>
-                      <Link
-                        className="items-center justify-center gap-3 text-[#202020] hover:text-[#FE66FF] text-xl hidden md:flex"
-                        href={`/listing/${listing._id}`}
-                      >
-                        <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r">
-                          <span className="block text-white px-4 py-2 font-semibold rounded-full bg-transparent hover:bg-white hover:text-black transition">
-                            Apply Now
-                          </span>
-                        </button>
-                      </Link>
-                    </div>
-                    <p
-                      className="text-sm sm:text-base md:text-lg my-4 line-clamp-5 text-[#202020]"
-                      dangerouslySetInnerHTML={{ __html: listing.description }}
-                    />
-                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-2 items-center justify-center">
-                      <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r">
-                        <span className="block text-black px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition text-base">
-                          {listing.reward} $SALD
-                        </span>
-                      </button>
-                      <Link
-                        className="items-center justify-center gap-3 text-[#202020] hover:text-[#FE66FF] text-xl flex md:hidden w-full"
-                        href={`/listing/${listing._id}`}
-                      >
-                        <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r w-full">
-                          <span className="block text-white px-4 py-2 font-semibold rounded-full bg-transparent hover:bg-white hover:text-black transition text-base md:text-lg">
-                            Apply Now
-                          </span>
-                        </button>
-                      </Link>
-                    </div>
-                  </div>
-                );
+                return <ListingCard listingDetails={listing} key={listing._id} />;
               }
             })}
         </div>

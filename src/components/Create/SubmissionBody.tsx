@@ -138,7 +138,7 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
         }
 
         if (jobTypes.length > 0) {
-          setForm((prev) => ({ ...prev, type: jobTypes[0]._id }));
+          setForm((prev) => ({ ...prev, type: jobTypes[0].title}));
         }
       })
       .catch((error) => {
@@ -243,7 +243,7 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
             onChange={handleChange}
           >
             {jobTypes.map((type) => (
-              <option value={type._id} key={type._id}>
+              <option value={type.title} key={type._id}>
                 {type.title}
               </option>
             ))}

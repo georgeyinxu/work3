@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
       category: new mongoose.Types.ObjectId(categoryId),
       transactionHash,
       jobId,
-      jobType: new mongoose.Types.ObjectId(jobType),
+      jobType,
       location,
       jobStatus: JobStatus.ACTIVE,
     });
