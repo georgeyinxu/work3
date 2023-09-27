@@ -26,6 +26,8 @@ const JobDetails: React.FC<Props> = ({ params }) => {
     jobId: 0,
     jobStatus: JobStatus.ACTIVE,
     date: "",
+    jobType: "",
+    location: "",
     createdAt: "",
     reward: 0,
     transactionHash: "",
