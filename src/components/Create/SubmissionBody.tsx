@@ -8,8 +8,9 @@ import "react-quill/dist/quill.snow.css";
 import { fetchCategories } from "@/utils/Categories";
 import { ICategory } from "@/interfaces/CategoryResponse";
 import axios from "axios";
-import { fetchLocations } from "@/utils/Common";
+import { fetchJobTypes, fetchLocations } from "@/utils/Common";
 import { ILocation } from "@/interfaces/LocationResponse";
+import { IJobType } from "@/interfaces/JobTypeResponse";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
@@ -51,6 +52,7 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
   const [show, setShow] = useState<boolean>(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
+  const [jobTypes, setJobTypes] = useState<IJobType[]>([]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -86,7 +88,6 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
       selected: "dark:bg-[#FF66FF] dark:text-white",
     },
     icons: {
-      // () => ReactElement | JSX.Element
       prev: () => (
         <span>
           <FaArrowLeft />
@@ -108,26 +109,41 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
   };
 
   useEffect(() => {
-    const fetchAllData = async () => {
-      let categories = await fetchCategories();
-      categories = categories.filter(
-        (category) => category.title !== "View All"
-      );
-      setCategories(categories);
+    const promises = [fetchCategories(), fetchLocations(), fetchJobTypes()];
 
-      let locations = await fetchLocations();
-      setLocations(locations);
+    Promise.all(promises)
+      .then((responses) => {
+        // Setting categories
+        let categories = responses[0];
+        categories = categories.filter(
+          (category: ICategory) => category.title !== "View All"
+        );
+        setCategories(categories);
 
-      if (categories.length > 0) {
-        setForm((prev) => ({ ...prev, category: categories[0]._id }));
-      }
+        // Setting locations
+        const locations = responses[1];
+        setLocations(locations);
 
-      if (locations.length > 0) {
-        setForm((prev) => ({ ...prev, location: locations[0] }));
-      }
-    };
+        // Setting job types
+        const jobTypes = responses[2];
+        setJobTypes(jobTypes);
 
-    fetchAllData();
+        // Setting the states for form
+        if (categories.length > 0) {
+          setForm((prev) => ({ ...prev, category: categories[0]._id }));
+        }
+
+        if (locations.length > 0) {
+          setForm((prev) => ({ ...prev, location: locations[0] }));
+        }
+
+        if (jobTypes.length > 0) {
+          setForm((prev) => ({ ...prev, type: jobTypes[0]._id }));
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
   return (
@@ -206,8 +222,8 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             onChange={handleChange}
           >
-            {locations.map((category) => (
-              <option value={category} key={category}>
+            {locations.map((category, index) => (
+              <option value={category} key={category + index}>
                 {category}
               </option>
             ))}
@@ -226,9 +242,9 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             onChange={handleChange}
           >
-            {categories.map((category) => (
-              <option value={category._id} key={category._id}>
-                {category.title}
+            {jobTypes.map((type) => (
+              <option value={type._id} key={type._id}>
+                {type.title}
               </option>
             ))}
           </select>

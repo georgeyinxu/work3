@@ -13,4 +13,11 @@ const fetchLocations = async () => {
   return locations;
 };
 
-export { short, fetchLocations };
+const fetchJobTypes = async () => {
+  const res = await axios.get('/api/jobType');
+  const jobTypes = res.data.data;
+
+  return jobTypes;
+}
+
+export { short, fetchLocations, fetchJobTypes };
