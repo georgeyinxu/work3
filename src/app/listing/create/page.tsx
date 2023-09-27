@@ -41,6 +41,8 @@ const Create = () => {
                 form.reward,
                 form.category,
                 form.date,
+                form.location,
+                form.type,
                 setIsLoading
               )
             }

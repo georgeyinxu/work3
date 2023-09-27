@@ -14,8 +14,10 @@ export async function POST(req: NextRequest) {
     reward,
     transactionHash,
     jobId,
+    jobType,
     date,
     categoryId,
+    location
   } = await req.json();
   let listingId;
 
@@ -31,20 +33,22 @@ export async function POST(req: NextRequest) {
       category: new mongoose.Types.ObjectId(categoryId),
       transactionHash,
       jobId,
-      jobStatus: JobStatus.ACTIVE
+      jobType: new mongoose.Types.ObjectId(jobType),
+      location,
+      jobStatus: JobStatus.ACTIVE,
     });
 
     listingId = createdListing._id;
   } catch (error) {
     return NextResponse.json(
       { message: "Error adding listing to db due to " + error },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
   return NextResponse.json(
     { message: "Successfully created listing", data: listingId },
-    { status: 201 },
+    { status: 201 }
   );
 
   // TODO: Finish up the next 2 steps after getting the S3 Details from Fajri
@@ -67,7 +71,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       { message: "Error fetching listings from db due to " + error },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -91,17 +95,17 @@ export async function PUT(req: NextRequest) {
         reward,
         date,
         category: new mongoose.Types.ObjectId(categoryId),
-      },
+      }
     );
   } catch (error) {
     return NextResponse.json(
       { message: "Error updating listing in db due to " + error },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
   return NextResponse.json(
     { message: "Successfully updated listing" },
-    { status: 200 },
+    { status: 200 }
   );
 }

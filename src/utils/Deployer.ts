@@ -12,6 +12,8 @@ const postListing = async (
   reward: string,
   category: string,
   date: Date,
+  location: string,
+  type: string,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   if (!process.env.NEXT_PUBLIC_DEPLOYER_ADDR) {
@@ -111,8 +113,10 @@ const postListing = async (
         reward: rewardNum,
         transactionHash,
         jobId: maslowJobId,
+        jobType: type,
         date,
         categoryId: category,
+        location: location,
       },
       {}
     );

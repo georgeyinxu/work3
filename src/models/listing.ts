@@ -14,11 +14,16 @@ const listingSchema = new Schema(
     reward: Number,
     transactionHash: String,
     jobId: Number,
+    jobType: {
+      type: Schema.Types.ObjectId,
+      ref: "JobType"
+    },
     jobStatus: {
       type: String,
       enum: JobStatus,
       default: JobStatus.ACTIVE,
     },
+    location: String,
     date: Date,
   },
   {
