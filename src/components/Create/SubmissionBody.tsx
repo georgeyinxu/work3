@@ -22,32 +22,45 @@ const formattedDate = yesterday.toLocaleDateString("en-SG", {
 });
 
 type Props = {
-  title: string;
-  description: string;
-  reward: string;
-  date: Date;
-  category: string;
-  setTitle: React.Dispatch<React.SetStateAction<string>>;
-  setDescription: React.Dispatch<React.SetStateAction<string>>;
-  setReward: React.Dispatch<React.SetStateAction<string>>;
-  setDate: React.Dispatch<React.SetStateAction<Date>>;
-  setCategory: React.Dispatch<React.SetStateAction<string>>;
+  form: {
+    title: string;
+    reward: string;
+    date: Date;
+    category: string;
+    location: string;
+    type: string;
+    description: string;
+  };
+  setForm: React.Dispatch<
+    React.SetStateAction<{
+      title: string;
+      reward: string;
+      date: Date;
+      category: string;
+      location: string;
+      type: string;
+      description: string;
+    }>
+  >;
 };
 
-const SubmissionBody: React.FC<Props> = ({
-  title,
-  description,
-  reward,
-  date,
-  category,
-  setTitle,
-  setDescription,
-  setReward,
-  setDate,
-  setCategory,
-}) => {
+const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
   const [show, setShow] = useState<boolean>(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleDescriptionChange = (html: string) => {
+    setForm({ ...form, description: html });
+  };
+
+  const handleClose = (state: boolean) => {
+    setShow(state);
+  };
 
   const options = {
     title: "Please choose a date",
@@ -59,13 +72,13 @@ const SubmissionBody: React.FC<Props> = ({
     theme: {
       background: "bg-white dark:bg-white",
       todayBtn: "",
-      clearBtn: "",
-      icons: "",
-      text: "text-[#202020]",
+      clearBtn: "dark:bg-[#FF66FF] border-0",
+      icons: "dark:bg-[#FF66FF]",
+      text: "dark:text-[#202020]",
       disabledText: "bg-gray-200",
-      input: "bg-gray-50",
+      input: "bg-gray-50 dark:bg-gray-50 text-[#202020] dark:text-[#202020] dark:border-gray-300",
       inputIcon: "",
-      selected: "",
+      selected: "dark:bg-[#FF66FF] dark:text-white",
     },
     icons: {
       // () => ReactElement | JSX.Element
@@ -85,23 +98,8 @@ const SubmissionBody: React.FC<Props> = ({
     language: "en",
   };
 
-  // TODO: Fix default date for edit to show the previous date set by the deployer
-
   const handleDateChange = (selectedDate: Date) => {
-    setDate(selectedDate);
-  };
-
-  const handleClose = (state: boolean) => {
-    setShow(state);
-  };
-
-  function handleChange(html: string) {
-    setDescription(html);
-  }
-
-  const handleRewardChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value: string = e.target.value;
-    setReward(value);
+    setForm({ ...form, date: selectedDate });
   };
 
   useEffect(() => {
@@ -113,7 +111,7 @@ const SubmissionBody: React.FC<Props> = ({
       setCategories(categories);
 
       if (categories.length > 0) {
-        setCategory(categories[0]._id);
+        setForm((prev) => ({ ...prev, category: categories[0]._id }));
       }
     };
 
@@ -123,22 +121,16 @@ const SubmissionBody: React.FC<Props> = ({
   return (
     <div className="bg-white p-8 rounded-xl">
       <div className="flex items-center justify-between">
-        <h3 className="text-xl md:text-2xl text-[#202020] font-semibold">Submission Body</h3>
-        <button
-          className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r hidden md:block"
-          onClick={() => setDescription("")}
-        >
-          <span className="block text-black px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
-            Clear Description
-          </span>
-        </button>
+        <h3 className="text-xl md:text-2xl text-[#202020] font-semibold">
+          Submission Body
+        </h3>
       </div>
       <hr className="w-full h-0.5 bg-gradient-to-r from-[#ff00c7] to-[#ff9bfb] rounded-full my-4" />
       <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4">
         <div>
           <label
             htmlFor="title"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="block mb-2 text-sm font-medium text-gray-900"
           >
             Title
           </label>
@@ -147,15 +139,15 @@ const SubmissionBody: React.FC<Props> = ({
             id="title"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder=""
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            name="title"
+            onChange={handleChange}
             required
           />
         </div>
         <div>
           <label
             htmlFor="Reward"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="block mb-2 text-sm font-medium text-gray-900"
           >
             Reward ($SALD)
           </label>
@@ -164,15 +156,75 @@ const SubmissionBody: React.FC<Props> = ({
             id="reward"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="0"
-            value={reward}
-            onChange={handleRewardChange}
+            name="reward"
+            onChange={handleChange}
             required
           />
         </div>
         <div>
           <label
-            htmlFor="first_name"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            htmlFor="category"
+            className="block mb-2 text-sm font-medium text-gray-900"
+          >
+            Select Category
+          </label>
+          <select
+            id="category"
+            name="category"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            onChange={handleChange}
+          >
+            {categories.map((category) => (
+              <option value={category._id} key={category._id}>
+                {category.title}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label
+            htmlFor="location"
+            className="block mb-2 text-sm font-medium text-gray-900"
+          >
+            Select Location
+          </label>
+          <select
+            id="location"
+            name="location"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            onChange={handleChange}
+          >
+            {categories.map((category) => (
+              <option value={category._id} key={category._id}>
+                {category.title}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label
+            htmlFor="type"
+            className="block mb-2 text-sm font-medium text-gray-900"
+          >
+            Job Type
+          </label>
+          <select
+            id="type"
+            name="type"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            onChange={handleChange}
+          >
+            {categories.map((category) => (
+              <option value={category._id} key={category._id}>
+                {category.title}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label
+            htmlFor="type"
+            className="block mb-2 text-sm font-medium text-gray-900"
           >
             Deadline
           </label>
@@ -183,33 +235,13 @@ const SubmissionBody: React.FC<Props> = ({
             setShow={handleClose}
           />
         </div>
-        <div>
-          <label
-            htmlFor="countries"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Select an option
-          </label>
-          <select
-            id="countries"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            {categories.map((category) => (
-              <option value={category._id} key={category._id}>
-                {category.title}
-              </option>
-            ))}
-          </select>
-        </div>
       </div>
-      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-4">
+      <label className="block mb-2 text-sm font-medium text-gray-900 mt-4">
         Description
       </label>
       <ReactQuill
-        value={description}
-        onChange={handleChange}
+        value={form.description}
+        onChange={handleDescriptionChange}
         className="text-[#202020]"
       />
     </div>
