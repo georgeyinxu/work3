@@ -5,13 +5,7 @@ import SubmissionBody from "@/components/Create/SubmissionBody";
 import { postListing } from "@/utils/Deployer";
 
 const Create = () => {
-  const [title, setTitle] = useState<string>("");
-  const [reward, setReward] = useState<string>("0");
-  const [date, setDate] = useState<Date>(new Date());
-  const [category, setCategory] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
-
   const [form, setForm] = useState({
     title: "",
     reward: "0",
@@ -42,11 +36,11 @@ const Create = () => {
             }`}
             onClick={() =>
               postListing(
-                title,
-                description,
-                reward,
-                category,
-                date,
+                form.title,
+                form.description,
+                form.reward,
+                form.category,
+                form.date,
                 setIsLoading
               )
             }

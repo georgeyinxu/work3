@@ -7,6 +7,9 @@ import Datepicker from "tailwind-datepicker-react";
 import "react-quill/dist/quill.snow.css";
 import { fetchCategories } from "@/utils/Categories";
 import { ICategory } from "@/interfaces/CategoryResponse";
+import axios from "axios";
+import { fetchLocations } from "@/utils/Common";
+import { ILocation } from "@/interfaces/LocationResponse";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
@@ -47,6 +50,7 @@ type Props = {
 const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
   const [show, setShow] = useState<boolean>(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
+  const [locations, setLocations] = useState<string[]>([]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -76,7 +80,8 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
       icons: "dark:bg-[#FF66FF]",
       text: "dark:text-[#202020]",
       disabledText: "bg-gray-200",
-      input: "bg-gray-50 dark:bg-gray-50 text-[#202020] dark:text-[#202020] dark:border-gray-300",
+      input:
+        "bg-gray-50 dark:bg-gray-50 text-[#202020] dark:text-[#202020] dark:border-gray-300",
       inputIcon: "",
       selected: "dark:bg-[#FF66FF] dark:text-white",
     },
@@ -110,8 +115,15 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
       );
       setCategories(categories);
 
+      let locations = await fetchLocations();
+      setLocations(locations);
+
       if (categories.length > 0) {
         setForm((prev) => ({ ...prev, category: categories[0]._id }));
+      }
+
+      if (locations.length > 0) {
+        setForm((prev) => ({ ...prev, location: locations[0] }));
       }
     };
 
@@ -194,9 +206,9 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             onChange={handleChange}
           >
-            {categories.map((category) => (
-              <option value={category._id} key={category._id}>
-                {category.title}
+            {locations.map((category) => (
+              <option value={category} key={category}>
+                {category}
               </option>
             ))}
           </select>
