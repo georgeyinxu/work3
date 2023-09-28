@@ -9,8 +9,6 @@ import { fetchCategories } from "@/utils/Categories";
 import { ICategory } from "@/interfaces/CategoryResponse";
 import { fetchJobTypes, fetchLocations } from "@/utils/Common";
 import { IJobType } from "@/interfaces/JobTypeResponse";
-import { FileInfo } from "@/interfaces/FileInfo";
-import axios from "axios";
 import { postListing } from "@/utils/Deployer";
 
 const ReactQuill = dynamic(() => import("react-quill"), {

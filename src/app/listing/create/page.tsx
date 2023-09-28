@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import SubmissionBody from "@/components/Create/SubmissionBody";
-import { postListing } from "@/utils/Deployer";
 
 const Create = () => {
   const [form, setForm] = useState({

@@ -14,6 +14,7 @@ export interface IListing {
   jobStatus: JobStatus;
   location: string;
   date: string;
+  file: string;
   createdAt: string;
   updatedAt: string;
   __v: 0;

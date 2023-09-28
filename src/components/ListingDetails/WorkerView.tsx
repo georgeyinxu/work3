@@ -12,7 +12,8 @@ import { IListing } from "@/interfaces/ListingResponse";
 
 import { ImArrowUpRight2 } from "react-icons/im";
 import { FaMoneyBill, FaBriefcase, FaLocationDot } from "react-icons/fa6";
-import { short } from "@/utils/Common";
+import { fileName, short } from "@/utils/Common";
+import Link from "next/link";
 
 type Props = {
   listingDetails: IListing;
@@ -199,18 +200,12 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
           />
           <h6 className="text-sm text-[#7D7D7D] mt-4">Files</h6>
           <div className="flex flex-col md:flex-row md:items-center justify-start gap-4 mt-2">
-            <button className="text-sm text-[#FF66FF] flex items-center gap-2">
-              <span className="truncate">Design Assignment 1</span>
-              <ImArrowUpRight2 />
-            </button>
-            <button className="text-sm text-[#FF66FF] flex items-center gap-2">
-              <span className="truncate">Design Assignment 2</span>
-              <ImArrowUpRight2 />
-            </button>
-            <button className="text-sm text-[#FF66FF] flex items-center gap-2">
-              <span className="truncate">Design Assignment 3</span>
-              <ImArrowUpRight2 />
-            </button>
+            <Link href={`${listingDetails.file}`}>
+              <button className="text-sm text-[#FF66FF] flex items-center gap-2">
+                <span className="truncate">{fileName(listingDetails.file)}</span>
+                <ImArrowUpRight2 />
+              </button>
+            </Link>
           </div>
         </div>
         <div className="hidden md:block">

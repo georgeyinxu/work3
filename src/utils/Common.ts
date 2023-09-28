@@ -1,4 +1,5 @@
 import axios from "axios";
+import { basename } from "path";
 
 const short = (addr?: string) => {
   if (!addr) return null;
@@ -6,6 +7,15 @@ const short = (addr?: string) => {
   return `${addr.slice(0, 5)}…${addr.slice(-4)}`;
 };
 
+const fileName = (url: string) => {
+  if (!url) return null;
+
+  const parsedUrl = new URL(url);
+  const pathname = parsedUrl.pathname;
+  const filename = basename(pathname);
+  
+  return filename;
+} 
 const fetchLocations = async () => {
   const res = await axios.get("/api/location");
   const locations = res.data.data;
@@ -20,4 +30,4 @@ const fetchJobTypes = async () => {
   return jobTypes;
 }
 
-export { short, fetchLocations, fetchJobTypes };
+export { short, fileName, fetchLocations, fetchJobTypes };
