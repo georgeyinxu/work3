@@ -3,7 +3,7 @@
 import SubmissionBody from "@/components/Create/SubmissionBody";
 import React, { useEffect, useState } from "react";
 import ListingCard from "@/components/Edit/ListingCard";
-import { fetchListing, updateListing } from "@/utils/Listings";
+import { fetchListing } from "@/utils/Listings";
 import { IListing } from "@/interfaces/ListingResponse";
 import { useAddress } from "@thirdweb-dev/react";
 import { useRouter } from "next/navigation";
@@ -14,14 +14,28 @@ type Props = {
 };
 
 const Edit: React.FC<Props> = ({ params }) => {
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [fileInfo, setFileInfo] = useState<FileInfo[]>([]);
-  const [title, setTitle] = useState<string>("");
-  const [reward, setReward] = useState<string>("0");
-  const [date, setDate] = useState<Date>(new Date());
-  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
-  const [category, setCategory] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
+  const [form, setForm] = useState<{
+    title: string;
+    reward: string;
+    date: Date;
+    category: string;
+    location: string;
+    type: string;
+    description: string;
+    file?: string | undefined;
+    listingId?: string;
+  }>({
+    title: "",
+    reward: "0",
+    date: new Date(),
+    category: "",
+    location: "",
+    type: "",
+    description: "",
+    file: undefined,
+    listingId: "",
+  });
+  const [lastUpdated, setLastUpdated] = useState(new Date());
 
   const address = useAddress();
   const router = useRouter();
@@ -32,19 +46,25 @@ const Edit: React.FC<Props> = ({ params }) => {
       if (Object.keys(data).length === 0 && data.constructor === Object) {
         router.push("/");
       } else {
-        setTitle(data.title);
-        setReward(data.reward.toString());
-        setDate(new Date(data.date));
-        setCategory(data.category);
-        setDescription(data.description);
-        setLastUpdated(new Date(data.updatedAt));
+        // Setting the previous value
+        setForm({
+          title: data.title,
+          reward: data.reward.toString(),
+          date: new Date(data.date),
+          category: data.category,
+          description: data.description,
+          location: data.location,
+          type: data.jobType,
+          file: data.file,
+          listingId: data._id,
+        });
 
-        // TODO: Handle Files Later
+        setLastUpdated(new Date(data.updatedAt));
       }
     };
 
     fetchAllData();
-  }, []); // Dependency array
+  }, []);
 
   return (
     <main className="min-h-screen bg-[#F6F6F6] flex items-center justify-center">
@@ -57,44 +77,14 @@ const Edit: React.FC<Props> = ({ params }) => {
           submit
         </h5>
         <ListingCard
-          title={title}
-          reward={reward}
-          deadline={date}
+          title={form.title}
+          reward={form.reward}
+          deadline={new Date(form.date)}
           lastUpdated={lastUpdated}
-          description={description}
+          description={form.description}
         />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* <SubmissionBody
-            title={title}
-            reward={reward}
-            date={date}
-            category={category}
-            description={description}
-            setTitle={setTitle}
-            setReward={setReward}
-            setCategory={setCategory}
-            setDescription={setDescription}
-            setDate={setDate}
-          /> */}
-        </div>
-        <div className="flex items-center justify-end my-4">
-          <button
-            className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r"
-            onClick={() =>
-              updateListing(
-                title,
-                description,
-                reward,
-                date,
-                category,
-                params.slug
-              )
-            }
-          >
-            <span className="block text-white px-4 py-2 font-semibold rounded-full bg-transparent hover:bg-white hover:text-black transition">
-              Confirm Edit
-            </span>
-          </button>
+        <div className="grid grid-cols-1 gap-8">
+          <SubmissionBody form={form} setForm={setForm} edit={true} />
         </div>
       </div>
     </main>

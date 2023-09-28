@@ -12,7 +12,7 @@ import { IListing } from "@/interfaces/ListingResponse";
 
 import { ImArrowUpRight2 } from "react-icons/im";
 import { FaMoneyBill, FaBriefcase, FaLocationDot } from "react-icons/fa6";
-import { fileName, short } from "@/utils/Common";
+import { formatFileName, short } from "@/utils/Common";
 import Link from "next/link";
 
 type Props = {
@@ -202,7 +202,7 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
           <div className="flex flex-col md:flex-row md:items-center justify-start gap-4 mt-2">
             <Link href={`${listingDetails.file}`}>
               <button className="text-sm text-[#FF66FF] flex items-center gap-2">
-                <span className="truncate">{fileName(listingDetails.file)}</span>
+                <span className="truncate">{formatFileName(listingDetails.file)}</span>
                 <ImArrowUpRight2 />
               </button>
             </Link>

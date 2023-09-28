@@ -28,27 +28,49 @@ const fetchListing = async (id: string) => {
 };
 
 const updateListing = async (
+  e: React.FormEvent<HTMLFormElement>,
+  listingId: string,
+  file: File | undefined,
   title: string,
   description: string,
   reward: string,
+  category: string,
   date: Date,
-  categoryId: string,
-  listingId: string
+  location: string,
+  type: string,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
+  e.preventDefault();
   try {
-    const res = await axios.put("/api/listing", {
-      title,
-      description,
-      reward,
-      date,
-      categoryId,
-      listingId,
+    setIsLoading(true)
+    const data = new FormData();
+    if (file) {
+      data.set("file", file);
+    }
+    data.set("title", title);
+    data.set("description", description);
+    data.set("reward", reward);
+    data.set("jobType", type);
+    data.set("date", date.toISOString());
+    data.set("categoryId", category);
+    data.set("location", location);
+    data.set("listingId", listingId)
+
+    const res = await fetch("/api/listing", {
+      method: "PUT",
+      body: data,
     });
+
+    if (!res.ok) throw new Error(await res.text());
   } catch (error) {
     console.error("Failed to update listing due to: " + error);
+  } finally {
+    setIsLoading(false);
   }
 
   window.location.href = `/listing/${listingId}`;
+
+  // TODO: Add integration with the smart contract
 };
 
 export { fetchListings, fetchListing, updateListing };

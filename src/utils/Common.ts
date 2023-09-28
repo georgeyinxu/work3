@@ -7,7 +7,7 @@ const short = (addr?: string) => {
   return `${addr.slice(0, 5)}…${addr.slice(-4)}`;
 };
 
-const fileName = (url: string) => {
+const formatFileName = (url: string) => {
   if (!url) return null;
 
   const parsedUrl = new URL(url);
@@ -30,4 +30,4 @@ const fetchJobTypes = async () => {
   return jobTypes;
 }
 
-export { short, fileName, fetchLocations, fetchJobTypes };
+export { short, formatFileName, fetchLocations, fetchJobTypes };

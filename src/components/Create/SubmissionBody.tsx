@@ -10,7 +10,11 @@ import { ICategory } from "@/interfaces/CategoryResponse";
 import { fetchJobTypes, fetchLocations } from "@/utils/Common";
 import { IJobType } from "@/interfaces/JobTypeResponse";
 import { postListing } from "@/utils/Deployer";
+import { updateListing } from "@/utils/Listings";
 import { FaPaperclip, FaTrashCan } from "react-icons/fa6";
+import Link from "next/link";
+import { ImArrowUpRight2 } from "react-icons/im";
+import { formatFileName } from "@/utils/Common";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
@@ -34,6 +38,8 @@ type Props = {
     location: string;
     type: string;
     description: string;
+    file?: string;
+    listingId?: string;
   };
   setForm: React.Dispatch<
     React.SetStateAction<{
@@ -44,11 +50,14 @@ type Props = {
       location: string;
       type: string;
       description: string;
+      file?: string;
+      listingId?: string;
     }>
   >;
+  edit: boolean;
 };
 
-const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
+const SubmissionBody: React.FC<Props> = ({ form, setForm, edit }) => {
   const [show, setShow] = useState<boolean>(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
@@ -115,6 +124,37 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
     }
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    if (edit) {
+      updateListing(
+        e,
+        form.listingId!,
+        file,
+        form.title,
+        form.description,
+        form.reward,
+        form.category,
+        form.date,
+        form.location,
+        form.type,
+        setIsLoading
+      );
+    } else {
+      postListing(
+        e,
+        file,
+        form.title,
+        form.description,
+        form.reward,
+        form.category,
+        form.date,
+        form.location,
+        form.type,
+        setIsLoading
+      );
+    }
+  };
+
   const options = {
     title: "Please choose a date",
     autoHide: true,
@@ -147,7 +187,7 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
       ),
     },
     datepickerClassNames: "top-12",
-    defaultDate: new Date(),
+    defaultDate: form.date,
     language: "en",
   };
 
@@ -191,22 +231,7 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
 
   return (
     <div className="bg-white p-8 rounded-xl">
-      <form
-        onSubmit={(e) =>
-          postListing(
-            e,
-            file,
-            form.title,
-            form.description,
-            form.reward,
-            form.category,
-            form.date,
-            form.location,
-            form.type,
-            setIsLoading
-          )
-        }
-      >
+      <form onSubmit={handleSubmit}>
         <div className="flex items-center justify-between">
           <h3 className="text-xl md:text-2xl text-[#202020] font-semibold">
             Submission Body
@@ -228,6 +253,7 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
               placeholder=""
               name="title"
               onChange={handleChange}
+              value={form.title}
               required
             />
           </div>
@@ -245,6 +271,7 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
               placeholder="0"
               name="reward"
               onChange={handleChange}
+              value={form.reward}
               required
             />
           </div>
@@ -260,6 +287,7 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
               name="category"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               onChange={handleChange}
+              value={form.category}
             >
               {categories.map((category) => (
                 <option value={category._id} key={category._id}>
@@ -280,6 +308,7 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
               name="location"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               onChange={handleChange}
+              value={form.location}
             >
               {locations.map((location, index) => (
                 <option value={location} key={location + index}>
@@ -300,6 +329,7 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
               name="type"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               onChange={handleChange}
+              value={form.type}
             >
               {jobTypes.map((type) => (
                 <option value={type.title} key={type._id}>
@@ -350,7 +380,7 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
           </button>
         </label>
         <div>
-          <span className="text-md text-gray-500 mt-2">
+          <span className="text-sm text-gray-500 mt-2">
             Max file size: 100 MB (1 File Only)
           </span>
         </div>
@@ -360,24 +390,54 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
             <p>
               {fileName} ({fileSize})
             </p>
-            <button className="rounded-full border-2 border-gray-200 text-[#FF66FF] p-2 hover:bg-[#FF66FF] hover:text-white hover:border-white transition" onClick={handleFileDelete}>
+            <button
+              className="rounded-full border-2 border-gray-200 text-[#FF66FF] p-2 hover:bg-[#FF66FF] hover:text-white hover:border-white transition"
+              onClick={handleFileDelete}
+            >
               <FaTrashCan />
             </button>
           </div>
         )}
+        {form.file && (
+          <div>
+            <h6 className="text-md text-gray-800 font-semibold mt-2">
+              Previous attached file
+            </h6>
+            <Link href={`${form.file}`}>
+              <button className="text-sm text-[#FF66FF] flex items-center gap-2">
+                <span className="truncate">{formatFileName(form.file)}</span>
+                <ImArrowUpRight2 />
+              </button>
+            </Link>
+          </div>
+        )}
         <hr className="w-full h-0.5 bg-gradient-to-r from-[#ff00c7] to-[#ff9bfb] rounded-full my-4" />
         <div className="flex items-center justify-end my-4">
-          <button
-            className={`p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r ${
-              isLoading ? "bg-opacity-60" : ""
-            }`}
-            type="submit"
-            disabled={isLoading}
-          >
-            <span className="block text-white px-4 py-2 font-semibold rounded-full bg-transparent hover:bg-white hover:text-black transition">
-              {isLoading ? "Loading..." : "Confirm Submission"}
-            </span>
-          </button>
+          {edit ? (
+            <button
+              className={`p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r ${
+                isLoading ? "bg-opacity-60" : ""
+              }`}
+              type="submit"
+              disabled={isLoading}
+            >
+              <span className="block text-white px-4 py-2 font-semibold rounded-full bg-transparent hover:bg-white hover:text-black transition">
+                {isLoading ? "Loading..." : "Confirm Edit"}
+              </span>
+            </button>
+          ) : (
+            <button
+              className={`p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r ${
+                isLoading ? "bg-opacity-60" : ""
+              }`}
+              type="submit"
+              disabled={isLoading}
+            >
+              <span className="block text-white px-4 py-2 font-semibold rounded-full bg-transparent hover:bg-white hover:text-black transition">
+                {isLoading ? "Loading..." : "Confirm Submission"}
+              </span>
+            </button>
+          )}
         </div>
       </form>
     </div>
