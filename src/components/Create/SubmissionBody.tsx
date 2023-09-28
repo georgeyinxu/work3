@@ -10,6 +10,7 @@ import { ICategory } from "@/interfaces/CategoryResponse";
 import { fetchJobTypes, fetchLocations } from "@/utils/Common";
 import { IJobType } from "@/interfaces/JobTypeResponse";
 import { postListing } from "@/utils/Deployer";
+import { FaPaperclip, FaTrashCan } from "react-icons/fa6";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
@@ -55,6 +56,8 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
   const [file, setFile] = useState<File>();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [fileName, setFileName] = useState<string>("");
+  const [fileSize, setFileSize] = useState<string>("");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -62,8 +65,44 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handleDateChange = (selectedDate: Date) => {
+    setForm({ ...form, date: selectedDate });
+  };
+
   const handleDescriptionChange = (html: string) => {
     setForm({ ...form, description: html });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+
+    if (selectedFile) {
+      // Check if the file size is greater than 100MB (in bytes)
+      const maxSize = 100 * 1024 * 1024; // 100MB in bytes
+
+      if (selectedFile.size <= maxSize) {
+        setFile(selectedFile);
+        setFileName(selectedFile.name);
+        setFileSize(`${(selectedFile.size / (1024 * 1024)).toFixed(2)} MB`);
+      } else {
+        // File size exceeds the limit, show an error message or handle it as needed
+        alert(
+          "File size exceeds the limit of 100MB. Please choose a smaller file."
+        );
+        // Clear the file input
+        e.target.value = "";
+      }
+    } else {
+      setFile(undefined);
+      setFileName("");
+      setFileSize("");
+    }
+  };
+
+  const handleFileDelete = () => {
+    setFile(undefined);
+    setFileName("");
+    setFileSize("");
   };
 
   const handleClose = (state: boolean) => {
@@ -112,10 +151,6 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
     language: "en",
   };
 
-  const handleDateChange = (selectedDate: Date) => {
-    setForm({ ...form, date: selectedDate });
-  };
-
   useEffect(() => {
     const promises = [fetchCategories(), fetchLocations(), fetchJobTypes()];
 
@@ -157,18 +192,20 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
   return (
     <div className="bg-white p-8 rounded-xl">
       <form
-        onSubmit={(e) => postListing(
-          e,
-          file,
-          form.title,
-          form.description,
-          form.reward,
-          form.category,
-          form.date,
-          form.location,
-          form.type,
-          setIsLoading
-        )}
+        onSubmit={(e) =>
+          postListing(
+            e,
+            file,
+            form.title,
+            form.description,
+            form.reward,
+            form.category,
+            form.date,
+            form.location,
+            form.type,
+            setIsLoading
+          )
+        }
       >
         <div className="flex items-center justify-between">
           <h3 className="text-xl md:text-2xl text-[#202020] font-semibold">
@@ -301,7 +338,7 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
             type="file"
             name="file"
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-            onChange={(e) => setFile(e.target.files?.[0])}
+            onChange={handleFileChange}
           />
           <button
             className="px-4 py-2 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r text-xs sm:text-base mt-4"
@@ -312,6 +349,23 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
             </span>
           </button>
         </label>
+        <div>
+          <span className="text-md text-gray-500 mt-2">
+            Max file size: 100 MB (1 File Only)
+          </span>
+        </div>
+        {fileName && (
+          <div className="text-sm text-[#202020] mt-2 flex items-center gap-3">
+            <FaPaperclip />
+            <p>
+              {fileName} ({fileSize})
+            </p>
+            <button className="rounded-full border-2 border-gray-200 text-[#FF66FF] p-2 hover:bg-[#FF66FF] hover:text-white hover:border-white transition" onClick={handleFileDelete}>
+              <FaTrashCan />
+            </button>
+          </div>
+        )}
+        <hr className="w-full h-0.5 bg-gradient-to-r from-[#ff00c7] to-[#ff9bfb] rounded-full my-4" />
         <div className="flex items-center justify-end my-4">
           <button
             className={`p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r ${
