@@ -32,6 +32,7 @@ const JobDetails: React.FC<Props> = ({ params }) => {
     reward: 0,
     transactionHash: "",
     updatedAt: "",
+    file: ""
   });
   const router = useRouter();
   const address = useAddress();
