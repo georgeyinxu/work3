@@ -1,6 +1,5 @@
 "use client";
 
-import FileUpload from "@/components/Create/FileUpload";
 import SubmissionBody from "@/components/Create/SubmissionBody";
 import React, { useEffect, useState } from "react";
 import ListingCard from "@/components/Edit/ListingCard";
@@ -65,13 +64,7 @@ const Edit: React.FC<Props> = ({ params }) => {
           description={description}
         />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <FileUpload
-            selectedFiles={selectedFiles}
-            setSelectedFiles={setSelectedFiles}
-            fileInfo={fileInfo}
-            setFileInfo={setFileInfo}
-          />
-          <SubmissionBody
+          {/* <SubmissionBody
             title={title}
             reward={reward}
             date={date}
@@ -82,7 +75,7 @@ const Edit: React.FC<Props> = ({ params }) => {
             setCategory={setCategory}
             setDescription={setDescription}
             setDate={setDate}
-          />
+          /> */}
         </div>
         <div className="flex items-center justify-end my-4">
           <button

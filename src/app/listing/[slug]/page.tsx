@@ -26,10 +26,13 @@ const JobDetails: React.FC<Props> = ({ params }) => {
     jobId: 0,
     jobStatus: JobStatus.ACTIVE,
     date: "",
+    jobType: "",
+    location: "",
     createdAt: "",
     reward: 0,
     transactionHash: "",
     updatedAt: "",
+    file: ""
   });
   const router = useRouter();
   const address = useAddress();
@@ -44,7 +47,7 @@ const JobDetails: React.FC<Props> = ({ params }) => {
         setListingDetails(data as IListing);
 
         if ("from" in data && address === data.from) {
-          setIsWorker(false);
+          // setIsWorker(false);
         } else {
           setIsWorker(true);
         }

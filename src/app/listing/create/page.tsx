@@ -1,20 +1,18 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import FileUpload from "@/components/Create/FileUpload";
+import React, { useState } from "react";
 import SubmissionBody from "@/components/Create/SubmissionBody";
-import { postListing } from "@/utils/Deployer";
-import { FileInfo } from "@/interfaces/FileInfo";
 
 const Create = () => {
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [fileInfo, setFileInfo] = useState<FileInfo[]>([]);
-  const [title, setTitle] = useState<string>("");
-  const [reward, setReward] = useState<string>("0");
-  const [date, setDate] = useState<Date>(new Date());
-  const [category, setCategory] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [form, setForm] = useState({
+    title: "",
+    reward: "0",
+    date: new Date(),
+    category: "",
+    location: "",
+    type: "",
+    description: "",
+  });
 
   return (
     <main className="min-h-screen bg-[#F6F6F6] flex items-center justify-center">
@@ -26,47 +24,8 @@ const Create = () => {
           Complete your submission, including relevant files, and then stake to
           submit
         </h5>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-          <FileUpload
-            selectedFiles={selectedFiles}
-            setSelectedFiles={setSelectedFiles}
-            fileInfo={fileInfo}
-            setFileInfo={setFileInfo}
-          />
-          <SubmissionBody
-            title={title}
-            reward={reward}
-            date={date}
-            category={category}
-            description={description}
-            setTitle={setTitle}
-            setReward={setReward}
-            setCategory={setCategory}
-            setDescription={setDescription}
-            setDate={setDate}
-          />
-        </div>
-        <div className="flex items-center justify-end my-4">
-          <button
-            className={`p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r ${
-              isLoading ? "bg-opacity-60" : ""
-            }`}
-            onClick={() =>
-              postListing(
-                title,
-                description,
-                reward,
-                category,
-                date,
-                setIsLoading
-              )
-            }
-            disabled={isLoading}
-          >
-            <span className="block text-white px-4 py-2 font-semibold rounded-full bg-transparent hover:bg-white hover:text-black transition">
-              {isLoading ? "Loading..." : "Confirm Submission"}
-            </span>
-          </button>
+        <div className="grid grid-cols-1 gap-8 mt-10">
+          <SubmissionBody form={form} setForm={setForm} />
         </div>
       </div>
     </main>
