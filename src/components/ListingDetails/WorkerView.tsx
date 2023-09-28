@@ -12,7 +12,7 @@ import { IListing } from "@/interfaces/ListingResponse";
 
 import { ImArrowUpRight2 } from "react-icons/im";
 import { FaMoneyBill, FaBriefcase, FaLocationDot } from "react-icons/fa6";
-import { fileName, short } from "@/utils/Common";
+import { formatFileName, short } from "@/utils/Common";
 import Link from "next/link";
 
 type Props = {
@@ -130,7 +130,7 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
               />
             )}
           </div>
-          <h3 className="text-[#222222] text-xl sm:text-2xl md:text-3xl font-semibold">
+          <h3 className="text-[#222222] text-xl sm:text-2xl md:text-3xl font-semibold mt-6">
             {listingDetails.title}
           </h3>
           <button
@@ -198,15 +198,21 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
             className="overflow-hidden overflow-ellipsis text-[#222222] mt-4 text-sm"
             dangerouslySetInnerHTML={{ __html: listingDetails.description }}
           />
-          <h6 className="text-sm text-[#7D7D7D] mt-4">Files</h6>
-          <div className="flex flex-col md:flex-row md:items-center justify-start gap-4 mt-2">
-            <Link href={`${listingDetails.file}`}>
-              <button className="text-sm text-[#FF66FF] flex items-center gap-2">
-                <span className="truncate">{fileName(listingDetails.file)}</span>
-                <ImArrowUpRight2 />
-              </button>
-            </Link>
-          </div>
+          {listingDetails.file && (
+            <div>
+              <h6 className="text-sm text-[#7D7D7D] mt-4">Files</h6>
+              <div className="flex flex-col md:flex-row md:items-center justify-start gap-4 mt-2">
+                <Link href={`${listingDetails.file}`}>
+                  <button className="text-sm text-[#FF66FF] flex items-center gap-2">
+                    <span className="truncate">
+                      {formatFileName(listingDetails.file)}
+                    </span>
+                    <ImArrowUpRight2 />
+                  </button>
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
         <div className="hidden md:block">
           {listingDetails.jobStatus === JobStatus.COMPLETED ? (

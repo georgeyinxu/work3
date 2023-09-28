@@ -5,6 +5,28 @@ import Listing from "@/models/listing";
 import JobStatus from "@/enums/JobStatus";
 import { handleUpload } from "@/utils/S3";
 
+export async function GET(req: NextRequest) {
+  await connectMongoDB();
+  const url = new URL(req.url);
+  const id = url.searchParams.get("id");
+  let listings = [];
+
+  try {
+    if (id) {
+      listings = await Listing.findById(id);
+    } else {
+      listings = await Listing.find();
+    }
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Error fetching listings from db due to " + error },
+      { status: 400 }
+    );
+  }
+
+  return NextResponse.json({ listings }, { status: 200 });
+}
+
 export async function POST(req: NextRequest) {
   await connectMongoDB();
   const data = await req.formData();
@@ -57,8 +79,6 @@ export async function POST(req: NextRequest) {
 
       await Listing.findByIdAndUpdate(listingId, { file: fileLocation });
     }
-
-    window.location.href = `/listing/${listingId}`
   } catch (error) {
     return NextResponse.json(
       { message: "Error adding listing to db due to " + error },
@@ -70,39 +90,23 @@ export async function POST(req: NextRequest) {
     { message: "Successfully created listing", data: listingId },
     { status: 201 }
   );
-
-  // TODO: Finish up the next 2 steps after getting the S3 Details from Fajri
-  // 2. Do the file uploading to AWS S3
-  // 3. Add the files uploaded to S3 with its file name and file path to MongoDB
-}
-
-export async function GET(req: NextRequest) {
-  await connectMongoDB();
-  const url = new URL(req.url);
-  const id = url.searchParams.get("id");
-  let listings = [];
-
-  try {
-    if (id) {
-      listings = await Listing.findById(id);
-    } else {
-      listings = await Listing.find();
-    }
-  } catch (error) {
-    return NextResponse.json(
-      { message: "Error fetching listings from db due to " + error },
-      { status: 400 }
-    );
-  }
-
-  return NextResponse.json({ listings }, { status: 200 });
 }
 
 export async function PUT(req: NextRequest) {
   await connectMongoDB();
 
-  const { title, description, reward, date, categoryId, listingId } =
-    await req.json();
+  const data = await req.formData();
+  const file: File | null = data.get("file") as unknown as File;
+  const title: string | null = data.get("title") as unknown as string;
+  const description: string | null = data.get(
+    "description"
+  ) as unknown as string;
+  const reward: string | null = data.get("reward") as unknown as string;
+  const jobType: string | null = data.get("jobType") as unknown as string;
+  const date: string | null = data.get("date") as unknown as string;
+  const categoryId: string | null = data.get("categoryId") as unknown as string;
+  const location: string | null = data.get("location") as unknown as string;
+  const listingId: string | null = data.get("listingId") as unknown as string;
 
   try {
     await Listing.findOneAndUpdate(
@@ -112,11 +116,24 @@ export async function PUT(req: NextRequest) {
       {
         title,
         description,
-        reward,
-        date,
+        reward: parseFloat(reward),
+        date: new Date(date),
+        location,
+        jobType,
         category: new mongoose.Types.ObjectId(categoryId),
       }
     );
+
+    // Format the file
+    if (file) {
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+
+      // Upload to S3
+      const fileLocation = await handleUpload(buffer, file.name, listingId);
+
+      await Listing.findByIdAndUpdate(listingId, { file: fileLocation });
+    }
   } catch (error) {
     return NextResponse.json(
       { message: "Error updating listing in db due to " + error },

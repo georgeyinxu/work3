@@ -11,9 +11,8 @@ const handleUpload = async (
   fileName: string,
   listingId: string
 ) => {
-  console.log(buffer, fileName, listingId);
-  const S3_UPLOAD_BUCKET = process.env.S3_UPLOAD_BUCKET || "";
   let location = "";
+  const S3_UPLOAD_BUCKET = process.env.S3_UPLOAD_BUCKET || "";
 
   const params = {
     Bucket: S3_UPLOAD_BUCKET,

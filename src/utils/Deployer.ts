@@ -17,7 +17,6 @@ const postListing = async (
   type: string,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
-  console.log("Post Listing Called!!!!")
   e.preventDefault();
   if (!process.env.NEXT_PUBLIC_DEPLOYER_ADDR) {
     console.error("Please set your NEXT_PUBLIC_DEPLOYER_ADDR in .env.local");
@@ -35,11 +34,8 @@ const postListing = async (
   }
 
   setIsLoading(true);
-
   const deadline = new Date(date).getDate();
-  const rewardNum = parseFloat(reward);
-  let maslowJobId = 0;
-  let createdListingId;
+  let listingId = "";
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   window.ethereum.enable();
@@ -129,10 +125,11 @@ const postListing = async (
       body: data,
     });
 
-    // handle the error
     if (!res.ok) throw new Error(await res.text());
 
+    const resData = await res.json();
 
+    listingId = resData.data;
   } catch (error: any) {
     if (error.code === "ACTION_REJECTED") {
       console.log("User rejected the MetaMask transaction.");
@@ -142,6 +139,8 @@ const postListing = async (
   } finally {
     setIsLoading(false);
   }
+
+  window.location.href = `/listing/${listingId}`;
 };
 
 const pickApplicant = async (

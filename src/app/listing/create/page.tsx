@@ -25,7 +25,7 @@ const Create = () => {
           submit
         </h5>
         <div className="grid grid-cols-1 gap-8 mt-10">
-          <SubmissionBody form={form} setForm={setForm} />
+          <SubmissionBody form={form} setForm={setForm} edit={false} />
         </div>
       </div>
     </main>
