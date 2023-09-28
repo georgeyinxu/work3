@@ -90,10 +90,6 @@ export async function POST(req: NextRequest) {
     { message: "Successfully created listing", data: listingId },
     { status: 201 }
   );
-
-  // TODO: Finish up the next 2 steps after getting the S3 Details from Fajri
-  // 2. Do the file uploading to AWS S3
-  // 3. Add the files uploaded to S3 with its file name and file path to MongoDB
 }
 
 export async function PUT(req: NextRequest) {

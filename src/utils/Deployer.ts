@@ -34,8 +34,8 @@ const postListing = async (
   }
 
   setIsLoading(true);
-
   const deadline = new Date(date).getDate();
+  let listingId = "";
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   window.ethereum.enable();
@@ -127,7 +127,9 @@ const postListing = async (
 
     if (!res.ok) throw new Error(await res.text());
 
-    // TODO: Add a redirect
+    const resData = await res.json();
+
+    listingId = resData.data;
   } catch (error: any) {
     if (error.code === "ACTION_REJECTED") {
       console.log("User rejected the MetaMask transaction.");
@@ -137,6 +139,8 @@ const postListing = async (
   } finally {
     setIsLoading(false);
   }
+
+  window.location.href = `/listing/${listingId}`;
 };
 
 const pickApplicant = async (
