@@ -5,7 +5,6 @@ import SubmissionBody from "@/components/Create/SubmissionBody";
 import { postListing } from "@/utils/Deployer";
 
 const Create = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [form, setForm] = useState({
     title: "",
     reward: "0",
@@ -28,30 +27,6 @@ const Create = () => {
         </h5>
         <div className="grid grid-cols-1 gap-8 mt-10">
           <SubmissionBody form={form} setForm={setForm} />
-        </div>
-        <div className="flex items-center justify-end my-4">
-          <button
-            className={`p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r ${
-              isLoading ? "bg-opacity-60" : ""
-            }`}
-            onClick={() =>
-              postListing(
-                form.title,
-                form.description,
-                form.reward,
-                form.category,
-                form.date,
-                form.location,
-                form.type,
-                setIsLoading
-              )
-            }
-            disabled={isLoading}
-          >
-            <span className="block text-white px-4 py-2 font-semibold rounded-full bg-transparent hover:bg-white hover:text-black transition">
-              {isLoading ? "Loading..." : "Confirm Submission"}
-            </span>
-          </button>
         </div>
       </div>
     </main>
