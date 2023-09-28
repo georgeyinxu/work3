@@ -78,34 +78,6 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
     }
   };
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!file) return;
-
-    try {
-      const data = new FormData();
-      data.set("file", file);
-      data.set("title", form.title);
-      data.set("category", form.category);
-      data.set("reward", form.reward);
-      data.set("date", form.date.toISOString());
-      data.set("description", form.description);
-      data.set("type", form.type);
-      data.set("location", form.location);
-
-      const res = await fetch("/api/test", {
-        method: "POST",
-        body: data,
-      });
-
-      // handle the error
-      if (!res.ok) throw new Error(await res.text());
-    } catch (e: any) {
-      // Handle errors here
-      console.error(e);
-    }
-  };
-
   const options = {
     title: "Please choose a date",
     autoHide: true,
@@ -186,7 +158,20 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm }) => {
 
   return (
     <div className="bg-white p-8 rounded-xl">
-      <form onSubmit={onSubmit}>
+      <form
+        onSubmit={(e) => postListing(
+          e,
+          file,
+          form.title,
+          form.description,
+          form.reward,
+          form.category,
+          form.date,
+          form.location,
+          form.type,
+          setIsLoading
+        )}
+      >
         <div className="flex items-center justify-between">
           <h3 className="text-xl md:text-2xl text-[#202020] font-semibold">
             Submission Body

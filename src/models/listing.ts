@@ -22,6 +22,7 @@ const listingSchema = new Schema(
     },
     location: String,
     date: Date,
+    file: String,
   },
   {
     timestamps: true,

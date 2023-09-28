@@ -11,19 +11,20 @@ const handleUpload = async (
   fileName: string,
   listingId: string
 ) => {
+  console.log(buffer, fileName, listingId);
   const S3_UPLOAD_BUCKET = process.env.S3_UPLOAD_BUCKET || "";
-  let location = ""
+  let location = "";
 
   const params = {
     Bucket: S3_UPLOAD_BUCKET,
     Key: `${listingId}/${Date.now()}/${fileName}`,
     Body: buffer,
   };
-  console.log("handle upload called")
 
   try {
     const upload = await s3.upload(params).promise();
     location = upload.Location;
+    console.log(location);
   } catch (error) {
     console.error(error);
   }

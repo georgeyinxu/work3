@@ -7,6 +7,8 @@ import saldTokenAbi from "@/abi/SaldTokenABI.json";
 import workerContractAbi from "@/abi/WorkerContractABI.json";
 
 const postListing = async (
+  e: React.FormEvent<HTMLFormElement>,
+  file: File | undefined,
   title: string,
   description: string,
   reward: string,
@@ -16,6 +18,8 @@ const postListing = async (
   type: string,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
+  console.log("Post Listing Called!!!!")
+  e.preventDefault();
   if (!process.env.NEXT_PUBLIC_DEPLOYER_ADDR) {
     console.error("Please set your NEXT_PUBLIC_DEPLOYER_ADDR in .env.local");
     return;
@@ -32,6 +36,7 @@ const postListing = async (
   }
 
   setIsLoading(true);
+
   const deadline = new Date(date).getDate();
   const rewardNum = parseFloat(reward);
   let maslowJobId = 0;
@@ -63,7 +68,7 @@ const postListing = async (
   // Check existing allowance
   const existingAllowance = await tokenContract.allowance(
     await signer.getAddress(),
-    process.env.NEXT_PUBLIC_DEPLOYER_ADDR,
+    process.env.NEXT_PUBLIC_DEPLOYER_ADDR
   );
 
   if (existingAllowance.lt(amountToApprove)) {
@@ -103,27 +108,32 @@ const postListing = async (
     const to = receipt.to;
     const transactionHash = receipt.transactionHash;
 
-    const res = await axios.post(
-      "/api/listing",
-      {
-        from,
-        to,
-        title,
-        description,
-        reward: rewardNum,
-        transactionHash,
-        jobId: maslowJobId,
-        jobType: type,
-        date,
-        categoryId: category,
-        location: location,
-      },
-      {}
-    );
+    // Creating the form data
+    const data = new FormData();
+    if (file) {
+      data.set("file", file);
+    }
+    data.set("from", from);
+    data.set("to", to);
+    data.set("title", title);
+    data.set("description", description);
+    data.set("reward", reward);
+    data.set("transactionHash", transactionHash);
+    data.set("jobId", maslowJobId.toString());
+    data.set("jobType", type);
+    data.set("date", date.toISOString());
+    data.set("categoryId", category);
+    data.set("location", location);
 
-    createdListingId = res.data.data;
+    const res = await fetch("/api/listing", {
+      method: "POST",
+      body: data,
+    });
 
-    window.location.href = `/listing/${createdListingId}`;
+    // handle the error
+    if (!res.ok) throw new Error(await res.text());
+
+
   } catch (error: any) {
     if (error.code === "ACTION_REJECTED") {
       console.log("User rejected the MetaMask transaction.");
@@ -175,7 +185,7 @@ const pickApplicant = async (
     await axios.put("/api/listing/applicant", {
       applicantId,
       listingId,
-      status: "APPLICATION"
+      status: "APPLICATION",
     });
 
     setPickedWorker(true);
@@ -195,7 +205,7 @@ const completeJob = async (
   applicantId: number,
   listingId: string,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  setCompleteJobDone: React.Dispatch<React.SetStateAction<boolean>>,
+  setCompleteJobDone: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   if (!process.env.NEXT_PUBLIC_DEPLOYER_ADDR) {
     console.error("Please set your NEXT_PUBLIC_DEPLOYER_ADDR in .env.local");
@@ -232,7 +242,7 @@ const completeJob = async (
     await axios.put("/api/listing/applicant", {
       applicantId,
       listingId,
-      status: "COMPLETED"
+      status: "COMPLETED",
     });
 
     setCompleteJobDone(true);
