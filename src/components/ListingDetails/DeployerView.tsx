@@ -6,6 +6,7 @@ import { FaPenFancy } from "react-icons/fa";
 import { IListing } from "@/interfaces/ListingResponse";
 import { formatFileName, short } from "@/utils/Common";
 import { FaBriefcase, FaLocationDot, FaMoneyBill } from "react-icons/fa6";
+import TelegramDialog from "../Dialog/TelegramDialog";
 
 type Props = {
   listingDetails: IListing;
@@ -19,6 +20,7 @@ interface TimeLeft {
 }
 
 const DeployerView: React.FC<Props> = ({ listingDetails }) => {
+  let [isOpen, setIsOpen] = useState(false);
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
     hours: 0,
@@ -45,6 +47,10 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
 
     return { days, hours, minutes, seconds };
   };
+
+  function openModal() {
+    setIsOpen(true);
+  }
 
   useEffect(() => {
     setTimeLeft(calculateTimeLeft());
@@ -83,7 +89,7 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
               </button>
             </Link>
           </div>
-          <button className="text-[#FF66FF] underline mt-2">
+          <button className="text-[#FF66FF] underline mt-2" onClick={openModal}>
             {short(listingDetails.from)}
           </button>
           <hr className="w-full h-0.5 bg-gray-50 rounded-full my-4" />
@@ -164,6 +170,8 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
           />
         </div>
       </div>
+
+      <TelegramDialog isOpen={isOpen} setIsOpen={setIsOpen} />
     </main>
   );
 };
