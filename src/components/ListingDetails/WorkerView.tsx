@@ -52,7 +52,7 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
     __v: 0,
   });
   let [isOpen, setIsOpen] = useState(false);
-  const [userDialog, setUserDialog] = useState(true);
+  const [userDialog, setUserDialog] = useState(false);
   const address = useAddress();
 
   const calculateTimeLeft = () => {
