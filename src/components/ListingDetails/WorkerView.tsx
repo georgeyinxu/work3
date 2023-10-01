@@ -16,7 +16,7 @@ import { ImArrowUpRight2 } from "react-icons/im";
 import { FaMoneyBill, FaBriefcase, FaLocationDot } from "react-icons/fa6";
 import { formatFileName, short } from "@/utils/Common";
 import Link from "next/link";
-import UserDialog from "../Dialog/UserDialog";
+import UserDialog from "../Dialog/DeployerProfile";
 
 
 type Props = {
@@ -150,22 +150,6 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
             {short(listingDetails.from)}
           </button>
           <hr className="w-full h-0.5 bg-gray-50 rounded-full my-4" />
-          {/* {timeLeft.seconds ? (
-              <div>
-                <p className="text-sm text-[#7D7D7D]">Ends In</p>
-                <h3 className="text-[#222222] text-2xl md:text-3xl font-semibold">
-                  {timeLeft.days}D {timeLeft.hours}H {timeLeft.minutes}M{" "}
-                  {timeLeft.seconds}S
-                </h3>
-              </div>
-            ) : (
-              <div>
-                <p className="text-sm text-[#7D7D7D]">Ends In</p>
-                <h3 className="text-[#222222] text-2xl md:text-3xl font-semibold">
-                  0D 0H 0M 0S
-                </h3>
-              </div>
-            )} */}
           <h6 className="text-[#202020] font-bold text-lg">Job Details</h6>
           <div className="flex flex-col gap-8 mt-4">
             <div className="flex items-start justify-left text-gray-600 text-2xl">

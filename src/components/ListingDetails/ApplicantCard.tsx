@@ -9,6 +9,7 @@ import { useAddress } from "@thirdweb-dev/react";
 import { completeJob, pickApplicant } from "@/utils/Deployer";
 import AlertCard from "@/components/Alerts/AlertCard";
 import JobStatus from "@/enums/JobStatus";
+import WorkerProfile from "../Dialog/WorkerProfile";
 
 type Props = {
   listingId: string;
@@ -40,7 +41,14 @@ const ApplicantCard: React.FC<Props> = ({
   });
   const [applicants, setApplicants] = useState<IApplicant[]>([]);
   const [selectedApplicant, setSelectedApplicant] = useState<number>(-1);
+  const [isUserProfile, setIsUserProfile] = useState(false);
+  const [workerAddress, setWorkerAddress] = useState("");
   const address = useAddress();
+
+  function openWorkerProfile(address: string) {
+    setIsUserProfile(true);
+    setWorkerAddress(address);
+  }
 
   useEffect(() => {
     const fetchAllData = async () => {
@@ -87,9 +95,9 @@ const ApplicantCard: React.FC<Props> = ({
                   <IoCopyOutline />
                 </button>
                 <div>
-                  <h4 className="text-[#2e2e2e] ">
+                  <button className="text-[#FF66FF]" onClick={() => openWorkerProfile(applicant.applicantAddress)}>
                     {short(applicant.applicantAddress)}
-                  </h4>
+                  </button>
                   <p className="text-[#8E8E8E] text-xs">
                     Applied on&nbsp;
                     {DateTime.fromISO(applicant.createdAt).toFormat(
@@ -201,6 +209,7 @@ const ApplicantCard: React.FC<Props> = ({
           />
         </div>
       )}
+      <WorkerProfile isUserProfile={isUserProfile} setIsUserProfile={setIsUserProfile} workerAddress={workerAddress} />
     </div>
   );
 };

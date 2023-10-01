@@ -7,6 +7,7 @@ import { IListing } from "@/interfaces/ListingResponse";
 import { formatFileName, short } from "@/utils/Common";
 import { FaBriefcase, FaLocationDot, FaMoneyBill } from "react-icons/fa6";
 import TelegramDialog from "../Dialog/TelegramDialog";
+import WorkerProfile from "../Dialog/WorkerProfile";
 
 type Props = {
   listingDetails: IListing;
