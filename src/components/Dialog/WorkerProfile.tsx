@@ -2,19 +2,59 @@ import { Fragment, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import DeploymentTabs from "../ListingDetails/DeploymentTabs";
 import UserDeployments from "../ListingDetails/UserDeployments";
-import { short } from "@/utils/Common";
+import { checkTelegram, short } from "@/utils/Common";
+import { useAddress } from "@thirdweb-dev/react";
+import { getDetails } from "@/utils/Deployer";
+import { IWallet } from "@/interfaces/WalletResponse";
+import Link from "next/link";
+import TelegramDialog from "./TelegramDialog";
 
 type Props = {
   workerAddress: string;
   isUserProfile: boolean;
   setIsUserProfile: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpenTele: React.Dispatch<React.SetStateAction<boolean>>;
+  isOpen: boolean | undefined;
 };
 
-const WorkerProfile: React.FC<Props> = ({ workerAddress, isUserProfile, setIsUserProfile }) => {
+const WorkerProfile: React.FC<Props> = ({
+  workerAddress,
+  isUserProfile,
+  setIsUserProfile,
+  setIsOpenTele,
+  isOpen,
+}) => {
+  const [teleAvailable, setTeleAvailable] = useState(false);
+  const [wallet, setWallet] = useState<IWallet | null>(null);
+  const [workerWallet, setWorkerWallet] = useState<IWallet | null>(null);
+  const address = useAddress();
+
   function closeModal() {
     setIsUserProfile(false);
   }
-  
+
+  function openTelegramModal() {
+    setIsOpenTele(true);
+  }
+
+  useEffect(() => {
+    async function fetchAllData() {
+      if (address && workerAddress) {
+        // Check if deployer has telegram added
+        const { telegram, wallet } = await checkTelegram(address);
+
+        // Check if worker has added telegram
+        const { deployerWallet } = await getDetails(workerAddress);
+
+        setTeleAvailable(telegram);
+        setWallet(wallet);
+        setWorkerWallet(deployerWallet);
+      }
+    }
+
+    fetchAllData();
+  }, [address, workerAddress]);
+
   return (
     <Transition appear show={isUserProfile} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -65,6 +105,23 @@ const WorkerProfile: React.FC<Props> = ({ workerAddress, isUserProfile, setIsUse
                       </h3>
                       <span className="text-gray-500 font-bold">TVL: 58%</span>
                     </div>
+                    {teleAvailable ? (
+                      <Link href={`https://t.me/${workerWallet?.telegram}`}>
+                        <img
+                          src="/images/icons/telegram-logo.webp"
+                          className={"w-6 h-6 md:w-8 md:h-8 rounded-full"}
+                          alt={"telegram"}
+                        />
+                      </Link>
+                    ) : (
+                      <button onClick={openTelegramModal}>
+                        <img
+                          src="/images/icons/telegram-logo.webp"
+                          className={"w-6 h-6 md:w-8 md:h-8 rounded-full"}
+                          alt={"telegram"}
+                        />
+                      </button>
+                    )}
                   </div>
                   <div>
                     <div className="flex items-center justify-center">

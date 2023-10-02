@@ -21,7 +21,6 @@ interface TimeLeft {
 }
 
 const DeployerView: React.FC<Props> = ({ listingDetails }) => {
-  let [isOpen, setIsOpen] = useState(false);
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
     hours: 0,
@@ -48,10 +47,6 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
 
     return { days, hours, minutes, seconds };
   };
-
-  function openModal() {
-    setIsOpen(true);
-  }
 
   useEffect(() => {
     setTimeLeft(calculateTimeLeft());
@@ -90,9 +85,6 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
               </button>
             </Link>
           </div>
-          <button className="text-[#FF66FF] underline mt-2" onClick={openModal}>
-            {short(listingDetails.from)}
-          </button>
           <hr className="w-full h-0.5 bg-gray-50 rounded-full my-4" />
           <h6 className="text-[#202020] font-bold text-lg">Job Details</h6>
           <div className="flex flex-col gap-8 mt-4">
@@ -171,8 +163,6 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
           />
         </div>
       </div>
-
-      <TelegramDialog isOpen={isOpen} setIsOpen={setIsOpen} />
     </main>
   );
 };
