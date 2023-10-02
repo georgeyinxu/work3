@@ -3,17 +3,21 @@ import { useAddress } from "@thirdweb-dev/react";
 import { checkWorkerSelected } from "@/utils/Worker";
 import TransactionCard from "@/components/ListingDetails/TransactionCard";
 import WorkerClaimCard from "./WorkerClaimCard";
-import AlertCard from "../Alerts/AlertCard";
-import ErrorAlert from "../Alerts/ErrorAlert";
+import AlertCard from "@/components/Alerts/AlertCard";
+import ErrorAlert from "@/components/Alerts/ErrorAlert";
+import TelegramDialog from "@/components/Dialog/TelegramDialog";
 
 import JobStatus from "@/enums/JobStatus";
 import { IApplicant } from "@/interfaces/ApplicantResponse";
 import { IListing } from "@/interfaces/ListingResponse";
+import { IWallet } from "@/interfaces/WalletResponse";
 
 import { ImArrowUpRight2 } from "react-icons/im";
 import { FaMoneyBill, FaBriefcase, FaLocationDot } from "react-icons/fa6";
 import { formatFileName, short } from "@/utils/Common";
 import Link from "next/link";
+import UserDialog from "../Dialog/DeployerProfile";
+
 
 type Props = {
   listingDetails: IListing;
@@ -47,7 +51,8 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
     updatedAt: "",
     __v: 0,
   });
-  let [isOpen, setIsOpen] = useState(true);
+  let [isOpen, setIsOpen] = useState(false);
+  const [userDialog, setUserDialog] = useState(false);
   const address = useAddress();
 
   const calculateTimeLeft = () => {
@@ -69,6 +74,11 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
 
     return { days, hours, minutes, seconds };
   };
+
+  function openModal() {
+    // setIsOpen(true);
+    setUserDialog(true);
+  }
 
   useEffect(() => {
     setTimeLeft(calculateTimeLeft());
@@ -135,27 +145,11 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
           </h3>
           <button
             className="text-[#FF66FF] underline mt-2"
-            onClick={() => setIsOpen(true)}
+            onClick={openModal}
           >
             {short(listingDetails.from)}
           </button>
           <hr className="w-full h-0.5 bg-gray-50 rounded-full my-4" />
-          {/* {timeLeft.seconds ? (
-              <div>
-                <p className="text-sm text-[#7D7D7D]">Ends In</p>
-                <h3 className="text-[#222222] text-2xl md:text-3xl font-semibold">
-                  {timeLeft.days}D {timeLeft.hours}H {timeLeft.minutes}M{" "}
-                  {timeLeft.seconds}S
-                </h3>
-              </div>
-            ) : (
-              <div>
-                <p className="text-sm text-[#7D7D7D]">Ends In</p>
-                <h3 className="text-[#222222] text-2xl md:text-3xl font-semibold">
-                  0D 0H 0M 0S
-                </h3>
-              </div>
-            )} */}
           <h6 className="text-[#202020] font-bold text-lg">Job Details</h6>
           <div className="flex flex-col gap-8 mt-4">
             <div className="flex items-start justify-left text-gray-600 text-2xl">
@@ -231,6 +225,9 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
           )}
         </div>
       </div>
+
+      <TelegramDialog isOpen={isOpen} setIsOpen={setIsOpen} />
+      <UserDialog isOpen={userDialog} setIsOpen={setUserDialog} listingDetails={listingDetails} setIsOpenTele={setIsOpen} />
     </main>
   );
 };

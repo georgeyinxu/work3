@@ -6,6 +6,8 @@ import { FaPenFancy } from "react-icons/fa";
 import { IListing } from "@/interfaces/ListingResponse";
 import { formatFileName, short } from "@/utils/Common";
 import { FaBriefcase, FaLocationDot, FaMoneyBill } from "react-icons/fa6";
+import TelegramDialog from "../Dialog/TelegramDialog";
+import WorkerProfile from "../Dialog/WorkerProfile";
 
 type Props = {
   listingDetails: IListing;
@@ -83,9 +85,6 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
               </button>
             </Link>
           </div>
-          <button className="text-[#FF66FF] underline mt-2">
-            {short(listingDetails.from)}
-          </button>
           <hr className="w-full h-0.5 bg-gray-50 rounded-full my-4" />
           <h6 className="text-[#202020] font-bold text-lg">Job Details</h6>
           <div className="flex flex-col gap-8 mt-4">
