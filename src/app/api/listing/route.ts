@@ -146,3 +146,30 @@ export async function PUT(req: NextRequest) {
     { status: 200 }
   );
 }
+
+export async function DELETE(req: NextRequest) {
+  await connectMongoDB();
+  const url = new URL(req.url);
+  const id = url.searchParams.get("id");
+
+  try {
+    if (id) {
+      await Listing.findOneAndDelete({ _id: new mongoose.Types.ObjectId(id) });
+    } else {
+      return NextResponse.json(
+        { message: "Please pass in the correct params" },
+        { status: 400 }
+      );
+    }
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Error deleting listing due to " + error },
+      { status: 400 }
+    );
+  }
+
+  return NextResponse.json(
+    { message: "Successfully deleted listing" },
+    { status: 200 }
+  );
+}
