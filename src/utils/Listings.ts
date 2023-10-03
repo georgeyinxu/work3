@@ -143,6 +143,8 @@ const deleteListing = async (
 
     // Delete the listing
     await axios.delete(`/api/listing?id=${listingId}`);
+
+    // TODO: Check with Steve on how the deployer is able to get back his money after deleting the job.
   } catch (error) {
     console.error("Failed to delete listing due to: " + error);
   } finally {
