@@ -55,9 +55,10 @@ type Props = {
     }>
   >;
   edit: boolean;
+  jobId: number;
 };
 
-const SubmissionBody: React.FC<Props> = ({ form, setForm, edit }) => {
+const SubmissionBody: React.FC<Props> = ({ form, setForm, edit, jobId }) => {
   const [show, setShow] = useState<boolean>(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
@@ -137,6 +138,7 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm, edit }) => {
         form.date,
         form.location,
         form.type,
+        jobId,
         setIsLoading
       );
     } else {
@@ -217,7 +219,7 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm, edit }) => {
         }
 
         if (locations.length > 0) {
-          setForm((prev) => ({ ...prev, location: locations[0] }));
+            setForm((prev) => ({ ...prev, location: locations[0] }));
         }
 
         if (jobTypes.length > 0) {

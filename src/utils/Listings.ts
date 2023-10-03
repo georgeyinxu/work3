@@ -1,5 +1,10 @@
 import axios from "axios";
+import { ethers } from "ethers";
+
+import deployerContractAbi from "@/abi/DeployerContractABI.json";
+
 import { IListing } from "@/interfaces/ListingResponse";
+import JobStatus from "@/enums/JobStatus";
 
 const fetchListings = async () => {
   let listingsData: IListing[] = [];
@@ -38,11 +43,40 @@ const updateListing = async (
   date: Date,
   location: string,
   type: string,
+  jobId: number,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   e.preventDefault();
+
+  if (!process.env.NEXT_PUBLIC_DEPLOYER_ADDR) {
+    console.error("Please set your NEXT_PUBLIC_DEPLOYER_ADDR in .env.local");
+    return;
+  }
+
+  setIsLoading(true);
+  const deadline = new Date(date).getDate();
+
   try {
-    setIsLoading(true)
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    window.ethereum.enable();
+    const signer = provider.getSigner();
+
+    const deployerContract = new ethers.Contract(
+      process.env.NEXT_PUBLIC_DEPLOYER_ADDR,
+      deployerContractAbi,
+      signer
+    );
+
+    await deployerContract.connect(signer).updateJob({
+      jobId,
+      title,
+      description,
+      reward: ethers.utils.parseUnits(reward, 18),
+      deadline,
+      status: Object.keys(JobStatus).indexOf("PENDING"),
+    });
+
+    // Preparing data to save to MongoDB
     const data = new FormData();
     if (file) {
       data.set("file", file);
@@ -54,7 +88,7 @@ const updateListing = async (
     data.set("date", date.toISOString());
     data.set("categoryId", category);
     data.set("location", location);
-    data.set("listingId", listingId)
+    data.set("listingId", listingId);
 
     const res = await fetch("/api/listing", {
       method: "PUT",
