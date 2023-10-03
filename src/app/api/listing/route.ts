@@ -156,7 +156,10 @@ export async function DELETE(req: NextRequest) {
     if (id) {
       await Listing.findOneAndDelete({ _id: new mongoose.Types.ObjectId(id) });
     } else {
-      return;
+      return NextResponse.json(
+        { message: "Please pass in the correct params" },
+        { status: 400 }
+      );
     }
   } catch (error) {
     return NextResponse.json(
