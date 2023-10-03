@@ -105,4 +105,51 @@ const updateListing = async (
   window.location.href = `/listing/${listingId}`;
 };
 
-export { fetchListings, fetchListing, updateListing };
+const deleteListing = async (
+  listingId: string,
+  title: string,
+  description: string,
+  date: Date,
+  jobId: number,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  if (!process.env.NEXT_PUBLIC_DEPLOYER_ADDR) {
+    console.error("Please set your NEXT_PUBLIC_DEPLOYER_ADDR in .env.local");
+    return;
+  }
+
+  const deadline = new Date(date).getDate();
+
+  try {
+    setIsLoading(true);
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    window.ethereum.enable();
+    const signer = provider.getSigner();
+    const deployerContract = new ethers.Contract(
+      process.env.NEXT_PUBLIC_DEPLOYER_ADDR,
+      deployerContractAbi,
+      signer
+    );
+
+    await deployerContract.connect(signer).updateJob({
+      jobId,
+      title,
+      description,
+      reward: ethers.utils.parseUnits("50", 18),
+      deadline,
+      status: Object.keys(JobStatus).indexOf("CANCELLED"),
+    });
+
+    // Delete the listing
+    await axios.delete(`/api/listing?id=${listingId}`);
+  } catch (error) {
+    console.error("Failed to delete listing due to: " + error);
+  } finally {
+    setIsLoading(false);
+
+    window.location.href = "/";
+  }
+};
+
+export { fetchListings, fetchListing, updateListing, deleteListing };

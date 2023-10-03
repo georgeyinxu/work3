@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import ApplicantCard from "@/components/ListingDetails/ApplicantCard";
 import { ImArrowUpRight2 } from "react-icons/im";
-import { FaPenFancy } from "react-icons/fa";
+import { FaPenFancy, FaTrash } from "react-icons/fa";
 import { IListing } from "@/interfaces/ListingResponse";
-import { formatFileName, short } from "@/utils/Common";
+import { formatFileName } from "@/utils/Common";
 import { FaBriefcase, FaLocationDot, FaMoneyBill } from "react-icons/fa6";
-import TelegramDialog from "../Dialog/TelegramDialog";
-import WorkerProfile from "../Dialog/WorkerProfile";
+import DeleteListing from "../Dialog/DeleteListing";
 
 type Props = {
   listingDetails: IListing;
@@ -27,6 +26,8 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
     minutes: 0,
     seconds: 0,
   });
+
+  const [deleteModal, setDeleteModal] = useState(false);
 
   const calculateTimeLeft = () => {
     const now = new Date();
@@ -73,17 +74,30 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
             <h3 className="text-[#222222] text-xl sm:text-2xl md:text-3xl font-semibold">
               {listingDetails.title}
             </h3>
-            <Link
-              href={`/listing/${listingDetails._id}/edit`}
-              className="hidden md:block"
-            >
-              <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r">
-                <span className="text-black flex items-center justify-center gap-2 px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
-                  <FaPenFancy />
-                  Edit
-                </span>
-              </button>
-            </Link>
+            <div className="flex items-center justify-center gap-4">
+              {listingDetails.jobStatus !== "COMPLETED" && (
+                <button
+                  className="p-1 rounded-full from-red-400 via-red-500 to-red-600 bg-gradient-to-r"
+                  onClick={() => setDeleteModal(true)}
+                >
+                  <span className="text-black flex items-center justify-center gap-2 px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
+                    <FaTrash />
+                    Delete
+                  </span>
+                </button>
+              )}
+              <Link
+                href={`/listing/${listingDetails._id}/edit`}
+                className="hidden md:block"
+              >
+                <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r">
+                  <span className="text-black flex items-center justify-center gap-2 px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
+                    <FaPenFancy />
+                    Edit
+                  </span>
+                </button>
+              </Link>
+            </div>
           </div>
           <hr className="w-full h-0.5 bg-gray-50 rounded-full my-4" />
           <h6 className="text-[#202020] font-bold text-lg">Job Details</h6>
@@ -143,11 +157,22 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
               </div>
             </div>
           )}
+          {listingDetails.jobStatus !== "COMPLETED" && (
+            <button
+              className="p-1 rounded-full from-red-400 via-red-500 to-red-600 bg-gradient-to-r w-full mt-4 md:hidden"
+              onClick={() => setDeleteModal(true)}
+            >
+              <span className="text-black flex items-center justify-center gap-2 px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
+                <FaTrash />
+                Delete
+              </span>
+            </button>
+          )}
           <Link
             href={`/listing/${listingDetails._id}/edit`}
             className="md:hidden"
           >
-            <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r w-full mt-8">
+            <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r w-full mt-2">
               <span className="text-black flex items-center justify-center gap-2 px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
                 <FaPenFancy />
                 Edit
@@ -163,6 +188,11 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
           />
         </div>
       </div>
+      <DeleteListing
+        isOpen={deleteModal}
+        listingDetails={listingDetails}
+        setIsOpen={setDeleteModal}
+      />
     </main>
   );
 };

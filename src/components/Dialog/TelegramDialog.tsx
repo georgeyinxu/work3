@@ -1,5 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState } from "react";
 import { addTelegram } from "@/utils/Common";
 import { useAddress, ConnectWallet } from "@thirdweb-dev/react";
 
