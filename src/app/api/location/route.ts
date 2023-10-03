@@ -9,6 +9,7 @@ export async function GET(req: NextRequest) {
     const countries = data.data as ILocation[];
 
     officialNames = countries.map(country => country.name.common).sort();
+    officialNames.push("Remote");
   } catch (error) {
     return NextResponse.json(
       { message: "Failed to get all countries" },

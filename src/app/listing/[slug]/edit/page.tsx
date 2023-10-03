@@ -7,13 +7,13 @@ import { fetchListing } from "@/utils/Listings";
 import { IListing } from "@/interfaces/ListingResponse";
 import { useAddress } from "@thirdweb-dev/react";
 import { useRouter } from "next/navigation";
-import { FileInfo } from "@/interfaces/FileInfo";
 
 type Props = {
   params: { slug: string };
 };
 
 const Edit: React.FC<Props> = ({ params }) => {
+  const [jobId, setJobId] = useState(-1);
   const [form, setForm] = useState<{
     title: string;
     reward: string;
@@ -59,6 +59,8 @@ const Edit: React.FC<Props> = ({ params }) => {
           listingId: data._id,
         });
 
+        setJobId(data.jobId);
+
         setLastUpdated(new Date(data.updatedAt));
       }
     };
@@ -84,7 +86,7 @@ const Edit: React.FC<Props> = ({ params }) => {
           description={form.description}
         />
         <div className="grid grid-cols-1 gap-8">
-          <SubmissionBody form={form} setForm={setForm} edit={true} />
+          <SubmissionBody form={form} jobId={jobId} setForm={setForm} edit={true} />
         </div>
       </div>
     </main>
