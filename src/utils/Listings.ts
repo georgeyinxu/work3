@@ -103,8 +103,6 @@ const updateListing = async (
   }
 
   window.location.href = `/listing/${listingId}`;
-
-  // TODO: Add integration with the smart contract
 };
 
 export { fetchListings, fetchListing, updateListing };

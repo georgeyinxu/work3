@@ -138,7 +138,7 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm, edit, jobId }) => {
         form.date,
         form.location,
         form.type,
-        jobId,
+        jobId!,
         setIsLoading
       );
     } else {
