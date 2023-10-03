@@ -55,7 +55,7 @@ type Props = {
     }>
   >;
   edit: boolean;
-  jobId: number;
+  jobId?: number;
 };
 
 const SubmissionBody: React.FC<Props> = ({ form, setForm, edit, jobId }) => {
