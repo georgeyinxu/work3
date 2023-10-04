@@ -7,6 +7,7 @@ import { IListing } from "@/interfaces/ListingResponse";
 import { formatFileName } from "@/utils/Common";
 import { FaBriefcase, FaLocationDot, FaMoneyBill } from "react-icons/fa6";
 import DeleteListing from "../Dialog/DeleteListing";
+import Chat from "../Chat";
 
 type Props = {
   listingDetails: IListing;
@@ -186,6 +187,7 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
             jobId={listingDetails.jobId}
             listingStatus={listingDetails.jobStatus}
           />
+          <Chat />
         </div>
       </div>
       <DeleteListing
