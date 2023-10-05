@@ -6,7 +6,8 @@ import { IApplicant } from "@/interfaces/ApplicantResponse";
 import { short } from "@/utils/Common";
 import { DateTime } from "luxon";
 import { useAddress } from "@thirdweb-dev/react";
-import { completeJob, pickApplicant } from "@/utils/Deployer";
+import { completeJob, createRoom, pickApplicant } from "@/utils/Deployer";
+import { useRoomStore } from "@/app/store/zustand";
 import AlertCard from "@/components/Alerts/AlertCard";
 import JobStatus from "@/enums/JobStatus";
 import WorkerProfile from "../Dialog/WorkerProfile";
@@ -47,18 +48,18 @@ const ApplicantCard: React.FC<Props> = ({
   const [openTele, setOpenTele] = useState(false);
   
   const address = useAddress();
-
-  function openTelegramModal() {
-    setOpenTele(true);
-  }
-
-  function closeTelegram() {
-    setOpenTele(false);
-  }
+  const { setRoomId, roomId } = useRoomStore();
 
   function openWorkerProfile(address: string) {
     setIsUserProfile(true);
     setWorkerAddress(address);
+  }
+
+  const handleWorkerClick = async (applicantId: number, applicantAddress: string) => {
+    setSelectedApplicant(applicantId);
+    const room = await createRoom(applicantAddress, address!, listingId)
+
+    setRoomId(room);
   }
 
   useEffect(() => {
@@ -94,7 +95,7 @@ const ApplicantCard: React.FC<Props> = ({
                 "border-2 border-[#FF66FF]"
               }`}
               key={applicant._id}
-              onClick={() => setSelectedApplicant(applicant.applicantId)}
+              onClick={() => handleWorkerClick(applicant.applicantId, applicant.applicantAddress)}
             >
               <div className="flex items-center justify-center">
                 <button
@@ -117,11 +118,6 @@ const ApplicantCard: React.FC<Props> = ({
                   </p>
                 </div>
               </div>
-              <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r">
-                <span className="text-black flex items-center justify-center gap-2 px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
-                  <IoChatbubbleEllipsesOutline />
-                </span>
-              </button>
             </div>
           ))}
       </div>

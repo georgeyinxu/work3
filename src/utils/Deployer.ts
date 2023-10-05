@@ -273,4 +273,21 @@ const getDetails = async (address: string) => {
   return { deployerWallet: wallet }
 }
 
-export { postListing, pickApplicant, completeJob, getDetails };
+const createRoom = async (worker: string, deployer: string, listingId: string) => {
+  let roomId = '';
+  try {
+    const res = await axios.post('/api/chat/room', {
+      worker,
+      deployer,
+      listingId
+    })
+
+    roomId = res.data.data;
+  } catch (error) {
+    console.error("Failed to check/create room due to: ", error)
+  }
+
+  return roomId;
+}
+
+export { postListing, pickApplicant, completeJob, getDetails, createRoom };
