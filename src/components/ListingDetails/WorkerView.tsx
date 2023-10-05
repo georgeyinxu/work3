@@ -17,7 +17,7 @@ import { FaMoneyBill, FaBriefcase, FaLocationDot } from "react-icons/fa6";
 import { formatFileName, short } from "@/utils/Common";
 import Link from "next/link";
 import UserDialog from "../Dialog/DeployerProfile";
-
+import Chat from "../Chat";
 
 type Props = {
   listingDetails: IListing;
@@ -143,10 +143,7 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
           <h3 className="text-[#222222] text-xl sm:text-2xl md:text-3xl font-semibold mt-6">
             {listingDetails.title}
           </h3>
-          <button
-            className="text-[#FF66FF] underline mt-2"
-            onClick={openModal}
-          >
+          <button className="text-[#FF66FF] underline mt-2" onClick={openModal}>
             {short(listingDetails.from)}
           </button>
           <hr className="w-full h-0.5 bg-gray-50 rounded-full my-4" />
@@ -223,11 +220,17 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
               status={listingDetails.jobStatus !== "ACTIVE"}
             />
           )}
+          <Chat />
         </div>
       </div>
 
       <TelegramDialog isOpen={isOpen} setIsOpen={setIsOpen} />
-      <UserDialog isOpen={userDialog} setIsOpen={setUserDialog} listingDetails={listingDetails} setIsOpenTele={setIsOpen} />
+      <UserDialog
+        isOpen={userDialog}
+        setIsOpen={setUserDialog}
+        listingDetails={listingDetails}
+        setIsOpenTele={setIsOpen}
+      />
     </main>
   );
 };
