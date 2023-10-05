@@ -1,22 +1,26 @@
 import React from "react";
 import DebouncedInput from "@/components/Chat/Input/DebouncedInput";
 import { IMessage } from "@/interfaces/Message";
+import { useAddress } from "@thirdweb-dev/react";
 interface ChatInputBoxProps {
-  sendMessage: (message: IMessage) => void;
+  socket: any;
+  roomId: string | number;
 }
 
-const ChatInputBox = ({ sendMessage }: ChatInputBoxProps) => {
+const ChatInputBox = ({ socket, roomId }: ChatInputBoxProps) => {
   const [newMessage, setNewMessage] = React.useState("");
+  const address = useAddress();
 
-  const doSendMessage = () => {
+  const doSendMessage = async () => {
     if (newMessage && newMessage.length > 0) {
       const newMessagePayload: IMessage = {
+        roomId,
         sentAt: new Date(),
-        sentBy: "devlazar",
+        sentBy: address!,
         isChatOwner: true,
         text: newMessage,
       };
-      sendMessage(newMessagePayload);
+      await socket.emit("send_msg", newMessagePayload);
       setNewMessage("");
     }
   };
