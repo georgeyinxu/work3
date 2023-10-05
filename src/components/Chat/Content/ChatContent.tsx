@@ -1,15 +1,14 @@
 import React from "react";
-import { Message } from "../Data/index";
-import Avatar from "../Avatar/Avatar";
+import { IMessage } from "@/interfaces/Message";
 
 interface ChatContentProps {
-  messages: Message[];
+  messages: IMessage[];
 }
 
 const ChatContent = ({ messages }: ChatContentProps) => {
   return (
     <div className="max-h-64 h-64 px-6 py-1 overflow-auto">
-      {messages.map((message: Message, index: number) => (
+      {messages.map((message: IMessage, index: number) => (
         <div
           key={index}
           className={`py-2 flex flex-row w-full ${

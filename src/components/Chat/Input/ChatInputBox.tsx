@@ -1,22 +1,22 @@
 import React from "react";
-import { Message } from "../Data/index";
 import DebouncedInput from "@/components/Chat/Input/DebouncedInput";
+import { IMessage } from "@/interfaces/Message";
 interface ChatInputBoxProps {
-  //   sendANewMessage: (message: Message) => void;
+  sendMessage: (message: IMessage) => void;
 }
 
-const ChatInputBox = ({}: ChatInputBoxProps) => {
+const ChatInputBox = ({ sendMessage }: ChatInputBoxProps) => {
   const [newMessage, setNewMessage] = React.useState("");
 
   const doSendMessage = () => {
     if (newMessage && newMessage.length > 0) {
-      const newMessagePayload: Message = {
+      const newMessagePayload: IMessage = {
         sentAt: new Date(),
         sentBy: "devlazar",
         isChatOwner: true,
         text: newMessage,
       };
-    //   sendANewMessage(newMessagePayload);
+      sendMessage(newMessagePayload);
       setNewMessage("");
     }
   };

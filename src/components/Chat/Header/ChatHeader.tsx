@@ -1,5 +1,4 @@
 import React from "react";
-import { PhoneIcon, CameraIcon } from "@heroicons/react/24/outline";
 import Avatar from "@/components/Chat/Avatar/Avatar";
 
 interface ChatHeaderProps {

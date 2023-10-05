@@ -1,11 +1,6 @@
-export interface Message {
-  text: string;
-  sentBy: string;
-  sentAt: Date;
-  isChatOwner?: boolean;
-}
+import { IMessage } from "@/interfaces/Message";
 
-const messages: Message[] = [
+const messages: IMessage[] = [
   {
     text: "Hey!",
     sentBy: "devlazar",
