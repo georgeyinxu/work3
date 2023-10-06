@@ -41,8 +41,6 @@ const updateListing = async (
   reward: string,
   category: string,
   date: Date,
-  location: string,
-  type: string,
   jobId: number,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
@@ -84,10 +82,8 @@ const updateListing = async (
     data.set("title", title);
     data.set("description", description);
     data.set("reward", reward);
-    data.set("jobType", type);
     data.set("date", date.toISOString());
     data.set("categoryId", category);
-    data.set("location", location);
     data.set("listingId", listingId);
 
     const res = await fetch("/api/listing", {

@@ -42,10 +42,8 @@ export async function POST(req: NextRequest) {
     "transactionHash"
   ) as unknown as string;
   const jobId: string | null = data.get("jobId") as unknown as string;
-  const jobType: string | null = data.get("jobType") as unknown as string;
   const date: string | null = data.get("date") as unknown as string;
   const categoryId: string | null = data.get("categoryId") as unknown as string;
-  const location: string | null = data.get("location") as unknown as string;
 
   let listingId;
 
@@ -61,8 +59,6 @@ export async function POST(req: NextRequest) {
       category: new mongoose.Types.ObjectId(categoryId),
       transactionHash,
       jobId,
-      jobType,
-      location,
       jobStatus: JobStatus.ACTIVE,
       file: "",
     });
@@ -102,10 +98,8 @@ export async function PUT(req: NextRequest) {
     "description"
   ) as unknown as string;
   const reward: string | null = data.get("reward") as unknown as string;
-  const jobType: string | null = data.get("jobType") as unknown as string;
   const date: string | null = data.get("date") as unknown as string;
   const categoryId: string | null = data.get("categoryId") as unknown as string;
-  const location: string | null = data.get("location") as unknown as string;
   const listingId: string | null = data.get("listingId") as unknown as string;
 
   try {
@@ -118,8 +112,6 @@ export async function PUT(req: NextRequest) {
         description,
         reward: parseFloat(reward),
         date: new Date(date),
-        location,
-        jobType,
         category: new mongoose.Types.ObjectId(categoryId),
       }
     );

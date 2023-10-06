@@ -58,25 +58,10 @@ const formatFileName = (url: string) => {
 
   return filename;
 };
-const fetchLocations = async () => {
-  const res = await axios.get("/api/location");
-  const locations = res.data.data;
-
-  return locations;
-};
-
-const fetchJobTypes = async () => {
-  const res = await axios.get("/api/jobType");
-  const jobTypes = res.data.data;
-
-  return jobTypes;
-};
 
 export {
   short,
   formatFileName,
-  fetchLocations,
-  fetchJobTypes,
   addTelegram,
   checkTelegram,
 };

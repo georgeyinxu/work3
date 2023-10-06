@@ -7,7 +7,6 @@ import Datepicker from "tailwind-datepicker-react";
 import "react-quill/dist/quill.snow.css";
 import { fetchCategories } from "@/utils/Categories";
 import { ICategory } from "@/interfaces/CategoryResponse";
-import { fetchJobTypes, fetchLocations } from "@/utils/Common";
 import { IJobType } from "@/interfaces/JobTypeResponse";
 import { postListing } from "@/utils/Deployer";
 import { updateListing } from "@/utils/Listings";
@@ -35,8 +34,6 @@ type Props = {
     reward: string;
     date: Date;
     category: string;
-    location: string;
-    type: string;
     description: string;
     file?: string;
     listingId?: string;
@@ -47,8 +44,6 @@ type Props = {
       reward: string;
       date: Date;
       category: string;
-      location: string;
-      type: string;
       description: string;
       file?: string;
       listingId?: string;
@@ -61,8 +56,6 @@ type Props = {
 const SubmissionBody: React.FC<Props> = ({ form, setForm, edit, jobId }) => {
   const [show, setShow] = useState<boolean>(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
-  const [locations, setLocations] = useState<string[]>([]);
-  const [jobTypes, setJobTypes] = useState<IJobType[]>([]);
   const [file, setFile] = useState<File>();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -136,8 +129,6 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm, edit, jobId }) => {
         form.reward,
         form.category,
         form.date,
-        form.location,
-        form.type,
         jobId!,
         setIsLoading
       );
@@ -150,8 +141,6 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm, edit, jobId }) => {
         form.reward,
         form.category,
         form.date,
-        form.location,
-        form.type,
         setIsLoading
       );
     }
@@ -194,7 +183,7 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm, edit, jobId }) => {
   };
 
   useEffect(() => {
-    const promises = [fetchCategories(), fetchLocations(), fetchJobTypes()];
+    const promises = [fetchCategories()];
 
     Promise.all(promises)
       .then((responses) => {
@@ -205,25 +194,9 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm, edit, jobId }) => {
         );
         setCategories(categories);
 
-        // Setting locations
-        const locations = responses[1];
-        setLocations(locations);
-
-        // Setting job types
-        const jobTypes = responses[2];
-        setJobTypes(jobTypes);
-
         // Setting the states for form
         if (categories.length > 0) {
           setForm((prev) => ({ ...prev, category: categories[0]._id }));
-        }
-
-        if (locations.length > 0) {
-            setForm((prev) => ({ ...prev, location: locations[0] }));
-        }
-
-        if (jobTypes.length > 0) {
-          setForm((prev) => ({ ...prev, type: jobTypes[0].title }));
         }
       })
       .catch((error) => {
@@ -294,48 +267,6 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm, edit, jobId }) => {
               {categories.map((category) => (
                 <option value={category._id} key={category._id}>
                   {category.title}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label
-              htmlFor="location"
-              className="block mb-2 text-sm font-medium text-gray-900"
-            >
-              Select Location
-            </label>
-            <select
-              id="location"
-              name="location"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              onChange={handleChange}
-              value={form.location}
-            >
-              {locations.map((location, index) => (
-                <option value={location} key={location + index}>
-                  {location}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label
-              htmlFor="type"
-              className="block mb-2 text-sm font-medium text-gray-900"
-            >
-              Job Type
-            </label>
-            <select
-              id="type"
-              name="type"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              onChange={handleChange}
-              value={form.type}
-            >
-              {jobTypes.map((type) => (
-                <option value={type.title} key={type._id}>
-                  {type.title}
                 </option>
               ))}
             </select>

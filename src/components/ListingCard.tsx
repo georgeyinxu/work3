@@ -27,12 +27,6 @@ const ListingCard: React.FC<Props> = ({ listingDetails }) => {
         <span className="bg-pink-100 text-pink-800 text-lg font-medium mr-2 px-2.5 py-0.5 rounded-lg text-center">
           {listingDetails.reward} $SALD
         </span>
-        <span className="bg-pink-100 text-pink-800 text-lg font-medium mr-2 px-2.5 py-0.5 rounded-lg text-center">
-          {listingDetails.location}
-        </span>
-        <span className="bg-pink-100 text-pink-800 text-lg font-medium mr-2 px-2.5 py-0.5 rounded-lg text-center">
-          {listingDetails.jobType}
-        </span>
       </div>
       <p
         className="text-sm sm:text-base md:text-lg my-4 line-clamp-5 text-[#202020]"

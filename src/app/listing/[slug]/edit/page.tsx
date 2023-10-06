@@ -19,8 +19,6 @@ const Edit: React.FC<Props> = ({ params }) => {
     reward: string;
     date: Date;
     category: string;
-    location: string;
-    type: string;
     description: string;
     file?: string | undefined;
     listingId?: string;
@@ -29,8 +27,6 @@ const Edit: React.FC<Props> = ({ params }) => {
     reward: "0",
     date: new Date(),
     category: "",
-    location: "",
-    type: "",
     description: "",
     file: undefined,
     listingId: "",
@@ -53,8 +49,6 @@ const Edit: React.FC<Props> = ({ params }) => {
           date: new Date(data.date),
           category: data.category,
           description: data.description,
-          location: data.location,
-          type: data.jobType,
           file: data.file,
           listingId: data._id,
         });

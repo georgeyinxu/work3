@@ -5,8 +5,9 @@ import { ImArrowUpRight2 } from "react-icons/im";
 import { FaPenFancy, FaTrash } from "react-icons/fa";
 import { IListing } from "@/interfaces/ListingResponse";
 import { formatFileName } from "@/utils/Common";
-import { FaBriefcase, FaLocationDot, FaMoneyBill } from "react-icons/fa6";
+import { FaClock, FaMoneyBill } from "react-icons/fa6";
 import DeleteListing from "../Dialog/DeleteListing";
+import { DateTime } from "luxon";
 
 type Props = {
   listingDetails: IListing;
@@ -114,24 +115,13 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
               </div>
             </div>
             <div className="flex items-start justify-left text-gray-600 text-2xl">
-              <FaBriefcase />
+              <FaClock />
               <div className="flex flex-col justify-left ml-4">
                 <h5 className="text-[#202020] text-base font-semibold mb-1">
-                  Job type
+                  Deadline
                 </h5>
                 <span className="bg-pink-100 text-pink-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-md text-center">
-                  {listingDetails.jobType}
-                </span>
-              </div>
-            </div>
-            <div className="flex items-start justify-left text-gray-600 text-2xl">
-              <FaLocationDot />
-              <div className="flex flex-col justify-left ml-4">
-                <h5 className="text-[#202020] text-base font-semibold mb-1">
-                  Location
-                </h5>
-                <span className="bg-pink-100 text-pink-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-md text-center">
-                  {listingDetails.location}
+                  {DateTime.fromISO(listingDetails.date).toLocaleString(DateTime.DATETIME_MED)}
                 </span>
               </div>
             </div>
