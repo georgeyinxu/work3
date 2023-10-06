@@ -1,6 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import {
+  useAddress,
+  useNetwork,
+  useNetworkMismatch,
+  ChainId,
+} from "@thirdweb-dev/react";
 
 import { ICategory } from "@/interfaces/CategoryResponse";
 import { IListing } from "@/interfaces/ListingResponse";
@@ -16,6 +22,16 @@ const App = () => {
   const [listings, setListings] = useState<IListing[]>([]);
   const [selected, setSelected] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const address = useAddress();
+  const [, switchNetwork] = useNetwork();
+  const isMismatched = useNetworkMismatch();
+
+  useEffect(() => {
+    if (isMismatched && switchNetwork) {
+      switchNetwork(ChainId.Mumbai);
+    }
+  }, [address]);
 
   useEffect(() => {
     setIsLoading(true);
