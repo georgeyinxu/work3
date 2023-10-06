@@ -7,7 +7,7 @@ import {
   ThirdwebProvider,
   walletConnect,
 } from "@thirdweb-dev/react";
-import { Mumbai, Polygon } from "@thirdweb-dev/chains";
+import { Mumbai } from "@thirdweb-dev/chains";
 import Navbar from "@/components/Navbar";
 
 const queryClient = new QueryClient();
@@ -16,7 +16,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <ThirdwebProvider
-        supportedChains={[Mumbai, Polygon]}
+        supportedChains={[Mumbai]}
         clientId="c39b8ec1e949b0b1fa56a439cb8f311c"
         supportedWallets={[metamaskWallet(), walletConnect()]}
       >

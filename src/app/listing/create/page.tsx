@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SubmissionBody from "@/components/Create/SubmissionBody";
+import { useAddress } from "@thirdweb-dev/react";
+import { useRouter } from "next/navigation";
 
 const Create = () => {
   const [form, setForm] = useState({
@@ -13,6 +15,15 @@ const Create = () => {
     type: "",
     description: "",
   });
+  const address = useAddress();
+  const router = useRouter();
+
+  // Redirect if the wallet is not connected
+  useEffect(() => {
+    if (!address) {
+      router.push('/')
+    }
+  }, [])
 
   return (
     <main className="min-h-screen bg-[#F6F6F6] flex items-center justify-center">
