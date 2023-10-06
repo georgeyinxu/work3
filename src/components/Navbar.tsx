@@ -63,15 +63,21 @@ const Navbar = () => {
         </button>
         <div className="hidden md:flex">
           <ul className="flex flex-col font-medium mt-4 rounded-lg bg-white md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-transparent items-center">
-            <li>
-              <a href="/listing/create" className="block">
-                <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r w-full md:w-auto">
-                  <span className={`block text-black font-semibold rounded-full bg-white hover:text-white hover:bg-transparent transition ${address ? 'p-4' : 'p-2'}`}>
-                    Create Listing
-                  </span>
-                </button>
-              </a>
-            </li>
+            {address && (
+              <li>
+                <a href="/listing/create" className="block">
+                  <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r w-full md:w-auto">
+                    <span
+                      className={`block text-black font-semibold rounded-full bg-white hover:text-white hover:bg-transparent transition ${
+                        address ? "p-4" : "p-2"
+                      }`}
+                    >
+                      Create Listing
+                    </span>
+                  </button>
+                </a>
+              </li>
+            )}
             <li>
               <div className="block my-4 md:my-0">
                 <ConnectWallet
@@ -97,15 +103,17 @@ const Navbar = () => {
           id="navbar-solid-bg"
         >
           <ul className="flex flex-col font-medium mt-4 rounded-lg bg-white md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-transparent">
-            <li>
-              <a href="/listing/create" className="block">
-                <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r w-full md:w-auto">
-                  <span className="block text-black p-4 font-semibold rounded-full bg-white hover:text-white hover:bg-transparent transition">
-                    Create Listing
-                  </span>
-                </button>
-              </a>
-            </li>
+            {address && (
+              <li>
+                <a href="/listing/create" className="block">
+                  <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r w-full md:w-auto">
+                    <span className="block text-black p-4 font-semibold rounded-full bg-white hover:text-white hover:bg-transparent transition">
+                      Create Listing
+                    </span>
+                  </button>
+                </a>
+              </li>
+            )}
             <li>
               <div className="block my-4">
                 <ConnectWallet
