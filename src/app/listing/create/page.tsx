@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import SubmissionBody from "@/components/Create/SubmissionBody";
-import { useAddress } from "@thirdweb-dev/react";
-import { useRouter } from "next/navigation";
+import { useBalance } from "@thirdweb-dev/react";
+import BalanceCard from "@/components/Create/BalanceCard";
 
 const Create = () => {
   const [form, setForm] = useState({
@@ -13,15 +13,7 @@ const Create = () => {
     category: "",
     description: "",
   });
-  const address = useAddress();
-  const router = useRouter();
-
-  // Redirect if the wallet is not connected
-  useEffect(() => {
-    if (!address) {
-      router.push('/')
-    }
-  }, [])
+  const { data, isLoading } = useBalance(process.env.NEXT_PUBLIC_SALD_ADDR);
 
   return (
     <main className="min-h-screen bg-[#F6F6F6] flex items-center justify-center">
@@ -33,8 +25,16 @@ const Create = () => {
           Complete your submission, including relevant files, and then stake to
           submit
         </h5>
-        <div className="grid grid-cols-1 gap-8 mt-10">
-          <SubmissionBody form={form} setForm={setForm} edit={false} />
+        <div className="flex items-center justify-end">
+          <BalanceCard saldBalance={data?.displayValue} />
+        </div>
+        <div className="grid grid-cols-1 gap-8 mt-4">
+          <SubmissionBody
+            form={form}
+            setForm={setForm}
+            edit={false}
+            saldBalance={data?.displayValue}
+          />
         </div>
       </div>
     </main>

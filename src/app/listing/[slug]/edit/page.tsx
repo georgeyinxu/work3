@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import ListingCard from "@/components/Edit/ListingCard";
 import { fetchListing } from "@/utils/Listings";
 import { IListing } from "@/interfaces/ListingResponse";
-import { useAddress } from "@thirdweb-dev/react";
+import { useAddress, useBalance } from "@thirdweb-dev/react";
 import { useRouter } from "next/navigation";
 
 type Props = {
@@ -35,6 +35,7 @@ const Edit: React.FC<Props> = ({ params }) => {
 
   const address = useAddress();
   const router = useRouter();
+  const { data, isLoading } = useBalance(process.env.NEXT_PUBLIC_SALD_ADDR);
 
   useEffect(() => {
     const fetchAllData = async () => {
@@ -80,7 +81,7 @@ const Edit: React.FC<Props> = ({ params }) => {
           description={form.description}
         />
         <div className="grid grid-cols-1 gap-8">
-          <SubmissionBody form={form} jobId={jobId} setForm={setForm} edit={true} />
+          <SubmissionBody form={form} jobId={jobId} setForm={setForm} edit={true} saldBalance={data?.displayValue} />
         </div>
       </div>
     </main>
