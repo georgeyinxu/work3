@@ -51,9 +51,10 @@ type Props = {
   >;
   edit: boolean;
   jobId?: number;
+  saldBalance: string | undefined;
 };
 
-const SubmissionBody: React.FC<Props> = ({ form, setForm, edit, jobId }) => {
+const SubmissionBody: React.FC<Props> = ({ form, setForm, edit, jobId, saldBalance }) => {
   const [show, setShow] = useState<boolean>(false);
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [file, setFile] = useState<File>();
@@ -360,11 +361,9 @@ const SubmissionBody: React.FC<Props> = ({ form, setForm, edit, jobId }) => {
             </button>
           ) : (
             <button
-              className={`p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r ${
-                isLoading ? "bg-opacity-60" : ""
-              }`}
+              className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r disabled:opacity-60"
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || parseFloat(form.reward) > parseFloat(saldBalance ? saldBalance : "0") || parseFloat(form.reward) <= 0}
             >
               <span className="block text-white px-4 py-2 font-semibold rounded-full bg-transparent hover:bg-white hover:text-black transition">
                 {isLoading ? "Loading..." : "Confirm Submission"}
