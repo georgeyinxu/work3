@@ -9,8 +9,6 @@ const Create = () => {
     reward: "0",
     date: new Date(),
     category: "",
-    location: "",
-    type: "",
     description: "",
   });
 

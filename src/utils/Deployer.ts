@@ -15,8 +15,6 @@ const postListing = async (
   reward: string,
   category: string,
   date: Date,
-  location: string,
-  type: string,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   e.preventDefault();
@@ -117,10 +115,8 @@ const postListing = async (
     data.set("reward", reward);
     data.set("transactionHash", transactionHash);
     data.set("jobId", maslowJobId.toString());
-    data.set("jobType", type);
     data.set("date", date.toISOString());
     data.set("categoryId", category);
-    data.set("location", location);
 
     const res = await fetch("/api/listing", {
       method: "POST",
