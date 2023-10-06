@@ -1,11 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import SubmissionBody from "@/components/Create/SubmissionBody";
-import { useAddress, useBalance } from "@thirdweb-dev/react";
-import { useRouter } from "next/navigation";
+import { useBalance } from "@thirdweb-dev/react";
 import BalanceCard from "@/components/Create/BalanceCard";
-import AlertCard from "@/components/Alerts/AlertCard";
 
 const Create = () => {
   const [form, setForm] = useState({
@@ -15,16 +13,7 @@ const Create = () => {
     category: "",
     description: "",
   });
-  const address = useAddress();
-  const router = useRouter();
   const { data, isLoading } = useBalance(process.env.NEXT_PUBLIC_SALD_ADDR);
-
-  // Redirect if the wallet is not connected
-  // useEffect(() => {
-  //   if (!address) {
-  //     router.push("/");
-  //   }
-  // }, []);
 
   return (
     <main className="min-h-screen bg-[#F6F6F6] flex items-center justify-center">
