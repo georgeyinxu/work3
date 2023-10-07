@@ -119,7 +119,7 @@ const App = () => {
         <div className="flex flex-col gap-4 w-full">
           {isLoading && <ListingCardLoad />}
           {listings &&
-            categories &&
+            categories[0] &&
             listings.map((listing) => {
               if (
                 listing.category === selected ||
