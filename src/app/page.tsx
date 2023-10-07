@@ -49,7 +49,7 @@ const App = () => {
       setListings(listingItems);
       setTotalPages(pagesData);
 
-      if (listingItems.length === 0) {
+      if (listingItems.length === 0 && currentPage !== 1) {
         setCurrentPage(1);
       }
     });
