@@ -9,13 +9,40 @@ export async function GET(req: NextRequest) {
   await connectMongoDB();
   const url = new URL(req.url);
   const id = url.searchParams.get("id");
+  const page = url.searchParams.get("page");
+  const limit = url.searchParams.get("limit");
+  let category = url.searchParams.get("category");
   let listings = [];
+  let pageNum = 0;
+  let limitNum = 0;
+  let totalPages = 0;
+  let filterOptions: any = {};
+  if (page) {
+    pageNum = parseInt(page, 10);
+  } else {
+    pageNum = 1;
+  }
+
+  if (limit) {
+    limitNum = parseInt(limit, 10);
+  } else {
+    limitNum = 5;
+  }
+
+  if (category && category !== process.env.VIEW_ALL_ID) {
+    filterOptions.category = new mongoose.Types.ObjectId(category);
+  }
+
+  const skip = (pageNum - 1) * limitNum;
 
   try {
     if (id) {
       listings = await Listing.findById(id);
     } else {
-      listings = await Listing.find();
+      listings = await Listing.find(filterOptions).skip(skip).limit(limitNum).exec();
+
+      const totalCount = await Listing.countDocuments(filterOptions);
+      totalPages = Math.ceil(totalCount / limitNum);
     }
   } catch (error) {
     return NextResponse.json(
@@ -24,7 +51,7 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  return NextResponse.json({ listings }, { status: 200 });
+  return NextResponse.json({ listings, totalPages }, { status: 200 });
 }
 
 export async function POST(req: NextRequest) {

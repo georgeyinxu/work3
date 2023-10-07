@@ -6,17 +6,19 @@ import deployerContractAbi from "@/abi/DeployerContractABI.json";
 import { IListing } from "@/interfaces/ListingResponse";
 import JobStatus from "@/enums/JobStatus";
 
-const fetchListings = async () => {
+const fetchListings = async (currentPage: number, selected: string) => {
   let listingsData: IListing[] = [];
+  let totalPages: number = 0;
 
   try {
-    const res = await axios.get("/api/listing");
+    const res = await axios.get(`/api/listing?page=${currentPage}&limit=5&category=${selected}`);
     listingsData = res.data.listings as IListing[];
+    totalPages = res.data.totalPages as number;
   } catch (error) {
     console.error("Failed to get all listings due to: " + error);
   }
 
-  return listingsData;
+  return { listingsData, totalPages };
 };
 
 const fetchListing = async (id: string) => {

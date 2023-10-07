@@ -22,6 +22,8 @@ const App = () => {
   const [listings, setListings] = useState<IListing[]>([]);
   const [selected, setSelected] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const address = useAddress();
   const [, switchNetwork] = useNetwork();
@@ -34,22 +36,57 @@ const App = () => {
   }, [address]);
 
   useEffect(() => {
+    const promises = [fetchListings(currentPage, selected)];
+
+    Promise.all(promises).then((responses) => {
+      const listingsData = responses[0] as {
+        listingsData: IListing[];
+        totalPages: number;
+      };
+      const pagesData = listingsData.totalPages;
+      const listingItems = listingsData.listingsData;
+
+      setListings(listingItems);
+      setTotalPages(pagesData);
+
+      if (listingItems.length === 0) {
+        setCurrentPage(1);
+      }
+    });
+  }, [selected, currentPage]);
+
+  useEffect(() => {
     setIsLoading(true);
-    const promises = [fetchCategories(), fetchListings()];
+    const promises = [fetchCategories()];
 
     Promise.all(promises).then((responses) => {
       const categories = responses[0] as ICategory[];
-      const listings = responses[1] as IListing[];
-
       setCategories(categories);
-      setListings(listings);
-      setIsLoading(false);
     });
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
     setSelected(categories.length > 0 ? categories[0]._id : "");
   }, [categories]);
+
+  const renderPaginationButtons = () => {
+    const buttons = [];
+    for (let i = 1; i <= totalPages; i++) {
+      buttons.push(
+        <li>
+          <button
+            className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+            onClick={() => setCurrentPage(i)}
+          >
+            {i}
+          </button>
+        </li>
+      );
+    }
+
+    return buttons;
+  };
 
   return (
     <main className="bg-white flex flex-col items-center justify-center">
@@ -82,6 +119,7 @@ const App = () => {
         <div className="flex flex-col gap-4 w-full">
           {isLoading && <ListingCardLoad />}
           {listings &&
+            categories &&
             listings.map((listing) => {
               if (
                 listing.category === selected ||
@@ -94,6 +132,11 @@ const App = () => {
             })}
         </div>
       </div>
+      <nav className="mb-4">
+        <ul className="inline-flex -space-x-px text-base h-10">
+          {renderPaginationButtons()}
+        </ul>
+      </nav>
     </main>
   );
 };
