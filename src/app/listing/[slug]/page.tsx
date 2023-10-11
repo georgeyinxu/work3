@@ -6,7 +6,7 @@ import { useAddress } from "@thirdweb-dev/react";
 import WorkerView from "@/components/ListingDetails/WorkerView";
 import DeployerView from "@/components/ListingDetails/DeployerView";
 import { fetchListing } from "@/utils/Listings";
-import IListing from "@/interfaces/ListingResponse";
+import { IListing } from "@/interfaces/ListingResponse";
 import JobStatus from "@/enums/JobStatus";
 
 type Props = {
@@ -30,6 +30,7 @@ const JobDetails: React.FC<Props> = ({ params }) => {
     reward: 0,
     transactionHash: "",
     updatedAt: "",
+    file: ""
   });
   const router = useRouter();
   const address = useAddress();
@@ -37,6 +38,7 @@ const JobDetails: React.FC<Props> = ({ params }) => {
   useEffect(() => {
     const fetchAllData = async () => {
       const data = await fetchListing(params.slug);
+
       if (Object.keys(data).length === 0 && data.constructor === Object) {
         router.push("/");
       } else {
@@ -51,11 +53,11 @@ const JobDetails: React.FC<Props> = ({ params }) => {
     };
 
     fetchAllData();
-  }, [address]); // Dependency array
+  }, [address]);
 
   return (
     <main className="min-h-screen bg-white flex items-center justify-center">
-      <div className="max-w-screen-xl rounded-xl px-6 py-32 w-full">
+      <div className="max-w-screen-xl rounded-xl px-6 py-12 w-full">
         {isWorker ? (
           <WorkerView listingDetails={listingDetails} />
         ) : (

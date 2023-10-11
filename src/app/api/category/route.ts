@@ -11,13 +11,13 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       { message: "Error creating a category" },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
   return NextResponse.json(
     { message: "Successfully created a category" },
-    { status: 201 },
+    { status: 201 }
   );
 }
 
@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       { message: "Failed to fetch all categories" },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -45,12 +45,12 @@ export async function DELETE(req: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       { message: "Failed to delete all categories" },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
   return NextResponse.json(
     { message: "Successfully deleted all categories" },
-    { status: 204 },
+    { status: 204 }
   );
 }

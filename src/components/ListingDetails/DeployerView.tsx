@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import UserDeployments from "@/components/ListingDetails/UserDeployments";
-import DeploymentTabs from "@/components/ListingDetails/DeploymentTabs";
 import ApplicantCard from "@/components/ListingDetails/ApplicantCard";
 import { ImArrowUpRight2 } from "react-icons/im";
-import { FaPenFancy } from "react-icons/fa";
-import IListing from "@/interfaces/ListingResponse";
-import { short } from "@/utils/Common";
-import JobCompleteCard from "@/components/ListingDetails/JobCompleteCard";
+import { FaPenFancy, FaTrash } from "react-icons/fa";
+import { IListing } from "@/interfaces/ListingResponse";
+import { formatFileName } from "@/utils/Common";
+import { FaClock, FaMoneyBill } from "react-icons/fa6";
+import DeleteListing from "../Dialog/DeleteListing";
+import { DateTime } from "luxon";
 
 type Props = {
   listingDetails: IListing;
@@ -28,15 +28,17 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
     seconds: 0,
   });
 
+  const [deleteModal, setDeleteModal] = useState(false);
+
   const calculateTimeLeft = () => {
     const now = new Date();
     const sgt = new Date(
-      now.toLocaleString("en-US", { timeZone: "Asia/Singapore" }),
+      now.toLocaleString("en-US", { timeZone: "Asia/Singapore" })
     );
     const targetTime = new Date(listingDetails.date);
 
     if (sgt.getTime() > targetTime.getTime()) {
-      targetTime.setDate(targetTime.getDate() + 1);
+      return { days: 0, hours: 0, minutes: 0, seconds: 0 };
     }
 
     const timeDifference = targetTime.getTime() - sgt.getTime();
@@ -60,97 +62,127 @@ const DeployerView: React.FC<Props> = ({ listingDetails }) => {
 
   return (
     <main>
-      <div
-        className="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50"
-        role="alert"
-      >
-        <span className="font-medium">Worker selected!</span> Please communicate
-        through the chat for submissions.
-      </div>
-      <div className="flex gap-4 justify-start items-center">
-        <img
-          src="https://sothebys-com.brightspotcdn.com/dims4/default/6a8c506/2147483647/strip/true/crop/1000x1000+0+0/resize/684x684!/quality/90/?url=http%3A%2F%2Fsothebys-brightspot.s3.amazonaws.com%2Fdotcom%2F8e%2F9c%2F972bfa1645c08ca0919ea68aabfe%2F4609.png"
-          className={"w-24 h-24 rounded-full"}
-          alt={"pudgy"}
-        />
-        <h3 className={"text-3xl text-[#2E2E2E] font-bold"}>
-          {short(listingDetails.from)}
-        </h3>
-      </div>
-      <div className="grid grid-cols-3">
-        <div className="col-span-2">
-          <UserDeployments />
-          <hr className="w-full h-0.5 bg-gray-50 rounded-full" />
-          <div className="flex items-center justify-end">
-            <DeploymentTabs />
+      <div className="grid grid-cols-1 md:grid-cols-3">
+        <div className="md:col-span-2 details-card bg-white px-4 py-8">
+          <div className="block md:hidden mb-6">
+            <ApplicantCard
+              listingId={listingDetails._id}
+              jobId={listingDetails.jobId}
+              listingStatus={listingDetails.jobStatus}
+            />
           </div>
-          <h3 className="text-[#222222] text-3xl font-semibold">Stats</h3>
-          <div className="flex items-center justify-between mt-4">
-            <div>
-              <p className="text-sm text-[#7D7D7D]">Total Earned</p>
-              <div className="flex items-center justify-center">
-                <h3 className="text-[#222222] text-3xl font-semibold">$1.1B</h3>
-                <img
-                  src="/images/sald-token.svg"
-                  className="w-14 h-14"
-                  alt="sald token"
-                />
-              </div>
-            </div>
-            {timeLeft.seconds ? (
-              <div>
-                <p className="text-sm text-[#7D7D7D]">Ends In</p>
-                <h3 className="text-[#222222] text-3xl font-semibold">
-                  {timeLeft.days}D {timeLeft.hours}H {timeLeft.minutes}M{" "}
-                  {timeLeft.seconds}S
-                </h3>
-              </div>
-            ) : (
-              " "
-            )}
-          </div>
-          <hr className="w-full h-0.5 bg-gray-50 rounded-full my-10" />
           <div className="flex items-center justify-between">
-            <h3 className="text-[#222222] text-3xl font-semibold">
+            <h3 className="text-[#222222] text-xl sm:text-2xl md:text-3xl font-semibold">
               {listingDetails.title}
             </h3>
-            <Link href={`/listing/${listingDetails._id}/edit`}>
-              <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r">
-                <span className="text-black flex items-center justify-center gap-2 px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
-                  <FaPenFancy />
-                  Edit
-                </span>
-              </button>
-            </Link>
+            <div className="flex items-center justify-center gap-4">
+              {listingDetails.jobStatus !== "COMPLETED" && (
+                <button
+                  className="p-1 rounded-full from-red-400 via-red-500 to-red-600 bg-gradient-to-r"
+                  onClick={() => setDeleteModal(true)}
+                >
+                  <span className="text-black flex items-center justify-center gap-2 px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
+                    <FaTrash />
+                    Delete
+                  </span>
+                </button>
+              )}
+              <Link
+                href={`/listing/${listingDetails._id}/edit`}
+                className="hidden md:block"
+              >
+                <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r">
+                  <span className="text-black flex items-center justify-center gap-2 px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
+                    <FaPenFancy />
+                    Edit
+                  </span>
+                </button>
+              </Link>
+            </div>
           </div>
+          <hr className="w-full h-0.5 bg-gray-50 rounded-full my-4" />
+          <h6 className="text-[#202020] font-bold text-lg">Job Details</h6>
+          <div className="flex flex-col gap-8 mt-4">
+            <div className="flex items-start justify-left text-gray-600 text-2xl">
+              <FaMoneyBill />
+              <div className="flex flex-col justify-left ml-4">
+                <h5 className="text-[#202020] text-base font-semibold mb-1">
+                  Pay
+                </h5>
+                <span className="bg-pink-100 text-pink-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-md text-center">
+                  {listingDetails.reward} $SALD
+                </span>
+              </div>
+            </div>
+            <div className="flex items-start justify-left text-gray-600 text-2xl">
+              <FaClock />
+              <div className="flex flex-col justify-left ml-4">
+                <h5 className="text-[#202020] text-base font-semibold mb-1">
+                  Deadline
+                </h5>
+                <span className="bg-pink-100 text-pink-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded-md text-center">
+                  {DateTime.fromISO(listingDetails.date).toLocaleString(DateTime.DATETIME_MED)}
+                </span>
+              </div>
+            </div>
+          </div>
+          <hr className="w-full h-0.5 bg-gray-50 rounded-full my-4" />
+          <h6 className="text-[#202020] font-bold text-lg">Job Description</h6>
           <p
-            className="overflow-hidden overflow-ellipsis text-[#222222] mt-2"
+            className="overflow-hidden overflow-ellipsis text-[#222222] mt-2 text-sm"
             dangerouslySetInnerHTML={{ __html: listingDetails.description }}
           />
-          <h6 className="text-sm text-[#7D7D7D] mt-8">Files</h6>
-          <div className="flex items-center justify-start gap-4 mt-2">
-            <button className="text-sm text-[#FF66FF] flex items-center gap-2">
-              <span className="truncate">Design Assignment 1</span>
-              <ImArrowUpRight2 />
-            </button>
-            <button className="text-sm text-[#FF66FF] flex items-center gap-2">
-              <span className="truncate">Design Assignment 2</span>
-              <ImArrowUpRight2 />
-            </button>
-            <button className="text-sm text-[#FF66FF] flex items-center gap-2">
-              <span className="truncate">Design Assignment 3</span>
-              <ImArrowUpRight2 />
-            </button>
-          </div>
-        </div>
-        <div>
-          {listingDetails.jobStatus !== "APPLICATION" ? (
-            <ApplicantCard listingId={listingDetails._id} />
-          ) : (
-            <JobCompleteCard />
+          {listingDetails.file && (
+            <div>
+              <h6 className="text-sm text-[#7D7D7D] mt-4">Files</h6>
+              <div className="flex flex-col md:flex-row md:items-center justify-start gap-4 mt-2">
+                <Link href={`${listingDetails.file}`}>
+                  <button className="text-sm text-[#FF66FF] flex items-center gap-2">
+                    <span className="truncate">
+                      {formatFileName(listingDetails.file)}
+                    </span>
+                    <ImArrowUpRight2 />
+                  </button>
+                </Link>
+              </div>
+            </div>
           )}
+          {listingDetails.jobStatus !== "COMPLETED" && (
+            <button
+              className="p-1 rounded-full from-red-400 via-red-500 to-red-600 bg-gradient-to-r w-full mt-4 md:hidden"
+              onClick={() => setDeleteModal(true)}
+            >
+              <span className="text-black flex items-center justify-center gap-2 px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
+                <FaTrash />
+                Delete
+              </span>
+            </button>
+          )}
+          <Link
+            href={`/listing/${listingDetails._id}/edit`}
+            className="md:hidden"
+          >
+            <button className="p-1 rounded-full from-[#ff00c7] to-[#ff9bfb] bg-gradient-to-r w-full mt-2">
+              <span className="text-black flex items-center justify-center gap-2 px-4 py-2 font-semibold rounded-full bg-white hover:bg-transparent hover:text-white transition">
+                <FaPenFancy />
+                Edit
+              </span>
+            </button>
+          </Link>
+        </div>
+        <div className="hidden md:block">
+          <ApplicantCard
+            listingId={listingDetails._id}
+            jobId={listingDetails.jobId}
+            listingStatus={listingDetails.jobStatus}
+          />
         </div>
       </div>
+      <DeleteListing
+        isOpen={deleteModal}
+        listingDetails={listingDetails}
+        setIsOpen={setDeleteModal}
+      />
     </main>
   );
 };

@@ -4,15 +4,20 @@ import axios from "axios";
 import deployerContractAbi from "@/abi/DeployerContractABI.json";
 import maslowContractAbi from "@/abi/MaslowContractABI.json";
 import saldTokenAbi from "@/abi/SaldTokenABI.json";
-import workerContractAbi from "@/abi/WorkerContractABI.json";
+
+import { IWallet } from "@/interfaces/WalletResponse";
 
 const postListing = async (
+  e: React.FormEvent<HTMLFormElement>,
+  file: File | undefined,
   title: string,
   description: string,
   reward: string,
   category: string,
   date: Date,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
+  e.preventDefault();
   if (!process.env.NEXT_PUBLIC_DEPLOYER_ADDR) {
     console.error("Please set your NEXT_PUBLIC_DEPLOYER_ADDR in .env.local");
     return;
@@ -28,28 +33,28 @@ const postListing = async (
     return;
   }
 
+  setIsLoading(true);
   const deadline = new Date(date).getDate();
-  const rewardNum = parseFloat(reward);
-  let maslowJobId = 0;
-  let createdListingId;
+  let listingId = "";
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
+  window.ethereum.enable();
   const signer = provider.getSigner();
 
   const deployerContract = new ethers.Contract(
     process.env.NEXT_PUBLIC_DEPLOYER_ADDR,
     deployerContractAbi,
-    signer,
+    signer
   );
   const tokenContract = new ethers.Contract(
     process.env.NEXT_PUBLIC_SALD_ADDR,
     saldTokenAbi,
-    signer,
+    signer
   );
   const maslowContract = new ethers.Contract(
     process.env.NEXT_PUBLIC_MASLOW_ADDR,
     maslowContractAbi,
-    signer,
+    signer
   );
 
   // Approval
@@ -58,7 +63,7 @@ const postListing = async (
   // Check existing allowance
   const existingAllowance = await tokenContract.allowance(
     await signer.getAddress(),
-    process.env.NEXT_PUBLIC_DEPLOYER_ADDR,
+    process.env.NEXT_PUBLIC_DEPLOYER_ADDR
   );
 
   if (existingAllowance.lt(amountToApprove)) {
@@ -98,31 +103,50 @@ const postListing = async (
     const to = receipt.to;
     const transactionHash = receipt.transactionHash;
 
-    const res = await axios.post(
-      "/api/listing",
-      {
-        from,
-        to,
-        title,
-        description,
-        reward: rewardNum,
-        transactionHash,
-        jobId: maslowJobId,
-        date,
-        categoryId: category,
-      },
-      {},
-    );
+    // Creating the form data
+    const data = new FormData();
+    if (file) {
+      data.set("file", file);
+    }
+    data.set("from", from);
+    data.set("to", to);
+    data.set("title", title);
+    data.set("description", description);
+    data.set("reward", reward);
+    data.set("transactionHash", transactionHash);
+    data.set("jobId", maslowJobId.toString());
+    data.set("date", date.toISOString());
+    data.set("categoryId", category);
 
-    createdListingId = res.data.data;
-  } catch (error) {
-    console.error("Failed to list job due to: " + error);
+    const res = await fetch("/api/listing", {
+      method: "POST",
+      body: data,
+    });
+
+    if (!res.ok) throw new Error(await res.text());
+
+    const resData = await res.json();
+
+    listingId = resData.data;
+  } catch (error: any) {
+    if (error.code === "ACTION_REJECTED") {
+      console.log("User rejected the MetaMask transaction.");
+    } else {
+      console.error("Failed to list job due to: ", error);
+    }
+  } finally {
+    setIsLoading(false);
   }
 
-  window.location.href = `/listing/${createdListingId}`;
+  window.location.href = `/listing/${listingId}`;
 };
 
-const pickApplicant = async (applicantId: number, listingId: string) => {
+const pickApplicant = async (
+  applicantId: number,
+  listingId: string,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setPickedWorker: React.Dispatch<React.SetStateAction<boolean>>
+) => {
   if (!process.env.NEXT_PUBLIC_DEPLOYER_ADDR) {
     console.error("Please set your NEXT_PUBLIC_DEPLOYER_ADDR in .env.local");
     return;
@@ -138,13 +162,14 @@ const pickApplicant = async (applicantId: number, listingId: string) => {
     return;
   }
 
+  setIsLoading(true);
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
 
   const deployerContract = new ethers.Contract(
     process.env.NEXT_PUBLIC_DEPLOYER_ADDR,
     deployerContractAbi,
-    signer,
+    signer
   );
 
   try {
@@ -156,10 +181,92 @@ const pickApplicant = async (applicantId: number, listingId: string) => {
     await axios.put("/api/listing/applicant", {
       applicantId,
       listingId,
+      status: "APPLICATION",
     });
+
+    setPickedWorker(true);
   } catch (error: any) {
-    console.error("Failed to pick applicant for job due to: ", error);
+    if (error.code === "ACTION_REJECTED") {
+      console.log("User rejected the MetaMask transaction.");
+    } else {
+      console.error("Failed to pick applicant for job due to: ", error);
+    }
+  } finally {
+    setIsLoading(false);
   }
 };
 
-export { postListing, pickApplicant };
+const completeJob = async (
+  jobId: number,
+  applicantId: number,
+  listingId: string,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setCompleteJobDone: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  if (!process.env.NEXT_PUBLIC_DEPLOYER_ADDR) {
+    console.error("Please set your NEXT_PUBLIC_DEPLOYER_ADDR in .env.local");
+    return;
+  }
+
+  if (!process.env.NEXT_PUBLIC_MASLOW_ADDR) {
+    console.error("Please set your NEXT_PUBLIC_MASLOW_ADDR in .env.local");
+    return;
+  }
+
+  if (!process.env.NEXT_PUBLIC_SALD_ADDR) {
+    console.error("Please set your NEXT_PUBLIC_SALD_ADDR in .env.local");
+    return;
+  }
+
+  setIsLoading(true);
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+
+  const deployerContract = new ethers.Contract(
+    process.env.NEXT_PUBLIC_DEPLOYER_ADDR,
+    deployerContractAbi,
+    signer
+  );
+
+  try {
+    const tx = await deployerContract.connect(signer).finishJob(jobId);
+
+    const receipt = await tx.wait();
+    console.log(receipt);
+
+    await axios.put("/api/listing/applicant", {
+      applicantId,
+      listingId,
+      status: "COMPLETED",
+    });
+
+    setCompleteJobDone(true);
+  } catch (error: any) {
+    if (error.code === "ACTION_REJECTED") {
+      console.log("User rejected the MetaMask transaction.");
+    } else {
+      console.error("Failed to pick applicant for job due to: ", error);
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+const getDetails = async (address: string) => {
+  // Can be futher expanded with the deployment data for the graph in the future
+
+  let wallet: IWallet | null = null;
+
+  try {
+    const res = await axios.get(`/api/wallet?address=${address}`)
+
+    wallet = res.data.data;
+  } catch (error) {
+    console.error("Failed to get deployer details due to: ", error)
+  }
+
+  return { deployerWallet: wallet }
+}
+
+export { postListing, pickApplicant, completeJob, getDetails };

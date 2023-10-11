@@ -11,6 +11,7 @@ const applicantSchema = new Schema(
     fee: Number,
     applicantId: Number,
     selected: Boolean,
+    claimed: Boolean
   },
   {
     timestamps: true,
