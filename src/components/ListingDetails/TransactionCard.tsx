@@ -93,7 +93,7 @@ const TransactionCard: React.FC<Props> = ({ to, jobId, date, _id, status }) => {
               width: "100%",
             }}
             disabled={status}
-            className='opacity-60'
+            className="opacity-60"
           >
             Application Closed
           </button>
@@ -115,7 +115,7 @@ const TransactionCard: React.FC<Props> = ({ to, jobId, date, _id, status }) => {
               applyListing(_id, jobId, "5", date, setApplied, setIsLoading)
             }
             disabled={isLoading || applied || !address}
-            className='disabled:opacity-60'
+            className="disabled:opacity-60"
           >
             {isLoading && "Loading..."}
             {applied && "Applied"}

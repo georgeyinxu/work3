@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAddress } from "@thirdweb-dev/react";
 import { checkWorkerSelected } from "@/utils/Worker";
 import TransactionCard from "@/components/ListingDetails/TransactionCard";
+import JobChat from "@/components/Chat/JobChat";
 import WorkerClaimCard from "./WorkerClaimCard";
 import AlertCard from "@/components/Alerts/AlertCard";
 import ErrorAlert from "@/components/Alerts/ErrorAlert";
@@ -196,21 +197,32 @@ const WorkerView: React.FC<Props> = ({ listingDetails }) => {
             </div>
           )}
         </div>
-        <div className="hidden md:block">
-          {listingDetails.jobStatus === JobStatus.COMPLETED ? (
-            <WorkerClaimCard
-              listingId={listingDetails._id}
-              applicantId={applicantDetails.applicantId}
-            />
-          ) : (
-            <TransactionCard
+
+        <div>
+          <div className="hidden md:block">
+            {listingDetails.jobStatus === JobStatus.COMPLETED ? (
+              <WorkerClaimCard
+                listingId={listingDetails._id}
+                applicantId={applicantDetails.applicantId}
+              />
+            ) : (
+              <TransactionCard
+                jobId={listingDetails.jobId}
+                to={listingDetails.from}
+                date={new Date(listingDetails.date)}
+                _id={listingDetails._id}
+                status={listingDetails.jobStatus !== "ACTIVE"}
+              />
+            )}
+          </div>
+
+          <div>
+            <JobChat
               jobId={listingDetails.jobId}
-              to={listingDetails.from}
-              date={new Date(listingDetails.date)}
-              _id={listingDetails._id}
-              status={listingDetails.jobStatus !== "ACTIVE"}
+              deployer={listingDetails.from}
+              worker={address ?? ""}
             />
-          )}
+          </div>
         </div>
       </div>
 

@@ -8,6 +8,8 @@ import Link from "next/link";
 import { Fragment, useState, useEffect } from "react";
 import DeploymentTabs from "../ListingDetails/DeploymentTabs";
 import UserDeployments from "../ListingDetails/UserDeployments";
+import { BiMessageDetail } from "react-icons/bi";
+import { createRoom } from "@/utils/Room";
 
 type Props = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,6 +38,12 @@ const UserDialog: React.FC<Props> = ({
     setIsOpenTele(true);
   }
 
+  const handleCreateRoom = () => {
+    if (address && listingDetails) {
+      createRoom(listingDetails.from, address, listingDetails._id);
+    }
+  };
+
   useEffect(() => {
     async function fetchAllData() {
       if (address && listingDetails.from) {
@@ -47,6 +55,9 @@ const UserDialog: React.FC<Props> = ({
         setDeployerWallet(deployerWallet);
       }
     }
+
+    console.log("listingDetails", listingDetails);
+    console.log("address", address);
 
     fetchAllData();
   }, [listingDetails, address]);
@@ -101,7 +112,6 @@ const UserDialog: React.FC<Props> = ({
                       </h3>
                       <span className="text-gray-500 font-bold">TVL: 58%</span>
                     </div>
-
                     {teleAvailable ? (
                       <Link href={`https://t.me/${deployerWallet?.telegram}`}>
                         <img
@@ -119,6 +129,15 @@ const UserDialog: React.FC<Props> = ({
                         />
                       </button>
                     )}
+                    <div>
+                      <button>
+                        <BiMessageDetail
+                          onClick={handleCreateRoom}
+                          color="#000"
+                          size={32}
+                        />
+                      </button>
+                    </div>
                   </div>
                   <div>
                     <div className="flex items-center justify-center">
