@@ -1,13 +1,13 @@
 import mongoose, { Schema } from "mongoose";
 
-const roomSchema = new Schema({
-  deployer: String,
-  listingId: String,
-  worker: String,
-  createdAt: Date,
-  updatedAt: Date,
+const messageSchema = new Schema({
+  roomId: String,
+  message: String,
+  sender: String,
+  timestamp: Date,
 });
 
-const Room = mongoose.models.Room || mongoose.model("Room", roomSchema);
+const Message =
+  mongoose.models.Message || mongoose.model("Message", messageSchema);
 
-export default Room;
+export default Message;

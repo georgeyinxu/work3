@@ -1,40 +1,41 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectMongoDB from "@/lib/mongodb";
-import Room from "@/models/room";
+import Message from "@/models/message";
 import { IRoom } from "@/interfaces/RoomResponse";
+import mongoose from "mongoose";
 
 export async function POST(req: NextRequest) {
-  const { listingId, deployer, worker } = await req.json();
+  const { roomId, message, sender, timestamp } = await req.json();
   await connectMongoDB();
-  let room;
+  let _message;
   try {
-    room = await Room.findOne({ listingId, deployer, worker });
+    _message = await Message.findOne({ roomId, message, sender, timestamp });
 
-    if (room) {
-      console.log("room already exists", room);
+    if (_message) {
+      console.log("message already saved", _message);
       return NextResponse.json(
-        { message: `Room already registered: ${room}` },
+        { message: `Room already registered: ${_message}` },
         { status: 201 }
       );
     }
 
-    room = await Room.create({
-      listingId,
-      deployer,
-      worker,
-      createdAt: new Date(),
+    _message = await Message.create({
+      roomId,
+      message,
+      sender,
+      timestamp,
     });
 
-    console.log("ROOM", room);
+    console.log("ROOM", _message);
   } catch (error) {
     return NextResponse.json(
-      { message: "Error adding wallet address to db" },
+      { message: "Error saving message to db" },
       { status: 400 }
     );
   }
 
   return NextResponse.json(
-    { message: `Successfully created: ${room}` },
+    { message: `Successfully created: ${_message}` },
     { status: 201 }
   );
 }
@@ -42,38 +43,19 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   await connectMongoDB();
   const url = new URL(req.url);
-  const sender = url.searchParams.get("sender");
+  const roomId = url.searchParams.get("roomId");
 
   try {
-    const worker = await Room.find({ worker: sender });
-    // .populate({
-    //   path: "listingId",
-    //   model: "Listing",
-    //   select: "title",
-    // })
-    // .exec();
+    const messages = await Message.find({
+      roomId,
+    });
+    console.log("messages", messages);
 
-    console.log("worker", worker);
-
-    const deployer = await Room.find({ deployer: sender });
-    // .populate({
-    //   path: "listingId",
-    //   model: "Listing",
-    //   select: "title",
-    // })
-    // .exec();
-
-    // console.log("deployer", deployer);
-
-    return NextResponse.json(
-      { data: [...worker, ...deployer] },
-      // { data: [...worker] },
-      { status: 200 }
-    );
+    return NextResponse.json({ data: messages }, { status: 200 });
   } catch (error) {
     console.log("error", error);
     return NextResponse.json(
-      { message: "Error getting wallet address due to: ", error },
+      { message: "Error getting messages due to: ", error },
       { status: 400 }
     );
   }

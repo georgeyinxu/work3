@@ -1,75 +1,45 @@
-import React, {
-  useState,
-  ChangeEvent,
-  KeyboardEvent,
-  useEffect,
-  useRef,
-} from "react";
+import { truncateAddress } from "@/utils/Common";
+import React, { useState, useEffect, useRef } from "react";
 
 type Props = {
-  jobId: number;
-  deployer: string;
-  worker: string;
+  socket: any;
+  address: string;
+  chat: any[];
 };
 
-const JobChat: React.FC<Props> = ({ jobId, deployer, worker }) => {
-  const [inputValue, setInputValue] = useState<string>("");
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+const JobChat: React.FC<Props> = ({ socket, address, chat }) => {
+  const container = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
+    if (container.current) {
+      container.current.scrollTop = container.current.scrollHeight;
     }
-  }, [inputValue]);
-
-  const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      if (e.shiftKey) {
-        setInputValue(inputValue + "\n");
-      } else {
-        // TODO logic to send message to socketIO
-        setInputValue("");
-      }
-    }
-  };
-
-  const handleSend = () => {
-    // TODO logic to send message to socketIO
-    setInputValue("");
-  };
+  }, [chat]);
 
   return (
-    <div className="bg-white rounded-2xl transaction-card text-black mt-2 md:ml-2">
-      <div className="bg-gray-100 min-h-[200px] rounded-2xl"></div>
-      <textarea
-        ref={textareaRef}
-        className="w-full mt-2 border border-black border-solid p-2 rounded-2xl"
-        value={inputValue}
-        onChange={handleInputChange}
-        onKeyPress={handleKeyPress}
-      ></textarea>
-      <button
-        onClick={handleSend}
-        style={{
-          background:
-            "linear-gradient(93.06deg, rgb(255, 0, 199) 2.66%, rgb(255, 159, 251) 98.99%)",
-          borderRadius: 16,
-          paddingTop: 4,
-          paddingBottom: 4,
-          fontSize: 24,
-          fontWeight: 600,
-          color: "white",
-          marginTop: 2,
-          width: "100%",
-        }}
-      >
-        Send
-      </button>
+    <div
+      // ref={container}
+      className="h-full overflow-y-scroll max-h-screen text-black"
+    >
+      {chat.map(({ roomId, sender, message, time }, key: number) => (
+        <div key={key} className="flex flex-col">
+          <div>
+            <div
+              className={`mb-1 flex ${
+                sender === address ? "justify-end" : "justify-start"
+              }`}
+            >
+              <span
+                className={`px-4 py-3 rounded-[20px] ${
+                  sender === address ? "bg-[#95e88b]" : "bg-[#d1d1d1]"
+                }`}
+              >
+                {message}
+              </span>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

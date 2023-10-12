@@ -20,7 +20,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         clientId="c39b8ec1e949b0b1fa56a439cb8f311c"
         supportedWallets={[metamaskWallet(), walletConnect()]}
       >
-        <Navbar />
+        {/* <Navbar /> */}
         {children}
       </ThirdwebProvider>
     </QueryClientProvider>

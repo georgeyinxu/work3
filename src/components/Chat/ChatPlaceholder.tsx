@@ -13,17 +13,7 @@ const ChatPlaceholder = () => {
 
       <div className="pt-30 flex flex-col justify-center items-center w-full">
         <TbMessages size={40} style={{ color: "#555" }} />
-        <span
-          className="my-2 text-[20px] font-bold text-[#555]"
-          // style={{
-          //   margin: "20px 0",
-          //   fontSize: "20px",
-          //   fontWeight: "bold",
-          //   color: "#555",
-          // }}
-        >
-          Chat
-        </span>
+        <span className="my-2 text-[20px] font-bold text-[#555]">Chat</span>
         <span className=" my-5 text-[14px] text-[#555]">
           Feel free to chat with <br />
           the deployer here!

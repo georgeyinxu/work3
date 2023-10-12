@@ -1,18 +1,15 @@
+import { IRoom } from "@/interfaces/RoomResponse";
 import axios from "axios";
 
-const getRoom = async (worker: string) => {
-  let room = false;
+const getRoom = async (address: string) => {
   try {
-    const res = await axios.get(`/api/room?worker=${worker}`);
+    const res = await axios.get(`/api/room?sender=${address}`);
 
-    room = res.data.data;
-
-    console.log("room", room);
+    return res.data.data;
   } catch (error) {
     console.error("Failed to check if room exists");
+    return undefined;
   }
-
-  return room;
 };
 
 const createRoom = async (
